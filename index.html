@@ -176,7 +176,6 @@
   .hero-mark { display: flex; flex-direction: column; align-items: center; }
   .cluster { width: min(232px, 62vw); height: auto; margin-top: -.25rem; }
   .step-fig { height: 76px; width: auto; display: block; margin-bottom: .6rem; }
-  .card { position: relative; padding-right: 4.6rem; }
   .card .ico { position: absolute; top: 1rem; right: 1rem; width: 52px; height: auto; }
   .story-fig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: .9rem; }
   .story-fig img { width: min(150px, 40vw); height: auto; }
@@ -238,9 +237,10 @@
 
   .cards { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 0; padding: 0; list-style: none; }
   .card {
+    position: relative;
     background: var(--panel);
     border-radius: 6px;
-    padding: 1.2rem 1.2rem 1.1rem;
+    padding: 1.2rem 4.6rem 1.1rem 1.2rem;   /* right: room for the icon, which is absolutely placed */
     display: flex; flex-direction: column; gap: .25rem;
   }
   .card .tag { font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }

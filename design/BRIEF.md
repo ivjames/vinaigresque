@@ -104,9 +104,12 @@ of it. Do not redraw the bottle from scratch; extend what is there.
 
 ## Hard constraints (every page)
 
-1. One self-contained HTML file. Inline CSS. JavaScript optional and
-   progressive: the page must be complete with JS off. No frameworks, no
-   external scripts.
+1. One HTML file with inline CSS and inline script, plus images under
+   `assets/` in this repo. Nothing loads from another host: no frameworks,
+   no external scripts, no webfont CDN. JavaScript optional and
+   progressive: the page must be complete with JS off. (Round 1's drafts
+   were single files with no images; the shipped page has an `assets/`
+   directory beside it, served by the same vhost.)
 2. Works at 360px wide (16px side gutters, no horizontal scroll) through
    1440px. Test both. Write section padding as longhands (`padding-top`,
    `padding-bottom`): the shorthand on a `.wrap` element zeroes its gutter,
@@ -126,7 +129,9 @@ of it. Do not redraw the bottle from scratch; extend what is there.
    script can flip. Do not wire it to a real service without being told
    which, and do not invent a `mailto:` address.
 6. `<meta name="robots" content="noindex">` stays until told otherwise.
-7. Under ~60KB. Keep the inline data-URI favicon.
+7. The HTML under ~60KB; images shown below their native pixel size and
+   kept small (the current eleven total about 350KB). Keep the inline
+   data-URI favicon.
 8. No build stamp on the page (see `DEPLOY.md`).
 
 ## Process
