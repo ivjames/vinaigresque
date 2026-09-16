@@ -58,7 +58,12 @@
     margin: 0 auto 2.25rem;
     touch-action: manipulation;
   }
-  .bottle.live { cursor: pointer; }
+  .bottle[role="button"] { cursor: pointer; }
+  .bottle:focus-visible {
+    outline: 2px solid var(--herb);
+    outline-offset: 7px;
+    border-radius: 4px;
+  }
   .bottle > * {
     position: absolute;
     inset: 0;
@@ -123,14 +128,13 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .bottle.live { cursor: default; }
     .bottle.shaking { animation: none; }
   }
 </style>
 </head>
 <body>
   <main>
-    <div class="bottle" id="bottle" title="Shake">
+    <div class="bottle" id="bottle">
       <svg class="cruet" viewBox="0 0 48 100" aria-hidden="true">
         <defs>
           <clipPath id="body">
@@ -632,7 +636,34 @@
     holder.classList.add('shaking');
   }
 
-  holder.addEventListener('pointerdown', shake);
+  // Shaking is a control, so it has to be one: focusable, labelled, and
+  // driven by click rather than pointerdown, since a screen reader activates
+  // it with a synthetic click and never sends a pointer event at all. A div
+  // with role=button gets no Enter/Space for free either, hence the keydown.
+  // The whole affordance is attached here rather than in the markup so that
+  // it exists only where it works — not without script, and not under
+  // reduced motion, where shaking is declined.
+  function setControl(on) {
+    if (on) {
+      holder.setAttribute('role', 'button');
+      holder.setAttribute('tabindex', '0');
+      holder.setAttribute('aria-label', 'Shake the bottle');
+      holder.setAttribute('title', 'Shake');
+    } else {
+      holder.removeAttribute('role');
+      holder.removeAttribute('tabindex');
+      holder.removeAttribute('aria-label');
+      holder.removeAttribute('title');
+    }
+  }
+
+  holder.addEventListener('click', shake);
+  holder.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();                         // Space would scroll the page
+      shake();
+    }
+  });
   holder.addEventListener('animationend', function () {
     holder.classList.remove('shaking');
   });
@@ -693,9 +724,11 @@
     holder.classList.add('live');
     resize();
     if (reduce && reduce.matches) {
+      setControl(false);
       clock = warm(38);                 // a settled arrangement, held still
       still();
     } else {
+      setControl(true);
       clock = warm(24);
       start();
       draw();
@@ -704,6 +737,7 @@
 
   if (reduce && reduce.addEventListener) {
     reduce.addEventListener('change', function () {
+      setControl(!reduce.matches);
       if (reduce.matches) still(); else start();
     });
   }
