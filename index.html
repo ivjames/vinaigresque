@@ -16,8 +16,8 @@
     --cream:    #FAF6EC;   /* background */
     --ink:      #2E2A1F;   /* olive brown: text and line work */
     --muted:    #5E5849;   /* secondary copy: 6.6:1 on cream. Taupe is never text. */
-    --sage:     #6B7F4E;   /* the period, icons, thin accents: 4.1:1, so never small text */
-    --sage-ink: #5A6C40;   /* sage for buttons and links, taken down to 5.3:1 */
+    --sage:     #6B7F4E;   /* the period and thin accents: 4.1:1, so never behind or as small text */
+    --sage-ink: #5A6C40;   /* sage for buttons, links and the step numerals, taken down to 5.3:1 */
     --gold:     #D4B04C;   /* the oil */
     --burgundy: #7A2E34;   /* the vinegar, and one accent */
     --taupe:    #D8CDBA;   /* rules, the bottle's glass, structure */
@@ -208,7 +208,7 @@
     place-items: center;
     width: 1.9rem; height: 1.9rem;
     border-radius: 50%;
-    background: var(--sage);
+    background: var(--sage-ink);   /* not --sage: cream on it is 4.1:1, short of AA for a numeral this size */
     color: var(--cream);
     font-family: var(--serif);
     font-size: 1.05rem;
@@ -264,7 +264,7 @@
     flex: 1 1 14rem;
     font: inherit;
     padding: .75rem .9rem;
-    border: 1px solid var(--taupe);
+    border: 1px solid var(--muted);   /* taupe was 1.35:1 against the panel; a control's edge needs 3:1 */
     border-radius: 3px;
     background: var(--cream);
     color: var(--ink);
