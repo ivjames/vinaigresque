@@ -44,4 +44,23 @@ server {
     # This is the lookahead form bin/fix-dotgit swept across the box.
     location ~ /\.(?!well-known) { deny all; return 404; }
     location ~* \.md$ { deny all; }
+
+    # deploy/ holds this template and its neighbours — build plumbing, not
+    # content, and nothing the web root needs to answer for.
+    #
+    # ^~ rather than a regex, because a prefix match with ^~ stops regex
+    # evaluation: it therefore outranks the \.md$ rule above, and everything
+    # under deploy/ answers the same way. A regex form here would leave
+    # deploy/README.md answering 403 while deploy/nginx.conf.template answers
+    # 404 — denied either way, but for two different-looking reasons.
+    #
+    # The trailing slash carries weight: plain `^~ /deploy` would also swallow
+    # a future /deployment-notes.html, so the bare path gets its own exact
+    # match instead of being folded in. Without it /deploy still 301s to
+    # /deploy/ and lands on the 404, which works but advertises the directory.
+    #
+    # 404 rather than 403, matching the dotfile rule: no reason to confirm
+    # what is there.
+    location = /deploy   { return 404; }
+    location ^~ /deploy/ { deny all; return 404; }
 }
