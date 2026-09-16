@@ -33,18 +33,24 @@ vinaigresque status      # HEAD, live probe, cert days remaining
 
 Full runbook, including first-time bring-up: `DEPLOY.md`.
 
-Checking what is actually live, concretely for this site — `vinaigresque status`
-on the box, or from anywhere:
+Checking what is actually live, concretely for this site:
 
 ```bash
 curl -s -o /dev/null -w 'HTTP %{http_code}\n' https://vinaigresque.com/
-curl -s https://vinaigresque.com/ | grep -o "const BUILD = '[^']*'" | head -1
 ```
 
-(The second line reports nothing if the page carries no `BUILD` constant — see
-the deploy stamp note in `DEPLOY.md`. `head -1` because a page that polls its
-own build stamp carries a matching regex literal, which grep otherwise reports
-as a phantom second build.)
+That is all the page will tell you from outside. **The page carries no build
+stamp on purpose**, so a 200 proves the endpoint answered and nothing more —
+which commit is serving can only be read on the droplet:
+
+```bash
+vinaigresque status     # checkout SHA, live probe, cert days
+```
+
+The platform conventions say to ask for the deployed commit rather than just
+the status code. On this site that ask has to happen on the box; there is no
+remote answer, because a remotely readable stamp is a publicly readable one
+and this site would rather not publish it.
 
 ## Things worth knowing
 
