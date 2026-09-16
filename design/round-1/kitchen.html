@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vinaigresque — a mustard-free vinaigrette mix</title>
+<meta name="description" content="Vinaigresque is a mustard-free vinaigrette mix. Three parts oil, one part vinegar, the mix, and a shake.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#e6dcc4">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f6f1e4'/><rect x='6' y='6' width='20' height='15' rx='2' fill='%23c8a227'/><rect x='6' y='21' width='20' height='5' rx='2' fill='%236b3b3b'/><circle cx='16' cy='14' r='3.2' fill='%236b3b3b'/></svg>">
+<style>
+  /* ---- Palette: the holding page's tokens, kept, plus a board behind the
+     paper so the cream reads as a card rather than as the page. ---- */
+  :root {
+    --board:    #e6dcc4;   /* the surface the card is pinned to — cream, one step deeper */
+    --paper:    #f6f1e4;   /* cream, unchanged: now the card */
+    --ink:      #2e2a20;
+    --muted:    #6f6452;
+    --muted-board: #625746;  /* muted, deepened for text that sits on the board */
+    --oil:      #c8a227;
+    --vinegar:  #6b3b3b;
+    --herb:     #6b7f4e;
+    --rule:     #d9cfb8;   /* card edges, hairlines */
+    --line:     #ddd3bd;   /* the ruling on the paper */
+    --margin:   #d9a9a6;   /* the red margin rule of a ruled sheet — vinegar, watered */
+    --glass:    #8c8270;   /* outline of the measures */
+    --accent:   #6b3b3b;   /* vinegar, where it has to be read as text */
+    --btn:      #6b3b3b;
+    --btn-ink:  #f6f1e4;
+    --shadow:   0 1px 2px rgba(60, 40, 10, .10), 0 10px 28px -8px rgba(60, 40, 10, .28);
+    --shadow-sm: 0 1px 2px rgba(60, 40, 10, .10), 0 6px 18px -6px rgba(60, 40, 10, .25);
+    --grid:     rgba(120, 90, 40, .07);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --board:    #14120e;
+      --paper:    #221e17;
+      --ink:      #efe7d5;
+      --muted:    #aa9f88;
+      --muted-board: #aa9f88;
+      --oil:      #d9b23a;
+      --vinegar:  #8a4a48;
+      --herb:     #8a9c68;
+      --rule:     #3f3729;
+      --line:     #332d23;
+      --margin:   #6a3d3b;
+      --glass:    #a2977f;
+      --accent:   #d39a95;
+      --btn:      #d9b23a;
+      --btn-ink:  #1d1912;
+      --shadow:   0 1px 2px rgba(0, 0, 0, .4), 0 12px 30px -8px rgba(0, 0, 0, .7);
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4), 0 6px 18px -6px rgba(0, 0, 0, .6);
+      --grid:     rgba(255, 235, 200, .045);
+      color-scheme: dark;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { height: 100%; }
+  body {
+    min-height: 100%;
+    margin: 0;
+    color: var(--ink);
+    background-color: var(--board);
+    /* A hairline grid on the board, like the squared side of a cutting mat. */
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 24px 24px;
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+                 Georgia, "Times New Roman", serif;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    padding: 40px 16px 56px;
+  }
+  @media (min-width: 720px) { body { padding: 64px 24px 72px; } }
+
+  .mono {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .72rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+
+  main { max-width: 900px; margin: 0 auto; }
+
+  /* ---- Cards: paper, soft shadow, a magnet through the top edge. Each is
+     rotated a hair off square, which is what "pinned" looks like. ---- */
+  .card {
+    position: relative;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    padding: 28px 20px 32px;
+  }
+  @media (min-width: 720px) { .card { padding: 44px 48px 48px; } }
+  .card.recipe  { transform: rotate(-.35deg); }
+  .card.notify  { transform: rotate(.6deg); margin-top: 44px; box-shadow: var(--shadow-sm); }
+  @media (min-width: 720px) { .card.notify { margin-top: 56px; width: min(100%, 560px); margin-left: auto; margin-right: 0; } }
+
+  .magnet {
+    position: absolute;
+    top: -15px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 34% 30%, rgba(255,255,255,.55), rgba(255,255,255,0) 42%),
+      var(--vinegar);
+    box-shadow: 0 2px 3px rgba(0,0,0,.28), inset 0 -2px 3px rgba(0,0,0,.25);
+  }
+  .recipe .magnet { left: 50%; margin-left: -15px; }
+  .notify .magnet { right: 28px; background-color: var(--herb);
+    background-image: radial-gradient(circle at 34% 30%, rgba(255,255,255,.5), rgba(255,255,255,0) 42%); }
+
+  /* ---- Hero: the ratio, drawn, with the name beside it. ---- */
+  .hero {
+    display: grid;
+    gap: 24px;
+    align-items: center;
+    padding-bottom: 28px;
+    border-bottom: 2px solid var(--rule);
+  }
+  @media (min-width: 720px) {
+    .hero { grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 40px; padding-bottom: 36px; }
+  }
+  .ratio { width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; }
+  @media (min-width: 720px) { .ratio { margin: 0; } }
+  .ratio .cup      { fill: none; stroke: var(--glass); stroke-width: 1.4; stroke-linejoin: round; }
+  .ratio .oil      { fill: var(--oil); }
+  .ratio .vin      { fill: var(--vinegar); }
+  .ratio .shine    { fill: rgba(255,255,255,.45); }
+  .ratio .lip      { fill: none; stroke: var(--glass); stroke-width: 1.4; }
+  .ratio .caption  { fill: var(--muted); font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; }
+  .ratio .op       { fill: var(--muted); font-family: inherit; font-size: 26px; }
+  .ratio .big      { fill: var(--accent); font-family: inherit; font-size: 38px; }
+
+  .kicker { margin: 0 0 10px; color: var(--muted); }
+  h1 {
+    font-size: clamp(2.6rem, 8vw, 3.6rem);
+    font-weight: 400;
+    letter-spacing: -.015em;
+    line-height: 1;
+    margin: 0;
+  }
+  h1 .accent { color: var(--herb); }
+  .tagline {
+    margin: 14px 0 0;
+    font-size: clamp(1.1rem, 2.6vw, 1.3rem);
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .tagline em { color: var(--muted); }
+
+  .cta {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 12px 20px;
+    background: var(--btn);
+    color: var(--btn-ink);
+    text-decoration: none;
+    border-radius: 3px;
+    font-size: 1rem;
+    letter-spacing: .01em;
+    box-shadow: 0 1px 0 rgba(0,0,0,.15), 0 3px 8px -2px rgba(0,0,0,.25);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .cta:hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(0,0,0,.15), 0 6px 12px -3px rgba(0,0,0,.3); }
+  .cta:active { transform: translateY(0); }
+
+  /* ---- The method. Ruled like an index card: line-height is the rule
+     pitch, and the ruling is a repeating gradient behind the text. ---- */
+  .body {
+    display: grid;
+    gap: 28px;
+    padding-top: 28px;
+  }
+  @media (min-width: 720px) {
+    .body { grid-template-columns: minmax(0, 1fr) 228px; gap: 44px; padding-top: 36px; }
+  }
+
+  .meta {
+    margin: 0 0 20px;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 22px;
+    color: var(--muted);
+  }
+  .meta li { margin: 0; }
+  .meta b { color: var(--ink); font-weight: 600; }
+
+  h2 { font-size: 1rem; font-weight: 400; margin: 0 0 14px; color: var(--muted); }
+
+  .ruled {
+    --pitch: 2rem;
+    line-height: var(--pitch);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(var(--pitch) - 1px),
+      var(--line) calc(var(--pitch) - 1px),
+      var(--line) var(--pitch)
+    );
+    background-position: 0 calc(var(--pitch) - .4rem);
+    background-size: 100% var(--pitch);
+  }
+  .steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 3rem;
+    margin: 0 0 var(--pitch);
+  }
+  .steps li:last-child { margin-bottom: 0; }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 0;
+    width: 2.2rem;
+    font-size: 1.9rem;
+    line-height: var(--pitch);
+    color: var(--accent);
+    font-style: italic;
+  }
+  .steps b { font-weight: 600; }
+  .steps .ph, .ph { color: var(--accent); font-style: italic; }
+
+  .intro { margin: 0 0 24px; }
+
+  /* Margin note: a scrap in the margin, hairline-boxed, in the muted italic
+     the holding page used for its tagline. */
+  .note {
+    align-self: start;
+    position: relative;
+    padding: 16px 18px 18px 20px;
+    border-left: 2px solid var(--margin);
+    background: linear-gradient(90deg, rgba(200, 162, 39, .06), rgba(200, 162, 39, 0));
+    font-size: .97rem;
+    line-height: 1.5;
+  }
+  .note h2 { margin-bottom: 8px; color: var(--accent); }
+  .note p { margin: 0 0 .7em; }
+  .note p:last-child { margin: 0; }
+  .note .ph { display: block; margin-top: .4em; }
+
+  /* ---- Notify: a smaller card, the closing ask. ---- */
+  .notify h2 { color: var(--ink); font-size: 1.5rem; margin: 0 0 6px; }
+  .notify p { margin: 0 0 18px; color: var(--muted); }
+  form { display: grid; gap: 10px; }
+  @media (min-width: 480px) { form { grid-template-columns: minmax(0, 1fr) auto; align-items: end; } }
+  label { display: block; margin-bottom: 6px; color: var(--muted); }
+  input[type="email"] {
+    width: 100%;
+    font: inherit;
+    padding: 11px 12px;
+    color: var(--ink);
+    background: var(--board);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+  }
+  input::placeholder { color: var(--muted-board); opacity: 1; }
+  button.cta { margin-top: 0; border: 0; font: inherit; cursor: pointer; }
+  .form-note { margin: 14px 0 0 !important; font-size: .9rem; }
+
+  :where(a, button, input, [tabindex]):focus-visible {
+    outline: 3px solid var(--herb);
+    outline-offset: 3px;
+  }
+
+  footer {
+    max-width: 900px;
+    margin: 48px auto 0;
+    color: var(--muted-board);
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta { transition: none; }
+    .cta:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <article class="card recipe" aria-labelledby="title">
+    <span class="magnet" aria-hidden="true"></span>
+
+    <header class="hero">
+      <svg class="ratio" viewBox="0 0 320 170" role="img"
+           aria-label="Three measures of oil beside one measure of vinegar: three parts to one.">
+        <defs>
+          <!-- One measure: a little glass jigger, wider at the lip. -->
+          <path id="cupShape" d="M8,22 L14,96 Q14,102 20,102 L44,102 Q50,102 50,96 L56,22 Z"/>
+          <clipPath id="cupClip"><use href="#cupShape"/></clipPath>
+        </defs>
+
+        <!-- three of oil -->
+        <g transform="translate(6,8)">
+          <g clip-path="url(#cupClip)"><rect class="oil" x="0" y="30" width="64" height="72"/></g>
+          <use class="cup" href="#cupShape"/>
+          <ellipse class="lip" cx="32" cy="22" rx="24" ry="4"/>
+          <rect class="shine" x="18" y="40" width="4" height="46" rx="2"/>
+        </g>
+        <g transform="translate(72,8)">
+          <g clip-path="url(#cupClip)"><rect class="oil" x="0" y="30" width="64" height="72"/></g>
+          <use class="cup" href="#cupShape"/>
+          <ellipse class="lip" cx="32" cy="22" rx="24" ry="4"/>
+          <rect class="shine" x="18" y="40" width="4" height="46" rx="2"/>
+        </g>
+        <g transform="translate(138,8)">
+          <g clip-path="url(#cupClip)"><rect class="oil" x="0" y="30" width="64" height="72"/></g>
+          <use class="cup" href="#cupShape"/>
+          <ellipse class="lip" cx="32" cy="22" rx="24" ry="4"/>
+          <rect class="shine" x="18" y="40" width="4" height="46" rx="2"/>
+        </g>
+
+        <text class="op" x="222" y="76" text-anchor="middle">+</text>
+
+        <!-- one of vinegar -->
+        <g transform="translate(250,8)">
+          <g clip-path="url(#cupClip)"><rect class="vin" x="0" y="30" width="64" height="72"/></g>
+          <use class="cup" href="#cupShape"/>
+          <ellipse class="lip" cx="32" cy="22" rx="24" ry="4"/>
+          <rect class="shine" x="18" y="40" width="4" height="46" rx="2"/>
+        </g>
+
+        <!-- captions -->
+        <text class="big" x="107" y="148" text-anchor="middle">3</text>
+        <text class="caption" x="107" y="165" text-anchor="middle">parts oil</text>
+        <text class="big" x="282" y="148" text-anchor="middle">1</text>
+        <text class="caption" x="282" y="165" text-anchor="middle">part vinegar</text>
+      </svg>
+
+      <div>
+        <p class="kicker mono">Recipe card · no mustard</p>
+        <h1 id="title">Vinaigresque<span class="accent">.</span></h1>
+        <p class="tagline">A mustard-free vinaigrette mix. <em>Three parts oil, one part vinegar, the mix — shake.</em></p>
+        <a class="cta" href="#notify">Tell me when it's out</a>
+      </div>
+    </header>
+
+    <div class="body">
+      <section aria-labelledby="method">
+        <ul class="meta mono">
+          <li>Makes <b class="ph">[yield]</b></li>
+          <li>Keeps <b class="ph">[storage note]</b></li>
+        </ul>
+
+        <p class="intro"><span class="ph">[what it is: a mix for your own oil and vinegar, or a bottled
+          dressing; unconfirmed]</span>. Contents: <span class="ph">[ingredient list]</span>.</p>
+
+        <h2 id="method" class="mono">Method</h2>
+        <ol class="steps ruled">
+          <li><b>Measure.</b> Three parts oil to one part vinegar, into something with a lid.</li>
+          <li><b>Add the mix.</b> <span class="ph">[amount]</span> of Vinaigresque for that much dressing.</li>
+          <li><b>Shake.</b> Lid on, hard, until it comes together. No whisk, no bowl, no spoon of mustard.</li>
+          <li><b>Dress.</b> Over the leaves at the last moment, and taste before you add more.</li>
+        </ol>
+      </section>
+
+      <aside class="note" aria-labelledby="why">
+        <h2 id="why" class="mono">Why no mustard?</h2>
+        <p>Nearly every vinaigrette recipe reaches for a spoonful of mustard to hold the oil and vinegar together. It is the usual emulsifier.</p>
+        <p>Vinaigresque leaves it out. That is the whole idea.
+          <span class="ph">[one or two lines on why that matters]</span></p>
+      </aside>
+    </div>
+  </article>
+
+  <section class="card notify" id="notify" aria-labelledby="notify-title">
+    <span class="magnet" aria-hidden="true"></span>
+    <h2 id="notify-title">Not in the shops yet.</h2>
+    <p>Leave an address and we'll say when it is.</p>
+    <form action="#" method="post">
+      <div>
+        <label for="email" class="mono">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+      </div>
+      <button type="submit" class="cta">Notify me</button>
+    </form>
+    <p class="form-note ph">[form target] — this form does not post anywhere yet.</p>
+  </section>
+</main>
+
+<footer class="mono">vinaigresque.com</footer>
+</body>
+</html>
