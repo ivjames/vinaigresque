@@ -7,28 +7,31 @@
 <meta name="description" content="Vinaigresque — a mustard-free vinaigrette mix. Under development.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#f6f1e4">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f6f1e4'/><rect x='6' y='6' width='20' height='12' rx='2' fill='%23c8a227'/><rect x='6' y='18' width='20' height='8' rx='2' fill='%236b7f4e'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f6f1e4'/><rect x='6' y='6' width='20' height='15' rx='2' fill='%23c8a227'/><rect x='6' y='21' width='20' height='5' rx='2' fill='%236b3b3b'/><circle cx='16' cy='14' r='3.2' fill='%236b3b3b'/></svg>">
 <style>
   :root {
     --bg:      #f6f1e4;   /* cream */
     --ink:     #2e2a20;   /* near-black, warmed */
     --muted:   #6f6452;   /* aged label ink */
-    --oil:     #c8a227;   /* olive oil, the top layer */
-    --vinegar: #6b3b3b;   /* red wine vinegar, the bottom layer */
+    --oil:     #c8a227;   /* olive oil — three parts, and so the body */
+    --vinegar: #6b3b3b;   /* red wine vinegar — one part, and so the globs */
     --herb:    #6b7f4e;   /* green herb */
     --rule:    #d9cfb8;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg:    #191712;
-      --ink:   #efe7d5;
-      --muted: #a0967f;
-      --rule:  #3a342a;
+      --bg:      #191712;
+      --ink:     #efe7d5;
+      --muted:   #a0967f;
+      --rule:    #3a342a;
+      --oil:     #d9b23a;
+      --vinegar: #73403f;
     }
   }
   * { box-sizing: border-box; }
-  html, body { height: 100%; }
+  html { height: 100%; }
   body {
+    min-height: 100%;
     margin: 0;
     background: var(--bg);
     color: var(--ink);
@@ -44,18 +47,45 @@
   }
   main { max-width: 34rem; }
 
-  /* The separation: oil floating on vinegar, which is the whole point of a
-     vinaigrette and the only ornament on the page. */
-  .cruet {
-    display: block;
-    width: 62px;
-    height: auto;
+  /* The bottle: vinegar globules rising and falling through the oil, with
+     the herbs and spices suspended in the convection. Three parts oil to one
+     of vinegar, so the oil is the body and the vinegar is what globs. Canvas
+     does the work; the inline SVG below it is what a reader without JS gets,
+     and the script hides it once the simulation is running. */
+  .bottle {
+    position: relative;
+    width: clamp(104px, 34vw, 152px);
+    aspect-ratio: 48 / 100;
     margin: 0 auto 2.25rem;
+    touch-action: manipulation;
   }
+  .bottle[role="button"] { cursor: pointer; }
+  .bottle:focus-visible {
+    outline: 2px solid var(--herb);
+    outline-offset: 7px;
+    border-radius: 4px;
+  }
+  .bottle > * {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .bottle.live .cruet { display: none; }
   .cruet .glass { fill: none; stroke: var(--rule); stroke-width: 2; }
   .cruet .cap    { fill: var(--rule); }
   .cruet .oil     { fill: var(--oil);     opacity: .9; }
   .cruet .vinegar { fill: var(--vinegar); opacity: .9; }
+
+  @keyframes shake {
+    0%, 100% { transform: translate(0, 0) rotate(0); }
+    20%      { transform: translate(-2.5%, 0) rotate(-2.2deg); }
+    45%      { transform: translate(2.5%, 0)  rotate(2.2deg); }
+    70%      { transform: translate(-1.4%, 0) rotate(-1.2deg); }
+    88%      { transform: translate(1%, 0)    rotate(.7deg); }
+  }
+  .bottle.shaking { animation: shake .62s ease-in-out; }
 
   h1 {
     font-size: clamp(2.6rem, 11vw, 4.25rem);
@@ -97,25 +127,40 @@
     color: var(--muted);
     opacity: .7;
   }
+
+  @media (max-height: 720px) {
+    body { padding: 32px 16px; }
+    .bottle { width: clamp(88px, 26vw, 116px); margin-bottom: 1.6rem; }
+    h1 { font-size: clamp(2.2rem, 8vw, 3.2rem); }
+    hr { margin: 1.6rem auto; }
+    footer { margin-top: 2.25rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bottle.shaking { animation: none; }
+  }
 </style>
 </head>
 <body>
   <main>
-    <svg class="cruet" viewBox="0 0 48 100" aria-hidden="true">
-      <defs>
-        <clipPath id="body">
-          <path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94
-                   L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
-        </clipPath>
-      </defs>
-      <rect class="cap" x="18.5" y="1" width="11" height="8" rx="2"/>
-      <g clip-path="url(#body)">
-        <rect class="oil"     x="0" y="48" width="48" height="22"/>
-        <rect class="vinegar" x="0" y="70" width="48" height="30"/>
-      </g>
-      <path class="glass" d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88
-                             Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
-    </svg>
+    <div class="bottle" id="bottle">
+      <svg class="cruet" viewBox="0 0 48 100" aria-hidden="true">
+        <defs>
+          <clipPath id="body">
+            <path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94
+                     L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
+          </clipPath>
+        </defs>
+        <rect class="cap" x="18.5" y="1" width="11" height="8" rx="2"/>
+        <g clip-path="url(#body)">
+          <rect class="oil"     x="0" y="36" width="48" height="43.5"/>
+          <rect class="vinegar" x="0" y="79.5" width="48" height="20.5"/>
+        </g>
+        <path class="glass" d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88
+                               Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
+      </svg>
+      <canvas id="lava" aria-hidden="true"></canvas>
+    </div>
 
     <h1>Vinaigresque<span class="accent">.</span></h1>
     <p class="tagline">A mustard-free vinaigrette mix.</p>
@@ -126,6 +171,589 @@
   </main>
 
   <footer>vinaigresque.com</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var holder = document.getElementById('bottle');
+  var canvas = document.getElementById('lava');
+  if (!holder || !canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  /* ---- Bottle geometry, in the SVG's own 48x100 units. Everything below is
+     drawn in these units and scaled to device pixels once, per resize. ---- */
+  var W = 48, H = 100, CX = 24;
+  var SURFACE = 36;            // liquid line, up inside the neck
+  var FLOOR = 92.5;            // as deep as anything suspended can get
+  var BODY = 'M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94 ' +
+             'L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z';
+  var bodyPath = new Path2D(BODY);
+
+  // Half-width of the liquid at a given height, inset to sit inside the glass.
+  function wall(y) {
+    var hw;
+    if (y >= 50) hw = 15;
+    else if (y <= 30) hw = 3.5;
+    else {
+      var t = (y - 30) / 20, s = t * t * (3 - 2 * t);
+      hw = 3.5 + s * 11.5;
+    }
+    if (y > 88) {                                  // the rounded base corners
+      var u = Math.min(1, (y - 88) / 6);
+      hw = Math.min(hw, 9.5 + 6 * Math.sqrt(Math.max(0, 1 - u * u)));
+    }
+    return hw;
+  }
+
+  function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  /* ---- Colours come from the stylesheet so the page keeps one palette. ---- */
+  var oil, oilTop, oilMid, oilDeep, vinegar, globRim, globBody, cream, glassRule;
+
+  function hex(name, fallback) {
+    var v = getComputedStyle(document.documentElement)
+              .getPropertyValue(name).trim() || fallback;
+    var m = /^#?([0-9a-f]{6})$/i.exec(v);
+    if (!m) return [0, 0, 0];
+    var n = parseInt(m[1], 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function mix(a, b, t) {
+    return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+  }
+  function css(c, a) {
+    return 'rgba(' + (c[0] | 0) + ',' + (c[1] | 0) + ',' + (c[2] | 0) + ',' + a + ')';
+  }
+
+  function readPalette() {
+    oil         = hex('--oil', '#c8a227');
+    vinegar     = hex('--vinegar', '#6b3b3b');
+    cream       = hex('--bg', '#f6f1e4');
+    glassRule   = hex('--rule', '#d9cfb8');
+    // Three parts of oil is a large field of colour rather than a band, and
+    // at full strength that field reads as mustard — which this is not. So
+    // the body is the token lifted towards the pale green-gold of the oil.
+    oilTop      = mix(oil, [255, 250, 225], 0.44);
+    oilMid      = mix(oil, [255, 246, 205], 0.2);
+    oilDeep     = mix(oil, [120, 70, 16], 0.34);
+    // The globs are the token pulled towards wine: against pale oil the
+    // token on its own goes muddy.
+    globBody    = mix(vinegar, [122, 26, 46], 0.45);
+    // A droplet is thin at its edge, so there it takes the colour of the oil.
+    globRim     = mix(globBody, oil, 0.3);
+  }
+  readPalette();
+
+  /* ---- The lava: oil globules, warmed at the base, cooled near the top.
+     Rendered as a metaball field so neighbours merge and part the way a lamp
+     does, rather than as a crowd of separate circles. ---- */
+  var HEAT_Y = 82;                 // only the base warms
+  var COOL_Y = 56;                 // only the top cools
+  var blobs = [];
+  for (var i = 0; i < 7; i++) {
+    var r = rand(3.0, 5.5);
+    blobs.push({
+      x: CX + rand(-8, 8), y: rand(46, 90), r: r, r2: r * r,
+      vx: 0, vy: 0,
+      // Staggered so the eight of them never cycle in step.
+      temp: i / 7 + rand(-0.06, 0.06),
+      rate: rand(0.13, 0.19), ph: rand(0, 6.283)
+    });
+  }
+
+  function stepBlobs(dt, t) {
+    var i, j, b;
+    for (i = 0; i < blobs.length; i++) {
+      b = blobs[i];
+      // Heat at the base, cool at the top, and nothing in between: it is
+      // the lag across the middle that keeps a lamp going instead of
+      // letting every globule park at its neutral height.
+      if (b.y > HEAT_Y) b.temp += dt * b.rate;
+      else if (b.y < COOL_Y) b.temp -= dt * b.rate;
+      b.temp = clamp(b.temp, 0, 1);
+
+      // Big globules are lazier than small ones, which is most of the charm.
+      var accel = (b.temp - 0.5) * 15 / (0.7 + b.r * 0.1);
+      b.vy -= accel * dt;
+      b.vy *= Math.exp(-1.6 * dt);
+      b.vx += Math.sin(t * 0.21 + b.ph) * 0.9 * dt;
+      b.vx *= Math.exp(-1.2 * dt);
+      b.x += b.vx * dt;
+      b.y += b.vy * dt;
+
+      var hw = wall(b.y) - b.r * 0.55;
+      if (hw < 0.5) hw = 0.5;
+      if (b.x > CX + hw) { b.x = CX + hw; b.vx *= -0.35; }
+      if (b.x < CX - hw) { b.x = CX - hw; b.vx *= -0.35; }
+      var top = SURFACE + 5 + b.r * 0.8, bot = FLOOR - b.r * 0.8;
+      if (b.y < top) { b.y = top; b.vy *= -0.2; }
+      if (b.y > bot) { b.y = bot; b.vy *= -0.2; }
+    }
+    // Enough mutual shove that they do not all stack into one lump.
+    for (i = 0; i < blobs.length; i++) {
+      for (j = i + 1; j < blobs.length; j++) {
+        var a = blobs[i], c = blobs[j];
+        var dx = c.x - a.x, dy = c.y - a.y;
+        var d = Math.sqrt(dx * dx + dy * dy) || 0.001;
+        var min = (a.r + c.r) * 1.05;
+        if (d < min) {
+          var f = (min - d) / min * 7.0 * dt;
+          dx /= d; dy /= d;
+          a.x -= dx * f * min * 0.5; a.y -= dy * f * min * 0.5;
+          c.x += dx * f * min * 0.5; c.y += dy * f * min * 0.5;
+        }
+      }
+    }
+  }
+
+  /* ---- Herbs and spices. No mustard seed, which is the whole point of the
+     product and so of the bottle. ---- */
+  var SPICES = [
+    { n: 5, shape: 'flake',  rad: [0.85, 1.7],  cols: ['#6b7f4e', '#5c7442', '#7d8f58'] }, // oregano
+    { n: 3, shape: 'flake',  rad: [0.65, 1.15], cols: ['#8aa15c', '#94a967'] },            // parsley
+    { n: 3, shape: 'needle', rad: [1.5, 2.4],   cols: ['#4f6b3f', '#5f7a49'] },            // rosemary
+    { n: 4, shape: 'flake',  rad: [0.7, 1.35],  cols: ['#b5432c', '#c65a33', '#9c3a26'] }, // chilli
+    { n: 4, shape: 'speck',  rad: [0.42, 0.78], cols: ['#2a241c', '#3b3328'] },            // black pepper
+    { n: 3, shape: 'chip',   rad: [0.7, 1.25],  cols: ['#e8dcc0', '#d6c49c'] }             // garlic
+  ];
+
+  var parts = [];
+  (function seed() {
+    for (var s = 0; s < SPICES.length; s++) {
+      var spec = SPICES[s];
+      for (var k = 0; k < spec.n * 2; k++) {
+        var rad = rand(spec.rad[0], spec.rad[1]);
+        var y = rand(SURFACE + 5, FLOOR - 2);
+        var hw = wall(y) - rad - 0.4;
+        var p = {
+          x: CX + rand(-hw, hw), y: y, vx: 0, vy: 0, rad: rad,
+          col: spec.cols[(Math.random() * spec.cols.length) | 0],
+          shape: spec.shape,
+          rot: rand(0, 6.283), spin: rand(0, 6.283), spinRate: rand(-2.2, 2.2),
+          front: Math.random() < 0.68,
+          pts: null
+        };
+        if (spec.shape === 'flake') {
+          var n = 4 + ((Math.random() * 3) | 0), pts = [];
+          for (var v = 0; v < n; v++) {
+            var ang = (v / n) * 6.283 + rand(-0.25, 0.25);
+            var rr = rad * rand(0.62, 1.15);
+            pts.push([Math.cos(ang) * rr, Math.sin(ang) * rr * rand(0.55, 1)]);
+          }
+          p.pts = pts;
+        }
+        parts.push(p);
+      }
+    }
+  })();
+
+  function stepParticles(dt, t) {
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+
+      // Convection: up the middle, down the walls, rolling over at each end.
+      var nx = clamp((p.x - CX) / 15, -1.1, 1.1);
+      var column = Math.cos(nx * 2.1);
+      var depth = clamp((p.y - SURFACE) / (FLOOR - SURFACE), 0, 1);
+      var swirl = 0.55 + 0.45 * Math.sin(t * 0.27 + depth * 3);
+      var fx = nx * 1.7 * Math.cos(Math.PI * depth) * swirl;
+      var fy = -column * 3.1 * swirl * Math.sin(Math.PI * depth);
+
+      fy += 0.72;                                   // heavier than what holds them
+      fx += (Math.random() - 0.5) * 0.9;            // a little brownian fuzz
+      fy += (Math.random() - 0.5) * 0.9;
+
+      // Anything caught in a rising globule rides it.
+      for (var b = 0; b < blobs.length; b++) {
+        var bl = blobs[b];
+        var dx = p.x - bl.x, dy = p.y - bl.y;
+        var reach = bl.r * 1.35, d2 = dx * dx + dy * dy;
+        if (d2 < reach * reach) {
+          var w = (1 - d2 / (reach * reach)) * 3.2 * dt;
+          p.vx += (bl.vx - p.vx) * w;
+          p.vy += (bl.vy - p.vy) * w;
+        }
+      }
+
+      p.vx += fx * dt; p.vy += fy * dt;
+      p.vx *= Math.exp(-2.2 * dt);
+      p.vy *= Math.exp(-2.2 * dt);
+      p.x += p.vx * dt; p.y += p.vy * dt;
+
+      var speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+      p.rot += p.spinRate * dt * (0.25 + speed * 0.3);
+      p.spin += p.spinRate * 0.8 * dt;
+
+      var hw = wall(p.y) - p.rad - 0.3;
+      if (hw < 0.3) hw = 0.3;
+      if (p.x > CX + hw) { p.x = CX + hw; p.vx *= -0.4; }
+      if (p.x < CX - hw) { p.x = CX - hw; p.vx *= -0.4; }
+      var top = SURFACE + 1.5 + p.rad;
+      if (p.y < top) { p.y = top; p.vy = Math.abs(p.vy) * 0.25; }
+      if (p.y > FLOOR - p.rad) { p.y = FLOOR - p.rad; p.vy *= -0.18; p.vx *= 0.82; }
+    }
+  }
+
+  function drawParticles(front) {
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      if (p.front !== front) continue;
+      // Tumbling: squash on one axis so a flat flake turns edge-on and back.
+      var face = Math.abs(Math.cos(p.spin));
+      var sq = 0.26 + 0.74 * face;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.scale(1, sq);
+      ctx.globalAlpha = front ? 0.55 + 0.45 * face : 0.34 + 0.2 * face;
+      ctx.fillStyle = p.col;
+      if (p.shape === 'flake') {
+        ctx.beginPath();
+        ctx.moveTo(p.pts[0][0], p.pts[0][1]);
+        for (var v = 1; v < p.pts.length; v++) ctx.lineTo(p.pts[v][0], p.pts[v][1]);
+        ctx.closePath();
+        ctx.fill();
+      } else if (p.shape === 'needle') {
+        ctx.beginPath();
+        ctx.moveTo(-p.rad, 0);
+        ctx.quadraticCurveTo(0, -p.rad * 0.34, p.rad, 0);
+        ctx.quadraticCurveTo(0, p.rad * 0.34, -p.rad, 0);
+        ctx.fill();
+      } else if (p.shape === 'chip') {
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.rad, p.rad * 0.62, 0, 0, 6.283);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(74,52,20,.45)';     // or they vanish into the oil
+        ctx.lineWidth = 0.16;
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.rad, 0, 6.283);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  /* ---- Metaball field, on a fixed low-res grid that is then scaled up.
+     The kernel is inverse-quartic rather than the usual inverse-square: the
+     square one bridges two globules while they are still a radius and a half
+     apart, so a bottleful reads as one lump instead of seven. ---- */
+  var FS = 5;                                   // grid cells per bottle unit
+  var FW = W * FS, FH = H * FS;
+  var field = new Float32Array(FW * FH);
+  var fcan = document.createElement('canvas');
+  fcan.width = FW; fcan.height = FH;
+  var fctx = fcan.getContext('2d');
+  var fimg = fctx.createImageData(FW, FH);
+
+  function renderField() {
+    field.fill(0);
+    for (var i = 0; i < blobs.length; i++) {
+      var b = blobs[i], reach = b.r * 2.7, q = b.r2 * b.r2;
+      var x0 = Math.max(0, Math.floor((b.x - reach) * FS));
+      var x1 = Math.min(FW - 1, Math.ceil((b.x + reach) * FS));
+      var y0 = Math.max(0, Math.floor((b.y - reach) * FS));
+      var y1 = Math.min(FH - 1, Math.ceil((b.y + reach) * FS));
+      for (var gy = y0; gy <= y1; gy++) {
+        var dy = (gy + 0.5) / FS - b.y, dy2 = dy * dy;
+        var idx = gy * FW + x0;
+        for (var gx = x0; gx <= x1; gx++, idx++) {
+          var dx = (gx + 0.5) / FS - b.x;
+          var d2 = dx * dx + dy2 + 0.08;
+          field[idx] += q / (d2 * d2);
+        }
+      }
+    }
+    var d = fimg.data;
+    d.fill(0);
+    for (var c = 0, o = 0; c < field.length; c++, o += 4) {
+      var f = field[c];
+      if (f < 0.94) continue;
+      // The edge is one field cell wide, so the globule has an outline
+      // rather than a halo. Everything inside it is flat but for a thin
+      // rim and a slow deepening through the middle.
+      var a = (f - 0.94) / 0.13; if (a > 1) a = 1;
+      a = a * a * (3 - a - a);                       // smoothstep
+      var rim = (f - 1.0) / 0.28; if (rim < 0) rim = 0; if (rim > 1) rim = 1;
+      rim = rim * rim * (3 - rim - rim);
+      d[o]     = globRim[0] + (globBody[0] - globRim[0]) * rim;
+      d[o + 1] = globRim[1] + (globBody[1] - globRim[1]) * rim;
+      d[o + 2] = globRim[2] + (globBody[2] - globRim[2]) * rim;
+      d[o + 3] = a * 255;
+    }
+    fctx.putImageData(fimg, 0, 0);
+  }
+
+  /* ---- Frame ---- */
+  var dpr = 1, cw = 0, ch = 0;
+
+  function resize() {
+    var rect = holder.getBoundingClientRect();
+    if (!rect.width) return false;
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    var nw = Math.max(1, Math.round(rect.width * dpr));
+    var nh = Math.max(1, Math.round(rect.height * dpr));
+    if (nw === cw && nh === ch) return false;
+    cw = nw; ch = nh;
+    canvas.width = cw; canvas.height = ch;
+    return true;
+  }
+
+  function draw() {
+    ctx.setTransform(cw / W, 0, 0, ch / H, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    ctx.save();
+    ctx.clip(bodyPath);
+
+    // The oil the globules travel through — the three parts of the three
+    // to one, which is why it is the body of the bottle and not the globs.
+    var g = ctx.createLinearGradient(0, SURFACE, 0, 94);
+    g.addColorStop(0, css(oilTop, 1));
+    g.addColorStop(0.58, css(oilMid, 1));
+    g.addColorStop(1, css(oilDeep, 1));
+    ctx.fillStyle = g;
+    ctx.fillRect(0, SURFACE, W, 94 - SURFACE);
+
+    // Warmth at the base, which is what is meant to be moving all of this.
+    var bulb = ctx.createRadialGradient(CX, 95, 1, CX, 95, 26);
+    bulb.addColorStop(0, css(mix(oil, [255, 246, 214], 0.75), 0.3));
+    bulb.addColorStop(1, css(oil, 0));
+    ctx.fillStyle = bulb;
+    ctx.fillRect(0, 60, W, 34);
+
+    drawParticles(false);
+
+    renderField();
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(fcan, 0, 0, FW, FH, 0, 0, W, H);
+    for (var bi = 0; bi < blobs.length; bi++) {
+      var sb = blobs[bi];
+      ctx.fillStyle = 'rgba(255,240,224,.19)';
+      ctx.beginPath();
+      ctx.ellipse(sb.x - sb.r * 0.36, sb.y - sb.r * 0.42,
+                  sb.r * 0.15, sb.r * 0.075, -0.55, 0, 6.283);
+      ctx.fill();
+    }
+
+    drawParticles(true);
+
+    // Empty neck above the liquid, then the meniscus across it.
+    ctx.fillStyle = css(cream, 1);
+    ctx.fillRect(0, 0, W, SURFACE);
+    ctx.fillStyle = css(mix(oil, [255, 255, 255], 0.3), 0.9);
+    ctx.beginPath();
+    ctx.ellipse(CX, SURFACE, wall(SURFACE) + 0.6, 1.15, 0, 0, 6.283);
+    ctx.fill();
+
+    // Glass: a shadow down each side and one specular streak on the left.
+    var side = ctx.createLinearGradient(8, 0, 40, 0);
+    side.addColorStop(0, 'rgba(0,0,0,.26)');
+    side.addColorStop(0.28, 'rgba(0,0,0,0)');
+    side.addColorStop(0.76, 'rgba(0,0,0,0)');
+    side.addColorStop(1, 'rgba(0,0,0,.3)');
+    ctx.fillStyle = side;
+    ctx.fillRect(0, 0, W, H);
+
+    var gleam = ctx.createLinearGradient(0, 42, 0, 90);
+    gleam.addColorStop(0, 'rgba(255,255,255,0)');
+    gleam.addColorStop(0.3, 'rgba(255,255,255,.2)');
+    gleam.addColorStop(0.72, 'rgba(255,255,255,.13)');
+    gleam.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = gleam;
+    ctx.beginPath();
+    ctx.ellipse(12.8, 66, 0.85, 22, 0, 0, 6.283);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(15.2, 62, 0.4, 15, 0, 0, 6.283);
+    ctx.fill();
+
+    ctx.restore();
+
+    // The bottle itself.
+    ctx.strokeStyle = css(glassRule, 1);
+    ctx.lineWidth = 2;
+    ctx.stroke(bodyPath);
+    ctx.fillStyle = css(glassRule, 1);
+    ctx.beginPath();
+    if (ctx.roundRect) { ctx.roundRect(18.5, 1, 11, 8, 2); }
+    else { ctx.rect(18.5, 1, 11, 8); }
+    ctx.fill();
+  }
+
+  function advance(dt, t) {
+    stepBlobs(dt, t);
+    stepParticles(dt, t);
+  }
+
+  // Start from somewhere the simulation has already settled into.
+  function warm(seconds) {
+    var step = 1 / 30;
+    for (var s = 0; s < seconds; s += step) advance(step, s);
+    return seconds;
+  }
+
+  var reduce = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  var clock = 0, last = 0, running = false, raf = 0, visible = true;
+
+  function frame(now) {
+    raf = 0;
+    if (!running) return;
+    var dt = last ? (now - last) / 1000 : 1 / 60;
+    last = now;
+    if (dt > 1 / 20) dt = 1 / 20;               // a backgrounded tab must not explode
+    clock += dt;
+    advance(dt, clock);
+    draw();
+    raf = requestAnimationFrame(frame);
+  }
+
+  function start() {
+    if (running || (reduce && reduce.matches) || !visible || document.hidden) return;
+    running = true; last = 0;
+    if (!raf) raf = requestAnimationFrame(frame);
+  }
+  function stop() {
+    running = false;
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+  }
+
+  function still() {
+    stop();
+    resize();
+    draw();
+  }
+
+  function shake() {
+    if (reduce && reduce.matches) return;
+    for (var i = 0; i < parts.length; i++) {
+      parts[i].vx += rand(-9, 9);
+      parts[i].vy += rand(-11, 7);
+      parts[i].spinRate = rand(-5, 5);
+    }
+    for (var b = 0; b < blobs.length; b++) {
+      blobs[b].vx += rand(-4, 4);
+      blobs[b].vy += rand(-5, 3);
+      blobs[b].temp = clamp(blobs[b].temp + rand(-0.25, 0.25), 0, 1);
+    }
+    holder.classList.remove('shaking');
+    void holder.offsetWidth;
+    holder.classList.add('shaking');
+  }
+
+  // Shaking is a control, so it has to be one: focusable, labelled, and
+  // driven by click rather than pointerdown, since a screen reader activates
+  // it with a synthetic click and never sends a pointer event at all. A div
+  // with role=button gets no Enter/Space for free either, hence the keydown.
+  // The whole affordance is attached here rather than in the markup so that
+  // it exists only where it works — not without script, and not under
+  // reduced motion, where shaking is declined.
+  function setControl(on) {
+    if (on) {
+      holder.setAttribute('role', 'button');
+      holder.setAttribute('tabindex', '0');
+      holder.setAttribute('aria-label', 'Shake the bottle');
+      holder.setAttribute('title', 'Shake');
+    } else {
+      holder.removeAttribute('role');
+      holder.removeAttribute('tabindex');
+      holder.removeAttribute('aria-label');
+      holder.removeAttribute('title');
+    }
+  }
+
+  holder.addEventListener('click', shake);
+  holder.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();                         // Space would scroll the page
+      shake();
+    }
+  });
+  holder.addEventListener('animationend', function () {
+    holder.classList.remove('shaking');
+  });
+
+  // A pointer dragged across the glass stirs what is inside it.
+  var lastPt = null;
+  holder.addEventListener('pointermove', function (e) {
+    if (!running) return;
+    var rect = holder.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    var x = (e.clientX - rect.left) / rect.width * W;
+    var y = (e.clientY - rect.top) / rect.height * H;
+    var mx = lastPt ? x - lastPt[0] : 0, my = lastPt ? y - lastPt[1] : 0;
+    lastPt = [x, y];
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      var dx = p.x - x, dy = p.y - y, d2 = dx * dx + dy * dy;
+      if (d2 < 100) {
+        var w = 1 - d2 / 100;
+        p.vx += (mx * 2.5 + dx * 0.35) * w;
+        p.vy += (my * 2.5 + dy * 0.35) * w;
+      }
+    }
+    for (var b = 0; b < blobs.length; b++) {
+      var bl = blobs[b];
+      var bx = bl.x - x, by = bl.y - y, bd2 = bx * bx + by * by;
+      if (bd2 < 144) {
+        var k = (1 - bd2 / 144) * 0.5;
+        bl.vx += (mx * 1.4 + bx * 0.16) * k;
+        bl.vy += (my * 1.4 + by * 0.16) * k;
+      }
+    }
+  });
+  holder.addEventListener('pointerleave', function () { lastPt = null; });
+
+  window.addEventListener('resize', function () {
+    if (resize() && !running) draw();
+  });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) stop(); else start();
+  });
+
+  if (window.IntersectionObserver) {
+    new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting;
+      if (visible) start(); else stop();
+    }, { threshold: 0.01 }).observe(holder);
+  }
+
+  var darkQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  function onScheme() {
+    readPalette();
+    if (!running) draw();
+  }
+  if (darkQuery && darkQuery.addEventListener) darkQuery.addEventListener('change', onScheme);
+
+  function boot() {
+    holder.classList.add('live');
+    resize();
+    if (reduce && reduce.matches) {
+      setControl(false);
+      clock = warm(38);                 // a settled arrangement, held still
+      still();
+    } else {
+      setControl(true);
+      clock = warm(24);
+      start();
+      draw();
+    }
+  }
+
+  if (reduce && reduce.addEventListener) {
+    reduce.addEventListener('change', function () {
+      setControl(!reduce.matches);
+      if (reduce.matches) still(); else start();
+    });
+  }
+
+  boot();
+})();
+</script>
 
 <script>
   // Stamped by `vinaigresque deploy` on the droplet with the deployed commit.
