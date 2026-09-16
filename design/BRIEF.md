@@ -27,6 +27,11 @@ self-contained HTML file in `design/round-1/`.
 
 No price, no pack size, no ingredient list, no allergen or health claims, no
 shipping, no stockists, no testimonials, no founder story, no launch date.
+**Not the product's physical form either**: a mix the buyer adds to their own
+oil and vinegar, or a bottled dressing at 3 : 1. The holding page's bottle
+suggests the latter; the 3 : 1 instruction reads as the former. Nor what holds
+it together: only that mustard, the usual emulsifier, is absent. Do not assert
+an emulsifier-free dressing, or a shake that follows from one.
 Where a landing page structurally needs one of these, write **bracketed
 placeholder copy** — e.g. `[price]`, `[ingredient list]`, `[quote from a
 customer]` — so a reader can see at a glance what is real and what is a slot.
