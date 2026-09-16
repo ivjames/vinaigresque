@@ -31,7 +31,9 @@
 
     --measure: 36rem;
     --wide: 68rem;
-    --gutter: 16px;
+    /* 16px on a phone, growing with the viewport to 88px: 43px at 834, 78px
+       at 1280. Exterior margin is what makes the page read as a page. */
+    --gutter: clamp(16px, calc(8vw - 24px), 88px);
   }
 
   * { box-sizing: border-box; }
@@ -103,8 +105,8 @@
     grid-template-columns: 1fr;
     gap: 2rem;
     align-items: center;
-    padding-top: 2.5rem;
-    padding-bottom: 3.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
     text-align: center;
   }
   .hero-copy { max-width: var(--measure); margin: 0 auto; }
@@ -169,17 +171,29 @@
   .bottle.shaking { animation: shake .62s ease-in-out; }
   @media (prefers-reduced-motion: reduce) { .bottle.shaking { animation: none; } }
 
+  /* Imagery: renders lifted from the packet's boards, keyed onto the page.
+     Each is shown below its native pixel size so nothing is upscaled. */
+  .hero-mark { display: flex; flex-direction: column; align-items: center; }
+  .cluster { width: min(232px, 62vw); height: auto; margin-top: -.25rem; }
+  .step-fig { height: 76px; width: auto; display: block; margin-bottom: .6rem; }
+  .card .ico { position: absolute; top: 1rem; right: 1rem; width: 52px; height: auto; }
+  .story-fig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: .9rem; }
+  .story-fig img { width: min(150px, 40vw); height: auto; }
+  .head-fig { display: flex; align-items: flex-end; gap: 1.5rem; }
+  .head-fig .sprig { width: 104px; height: auto; flex: 0 0 auto; margin-bottom: .4rem; }
+
   @media (min-width: 760px) {
     .hero {
       grid-template-columns: 3fr 2fr;
       text-align: left;
-      padding-top: 3.5rem;
-      padding-bottom: 4.5rem;
+      padding-top: 2.75rem;
+      padding-bottom: 3.25rem;
       gap: 3rem;
     }
     .hero-copy { margin: 0; }
     .cta { justify-content: flex-start; }
-    .bottle { width: clamp(150px, 18vw, 210px); }
+    .bottle { width: clamp(140px, 16vw, 190px); }
+    .cluster { margin-top: -1.25rem; }
   }
 
   /* Signals: the four lines of directional copy */
@@ -187,7 +201,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.25rem 1.5rem;
-    padding: 1.75rem 0;
+    padding: 1.25rem 0;
     margin: 0;
     list-style: none;
   }
@@ -196,9 +210,9 @@
   @media (min-width: 760px) { .signals { grid-template-columns: repeat(4, 1fr); } }
 
   /* Sections */
-  section.block { padding-top: 3.5rem; padding-bottom: 3.5rem; }  /* longhand: the shorthand would zero .wrap's gutter */
-  @media (min-width: 760px) { section.block { padding-top: 4.5rem; padding-bottom: 4.5rem; } }
-  .head { max-width: var(--measure); margin-bottom: 2rem; }
+  section.block { padding-top: 2.5rem; padding-bottom: 2.5rem; }  /* longhand: the shorthand would zero .wrap's gutter */
+  @media (min-width: 760px) { section.block { padding-top: 3.25rem; padding-bottom: 3.25rem; } }
+  .head { max-width: var(--measure); margin-bottom: 1.5rem; }
 
   .steps { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 0; padding: 0; list-style: none; counter-reset: step; }
   .steps li { counter-increment: step; padding-top: .9rem; border-top: 1px solid var(--taupe); }
@@ -218,14 +232,15 @@
   @media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
 
   .story { display: grid; grid-template-columns: 1fr; gap: 1.5rem 3rem; }
-  .story .aside { font-family: var(--serif); font-style: italic; font-size: 1.25rem; color: var(--muted); line-height: 1.35; }
+  .story .aside { font-family: var(--serif); font-style: italic; font-size: 1.25rem; color: var(--muted); line-height: 1.35; text-align: center; margin: 0; }
   @media (min-width: 760px) { .story { grid-template-columns: 2fr 1fr; align-items: start; } }
 
   .cards { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 0; padding: 0; list-style: none; }
   .card {
+    position: relative;
     background: var(--panel);
     border-radius: 6px;
-    padding: 1.35rem 1.35rem 1.2rem;
+    padding: 1.2rem 4.6rem 1.1rem 1.2rem;   /* right: room for the icon, which is absolutely placed */
     display: flex; flex-direction: column; gap: .25rem;
   }
   .card .tag { font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
@@ -233,7 +248,7 @@
   .card .pair { font-size: .92rem; color: var(--muted); margin: .4rem 0 0; }
   .card .pair b { font-weight: 500; color: var(--ink); }
   @media (min-width: 600px) { .cards { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 960px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 760px) { .cards { grid-template-columns: repeat(3, 1fr); } }
 
   .pairings { width: 100%; border-collapse: collapse; font-size: .98rem; }
   .pairings th, .pairings td { text-align: left; vertical-align: top; padding: .8rem .75rem .8rem 0; border-top: 1px solid var(--taupe); }
@@ -303,11 +318,12 @@
         <p class="tagline">A mustard-free vinaigrette mix.</p>
         <p class="lede">A small pouch of dried herbs, garlic, onion and pepper. Add your own oil and vinegar, shake, and dress the salad the way you like it.</p>
         <div class="cta">
-          <a class="btn" href="#waitlist" id="hero-cta">Coming soon</a>
+          <a class="btn" href="#waitlist">Coming soon</a>
           <a class="quiet" href="#how">How it works</a>
         </div>
       </div>
 
+      <div class="hero-mark">
       <div class="bottle" id="bottle">
         <svg class="cruet" viewBox="0 -22 48 122" aria-hidden="true">
           <defs>
@@ -332,6 +348,8 @@
         </svg>
         <canvas id="lava" aria-hidden="true"></canvas>
       </div>
+      <img class="cluster" src="assets/img/cluster.png" width="290" height="150" alt="">
+      </div>
     </section>
 
     <div class="wrap">
@@ -353,15 +371,18 @@
       </div>
       <ol class="steps">
         <li>
+          <img class="step-fig" src="assets/img/step-mix.png" width="165" height="95" alt="" loading="lazy">
           <h3>Add the mix</h3>
           <p>Empty the pouch into a jar or bottle, or take a spoonful for a single salad.</p>
         </li>
         <li>
+          <img class="step-fig" src="assets/img/step-shake.png" width="140" height="92" alt="" loading="lazy">
           <h3>Add oil and vinegar</h3>
           <p>Three parts oil to one part vinegar. For a whole pouch, that is ¾ cup oil and ¼ cup vinegar. For one salad, 1½ tablespoons oil and ½ tablespoon vinegar.</p>
           <p class="muted">Extra-virgin olive oil and red wine vinegar is the house pairing. Others below.</p>
         </li>
         <li>
+          <img class="step-fig" src="assets/img/step-toss.png" width="170" height="95" alt="" loading="lazy">
           <h3>Shake or whisk</h3>
           <p>Shake until it comes together, then dress the salad. It will separate again as it sits. That is what dressing without mustard does, so shake it before each pour.</p>
         </li>
@@ -377,7 +398,10 @@
           <p>Vinaigresque leaves it out. What is left is herbs, garlic, onion and pepper doing the work, and a dressing that tastes like the oil and vinegar you chose. Nothing to hold it together, so you shake it. That is the whole trick.</p>
           <p>It is a pantry mix, not a bottled dressing: dry until you want it, and fresh every time you make it.</p>
         </div>
-        <p class="aside">Salads deserve better.</p>
+        <figure class="story-fig">
+          <img src="assets/img/radish.png" width="172" height="215" alt="Radishes with their leaves, and a few loose peppercorns" loading="lazy">
+          <figcaption class="aside">Salads deserve better.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -390,30 +414,35 @@
       <ul class="cards">
         <li class="card">
           <span class="tag">The base blend</span>
+          <img class="ico" src="assets/img/ico-herb.png" width="94" height="87" alt="" loading="lazy">
           <h3>Classic Italian Herb</h3>
           <p class="profile">Herbal, garlicky, familiar.</p>
           <p class="pair"><b>Pair with</b> red wine vinegar and olive oil.</p>
         </li>
         <li class="card">
           <span class="tag">In development</span>
+          <img class="ico" src="assets/img/ico-lemon.png" width="94" height="87" alt="" loading="lazy">
           <h3>Lemon Herb</h3>
           <p class="profile">Bright, clean, lighter.</p>
           <p class="pair"><b>Pair with</b> white wine or champagne vinegar and a mild olive oil.</p>
         </li>
         <li class="card">
           <span class="tag">In development</span>
+          <img class="ico" src="assets/img/ico-garlic.png" width="57" height="65" alt="" loading="lazy">
           <h3>Garlic &amp; Herb</h3>
           <p class="profile">More savory, garlic-forward.</p>
           <p class="pair"><b>Pair with</b> red wine vinegar and a robust olive oil.</p>
         </li>
         <li class="card">
           <span class="tag">In development</span>
+          <img class="ico" src="assets/img/ico-dill.png" width="94" height="87" alt="" loading="lazy">
           <h3>Greek Herb</h3>
           <p class="profile">Oregano-forward, lemony, greener.</p>
           <p class="pair"><b>Pair with</b> red or white wine vinegar and olive oil.</p>
         </li>
         <li class="card">
           <span class="tag">In development</span>
+          <img class="ico" src="assets/img/ico-pepper.png" width="54" height="76" alt="" loading="lazy">
           <h3>Roasted Red Pepper</h3>
           <p class="profile">Sweet pepper, garlic, herbs.</p>
           <p class="pair"><b>Pair with</b> red wine or sherry vinegar and olive oil.</p>
@@ -422,10 +451,13 @@
     </section>
 
     <section class="wrap block" id="pairings">
-      <div class="head">
-        <p class="kicker">Oil and vinegar</p>
-        <h2>Pair. Make it yours.</h2>
-        <p class="muted">The pouch stays the same. The vinegar you reach for is what changes the dressing, and the oil follows the vinegar.</p>
+      <div class="head head-fig">
+        <div>
+          <p class="kicker">Oil and vinegar</p>
+          <h2>Pair. Make it yours.</h2>
+          <p class="muted">The pouch stays the same. The vinegar you reach for is what changes the dressing, and the oil follows the vinegar.</p>
+        </div>
+        <img class="sprig" src="assets/img/sprig.png" width="130" height="110" alt="" loading="lazy">
       </div>
       <table class="pairings">
         <thead>
@@ -447,7 +479,10 @@
         <p class="status">Under development</p>
         <h2>Not on shelves yet.</h2>
         <p class="measure">Vinaigresque is being made in small batches while the recipe and the pouch are finished.</p>
-        <p id="join-open" hidden>Leave an address and hear when it is ready.</p>
+        <!-- The list is not open. To open it: set this form's action, remove
+             hidden, delete the "not open" line below it, and change the hero
+             button from "Coming soon" to "Join the waitlist". No script flips
+             this, so a reader without JavaScript sees the same state. -->
         <form class="join" method="post" hidden>
           <label for="email">Email address</label>
           <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
@@ -1189,26 +1224,5 @@
 })();
 </script>
 
-<script>
-  // The waitlist has nowhere to post yet. Set this to a form endpoint (a
-  // Formspree-style URL, or whatever is chosen) and the form appears in place
-  // of the closed notice and the hero button starts asking for an address.
-  // Left empty, a reader without JS and a reader with it see the same honest
-  // line: not open yet.
-  var WAITLIST_ENDPOINT = '';
-  (function () {
-    if (!WAITLIST_ENDPOINT) return;
-    var form = document.querySelector('form.join');
-    var closed = document.getElementById('join-closed');
-    if (!form) return;
-    form.setAttribute('action', WAITLIST_ENDPOINT);
-    form.removeAttribute('hidden');
-    var open = document.getElementById('join-open');
-    if (open) open.removeAttribute('hidden');
-    if (closed) closed.remove();
-    var cta = document.getElementById('hero-cta');
-    if (cta) cta.textContent = 'Join the waitlist';
-  })();
-</script>
 </body>
 </html>
