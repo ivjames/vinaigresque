@@ -56,9 +56,10 @@ Land changes on `main` (via a PR — see `CLAUDE.md`), then on the droplet:
 vinaigresque deploy
 ```
 
-That is `git fetch` + `git reset --hard origin/main` of the checkout, plus a
-`sed` that stamps the deployed commit into the page's `BUILD` constant if it
-has one. No build, no restart, no reload.
+That is `git fetch` + `git reset --hard origin/main` of the checkout. No build,
+no restart, no reload. The CLI will also stamp the deployed commit into a
+`BUILD` constant if the page carries one — this page deliberately does not, so
+that step is a no-op here.
 
 ## Check it
 
@@ -88,7 +89,14 @@ health-check --site vinaigresque # the droplet-wide auditor also covers it
   `/.well-known/acme-challenge/`, which is where certbot serves its HTTP-01
   challenge — it would break the `setup` run's own certbot call and every
   renewal after it. Do not "simplify" it back.
-- **The page carries a `BUILD` constant** at two-space indentation, so
-  `vinaigresque deploy` stamps the deployed commit into it and the footer
-  shows which commit is live. `vinaigresque status` reads the same value back
-  over HTTPS. Keep the declaration line's shape if you edit `index.html`.
+- **The page carries no `BUILD` constant, deliberately.** The deploy stamp is
+  optional in the CLI (`deploy` only stamps a page that already has the
+  declaration line, and `status` prints `build n/a` without one), and this is
+  a product landing page rather than a dashboard — a commit SHA in the footer
+  is for us, shown to everyone. The cost is real and worth stating: there is
+  no way to tell which commit is live from off the box, because any stamp a
+  remote check can read is one every visitor can read. `vinaigresque status`
+  on the droplet reports the checkout SHA, and that is now the only answer.
+  If you ever want the remote check back, re-add the constant at two-space
+  indentation with single quotes — the anchored `sed` in `bin/vinaigresque`
+  matches exactly that shape — and put it back in the footer.

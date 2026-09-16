@@ -55,7 +55,7 @@
   .bottle {
     position: relative;
     width: clamp(104px, 34vw, 152px);
-    aspect-ratio: 48 / 100;
+    aspect-ratio: 48 / 122;
     margin: 0 auto 2.25rem;
     touch-action: manipulation;
   }
@@ -74,7 +74,6 @@
   }
   .bottle.live .cruet { display: none; }
   .cruet .glass { fill: none; stroke: var(--rule); stroke-width: 2; }
-  .cruet .cap    { fill: var(--rule); }
   .cruet .oil     { fill: var(--oil);     opacity: .9; }
   .cruet .vinegar { fill: var(--vinegar); opacity: .9; }
 
@@ -130,7 +129,7 @@
 
   @media (max-height: 720px) {
     body { padding: 32px 16px; }
-    .bottle { width: clamp(88px, 26vw, 116px); margin-bottom: 1.6rem; }
+    .bottle { width: clamp(80px, 23vw, 104px); margin-bottom: 1.4rem; }
     h1 { font-size: clamp(2.2rem, 8vw, 3.2rem); }
     hr { margin: 1.6rem auto; }
     footer { margin-top: 2.25rem; }
@@ -144,20 +143,19 @@
 <body>
   <main>
     <div class="bottle" id="bottle">
-      <svg class="cruet" viewBox="0 0 48 100" aria-hidden="true">
+      <svg class="cruet" viewBox="0 -22 48 122" aria-hidden="true">
         <defs>
           <clipPath id="body">
             <path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94
                      L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
           </clipPath>
         </defs>
-        <rect class="cap" x="18.5" y="1" width="11" height="8" rx="2"/>
         <g clip-path="url(#body)">
           <rect class="oil"     x="0" y="36" width="48" height="43.5"/>
           <rect class="vinegar" x="0" y="79.5" width="48" height="20.5"/>
         </g>
-        <path class="glass" d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88
-                               Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
+        <path class="glass" d="M20,8 L20,30 C20,35 8,39 8,50 L8,88 Q8,94 14,94
+                               L34,94 Q40,94 40,88 L40,50 C40,39 28,35 28,30 L28,8"/>
       </svg>
       <canvas id="lava" aria-hidden="true"></canvas>
     </div>
@@ -185,11 +183,19 @@
   /* ---- Bottle geometry, in the SVG's own 48x100 units. Everything below is
      drawn in these units and scaled to device pixels once, per resize. ---- */
   var W = 48, H = 100, CX = 24;
+  // Room above the mouth for the mix to fall through before it goes in.
+  var HEAD = 22, HT = H + HEAD;
   var SURFACE = 36;            // liquid line, up inside the neck
   var FLOOR = 92.5;            // as deep as anything suspended can get
   var BODY = 'M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94 ' +
              'L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z';
   var bodyPath = new Path2D(BODY);
+  // The same outline, but traversed without the segment across the mouth, so
+  // the bottle strokes open at the top. The closed one still does the
+  // clipping; only the stroke changes.
+  var RIM = 'M20,8 L20,30 C20,35 8,39 8,50 L8,88 Q8,94 14,94 ' +
+            'L34,94 Q40,94 40,88 L40,50 C40,39 28,35 28,30 L28,8';
+  var rimPath = new Path2D(RIM);
 
   // Half-width of the liquid at a given height, inset to sit inside the glass.
   function wall(y) {
@@ -320,20 +326,37 @@
     { n: 3, shape: 'chip',   rad: [0.7, 1.25],  cols: ['#e8dcc0', '#d6c49c'] }             // garlic
   ];
 
+  // What the product actually is: a mix that goes into your own oil and
+  // vinegar. So it keeps going in — the bottle is open and the mix falls
+  // through the neck without stopping.
+  //
+  // The bottle must not fill up, so the population is fixed rather than
+  // rationed by a rate: every flake released above the mouth is paired with
+  // one already inside, which fades out first and IS the one that comes back
+  // round. A constant count by construction, not by tuning.
+  var DROP_EVERY = 1.6;     // seconds between releases, jittered
+  var FADE_OUT = 0.9, FADE_IN = 0.45;
+
   var parts = [];
-  (function seed() {
+  function seedParticles() {
+    parts.length = 0;
     for (var s = 0; s < SPICES.length; s++) {
       var spec = SPICES[s];
       for (var k = 0; k < spec.n * 2; k++) {
         var rad = rand(spec.rad[0], spec.rad[1]);
-        var y = rand(SURFACE + 5, FLOOR - 2);
-        var hw = wall(y) - rad - 0.4;
         var p = {
-          x: CX + rand(-hw, hw), y: y, vx: 0, vy: 0, rad: rad,
+          x: 0, y: 0, vx: 0, vy: 0, rad: rad,
           col: spec.cols[(Math.random() * spec.cols.length) | 0],
           shape: spec.shape,
           rot: rand(0, 6.283), spin: rand(0, 6.283), spinRate: rand(-2.2, 2.2),
           front: Math.random() < 0.68,
+          dry: false,
+          fade: 1, going: false, born: 0,
+          // Which way this one drifts at the surface. The convection rises up
+          // the middle and its sideways component is proportional to the
+          // offset from centre, so a flake sitting exactly on the centre line
+          // has nothing to move it and the turnover strands it there.
+          side: Math.random() < 0.5 ? -1 : 1,
           pts: null
         };
         if (spec.shape === 'flake') {
@@ -345,14 +368,85 @@
           }
           p.pts = pts;
         }
+        // The body starts seeded. Nothing has to fall in for the bottle to
+        // look right on the first frame.
+        var y = rand(SURFACE + 5, FLOOR - 2);
+        var hw = wall(y) - rad - 0.4;
+        p.x = CX + rand(-hw, hw);
+        p.y = y;
         parts.push(p);
       }
     }
-  })();
+  }
+
+  // Send one flake back round: the longest-resident goes first, so the
+  // turnover works evenly through the bottle rather than draining one end.
+  var nextDrop = DROP_EVERY;
+  function recycle(t) {
+    if (t < nextDrop) return;
+    nextDrop = t + DROP_EVERY + rand(-0.45, 0.45);
+    var pick = null;
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      if (p.dry || p.going) continue;              // already in transit
+      if (!pick || p.born < pick.born) pick = p;
+    }
+    if (pick) pick.going = true;                   // starts fading where it is
+  }
+
+  function relaunch(p, t) {
+    p.going = false;
+    p.dry = true;
+    p.fade = 0;
+    p.born = t;
+    p.x = CX + rand(-2.4, 2.4);
+    p.y = -HEAD - rand(1, 7);
+    p.vx = rand(-0.5, 0.5);
+    p.vy = rand(1, 4);
+    p.side = Math.random() < 0.5 ? -1 : 1;
+    p.spinRate = rand(-2.2, 2.2);
+  }
 
   function stepParticles(dt, t) {
     for (var i = 0; i < parts.length; i++) {
       var p = parts[i];
+
+      if (p.going) {                              // on its way out
+        p.fade -= dt / FADE_OUT;
+        if (p.fade <= 0) { relaunch(p, t); }
+      } else if (p.fade < 1) {
+        p.fade += dt / FADE_IN;
+        if (p.fade > 1) p.fade = 1;
+      }
+
+      // Dry, and still on its way down: no convection, no globules to be
+      // caught by, and nothing holding it up but air.
+      if (p.dry) {
+        p.vy += 18 * dt;
+        p.vy *= Math.exp(-1.5 * dt);              // drifts down, does not plummet
+        p.vx *= Math.exp(-1.2 * dt);
+        p.x += p.vx * dt; p.y += p.vy * dt;
+        p.rot += p.spinRate * dt * 2.2;
+        p.spin += p.spinRate * 1.4 * dt;
+        if (p.y > 8) {                            // inside the neck now
+          var nhw = wall(p.y) - p.rad - 0.2;
+          if (nhw < 0.2) nhw = 0.2;
+          if (p.x > CX + nhw) { p.x = CX + nhw; p.vx *= -0.35; }
+          if (p.x < CX - nhw) { p.x = CX - nhw; p.vx *= -0.35; }
+        }
+        if (p.y >= SURFACE) {
+          // Into the oil. It keeps most of its fall, so it carries down into
+          // the body instead of stopping dead at the surface, and it scatters
+          // sideways — which it has to, because the convection column rises
+          // at the centre and the neck drops everything into the centre. With
+          // no sideways kick the flow lifts the whole lot straight back up
+          // and it piles under the surface in one clump.
+          p.dry = false;
+          p.vy *= 0.7;
+          p.vx += rand(-3.5, 3.5);
+        }
+        continue;
+      }
 
       // Convection: up the middle, down the walls, rolling over at each end.
       var nx = clamp((p.x - CX) / 15, -1.1, 1.1);
@@ -360,11 +454,25 @@
       var depth = clamp((p.y - SURFACE) / (FLOOR - SURFACE), 0, 1);
       var swirl = 0.55 + 0.45 * Math.sin(t * 0.27 + depth * 3);
       var fx = nx * 1.7 * Math.cos(Math.PI * depth) * swirl;
-      var fy = -column * 3.1 * swirl * Math.sin(Math.PI * depth);
+      var fy = -column * 2.2 * swirl * Math.sin(Math.PI * depth);
 
-      fy += 0.72;                                   // heavier than what holds them
-      fx += (Math.random() - 0.5) * 0.9;            // a little brownian fuzz
-      fy += (Math.random() - 0.5) * 0.9;
+      // Heavier than what holds it. These three numbers — the cell's lift,
+      // this weight, and the surface drift below — were swept together
+      // against the depth distribution over simulated 8-minute runs, because
+      // every other combination tried drained one end of the bottle: too
+      // light and the rising column collects the lot under the mouth, too
+      // heavy and it all ends up on the floor.
+      fy += 1.3;
+      // Near the surface the cell turns over outwards, but its sideways
+      // force is proportional to the offset from centre — which is zero at
+      // the centre, exactly where the neck delivers everything. Without this
+      // the arrivals pile into a raft under the mouth and stay there: with
+      // the old physics all 44 sat within two units of y=42 for a full
+      // minute. Give each flake a side to drift to and the stagnation drains.
+      if (depth < 0.24) fx += p.side * 1.2 * (1 - depth / 0.24);
+
+      fx += (Math.random() - 0.5) * 1.6;            // a little brownian fuzz
+      fy += (Math.random() - 0.5) * 1.2;
 
       // Anything caught in a rising globule rides it.
       for (var b = 0; b < blobs.length; b++) {
@@ -397,19 +505,7 @@
     }
   }
 
-  function drawParticles(front) {
-    for (var i = 0; i < parts.length; i++) {
-      var p = parts[i];
-      if (p.front !== front) continue;
-      // Tumbling: squash on one axis so a flat flake turns edge-on and back.
-      var face = Math.abs(Math.cos(p.spin));
-      var sq = 0.26 + 0.74 * face;
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot);
-      ctx.scale(1, sq);
-      ctx.globalAlpha = front ? 0.55 + 0.45 * face : 0.34 + 0.2 * face;
-      ctx.fillStyle = p.col;
+  function drawShape(p) {
       if (p.shape === 'flake') {
         ctx.beginPath();
         ctx.moveTo(p.pts[0][0], p.pts[0][1]);
@@ -434,6 +530,42 @@
         ctx.arc(0, 0, p.rad, 0, 6.283);
         ctx.fill();
       }
+  }
+
+  // Above the mouth there is no glass to clip to, so these are drawn on
+  // their own before the clip goes on.
+  function drawFalling() {
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      if (p.y >= 8) continue;
+      var face = Math.abs(Math.cos(p.spin));
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.scale(1, 0.26 + 0.74 * face);
+      ctx.globalAlpha = (0.55 + 0.45 * face) * p.fade;
+      ctx.fillStyle = p.col;
+      drawShape(p);
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawParticles(front) {
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      if (p.front !== front) continue;
+      if (p.y < 8) continue;                       // drawn outside the clip
+      // Tumbling: squash on one axis so a flat flake turns edge-on and back.
+      var face = Math.abs(Math.cos(p.spin));
+      var sq = 0.26 + 0.74 * face;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.scale(1, sq);
+      ctx.globalAlpha = (front ? 0.55 + 0.45 * face : 0.34 + 0.2 * face) * p.fade;
+      ctx.fillStyle = p.col;
+      drawShape(p);
       ctx.restore();
     }
     ctx.globalAlpha = 1;
@@ -505,10 +637,19 @@
   }
 
   function draw() {
-    ctx.setTransform(cw / W, 0, 0, ch / H, 0, 0);
-    ctx.clearRect(0, 0, W, H);
+    ctx.setTransform(cw / W, 0, 0, ch / HT, 0, 0);
+    ctx.translate(0, HEAD);                        // y < 0 is above the mouth
+    ctx.clearRect(0, -HEAD, W, HT);
+
+    drawFalling();                                 // still outside the glass
+
     ctx.save();
     ctx.clip(bodyPath);
+
+    // The empty neck first: it used to be painted last, as a mask, but the
+    // mix now falls through it and would be painted over.
+    ctx.fillStyle = css(cream, 1);
+    ctx.fillRect(0, 0, W, SURFACE);
 
     // The oil the globules travel through — the three parts of the three
     // to one, which is why it is the body of the bottle and not the globs.
@@ -526,6 +667,11 @@
     ctx.fillStyle = bulb;
     ctx.fillRect(0, 60, W, 34);
 
+    ctx.fillStyle = css(mix(oil, [255, 255, 255], 0.3), 0.9);
+    ctx.beginPath();
+    ctx.ellipse(CX, SURFACE, wall(SURFACE) + 0.6, 1.15, 0, 0, 6.283);
+    ctx.fill();
+
     drawParticles(false);
 
     renderField();
@@ -542,14 +688,6 @@
 
     drawParticles(true);
 
-    // Empty neck above the liquid, then the meniscus across it.
-    ctx.fillStyle = css(cream, 1);
-    ctx.fillRect(0, 0, W, SURFACE);
-    ctx.fillStyle = css(mix(oil, [255, 255, 255], 0.3), 0.9);
-    ctx.beginPath();
-    ctx.ellipse(CX, SURFACE, wall(SURFACE) + 0.6, 1.15, 0, 0, 6.283);
-    ctx.fill();
-
     // Glass: a shadow down each side and one specular streak on the left.
     var side = ctx.createLinearGradient(8, 0, 40, 0);
     side.addColorStop(0, 'rgba(0,0,0,.26)');
@@ -557,7 +695,7 @@
     side.addColorStop(0.76, 'rgba(0,0,0,0)');
     side.addColorStop(1, 'rgba(0,0,0,.3)');
     ctx.fillStyle = side;
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 0, W, 100);
 
     var gleam = ctx.createLinearGradient(0, 42, 0, 90);
     gleam.addColorStop(0, 'rgba(255,255,255,0)');
@@ -574,26 +712,29 @@
 
     ctx.restore();
 
-    // The bottle itself.
+    // The bottle itself, open at the top — there is no cap, because the mix
+    // never stops going in.
     ctx.strokeStyle = css(glassRule, 1);
     ctx.lineWidth = 2;
-    ctx.stroke(bodyPath);
-    ctx.fillStyle = css(glassRule, 1);
-    ctx.beginPath();
-    if (ctx.roundRect) { ctx.roundRect(18.5, 1, 11, 8, 2); }
-    else { ctx.rect(18.5, 1, 11, 8); }
-    ctx.fill();
+    ctx.lineCap = 'round';
+    ctx.stroke(rimPath);
   }
 
   function advance(dt, t) {
     stepBlobs(dt, t);
+    recycle(t);
     stepParticles(dt, t);
   }
 
-  // Start from somewhere the simulation has already settled into.
-  function warm(seconds) {
+  // Start from somewhere the simulation has already settled into. The
+  // globules can be warmed on their own, so the oil is already turning over
+  // when the mix goes in rather than starting from a dead stop.
+  function warm(seconds, withMix) {
     var step = 1 / 30;
-    for (var s = 0; s < seconds; s += step) advance(step, s);
+    for (var s = 0; s < seconds; s += step) {
+      stepBlobs(step, s);
+      if (withMix) { recycle(s); stepParticles(step, s); }
+    }
     return seconds;
   }
 
@@ -684,7 +825,7 @@
     var rect = holder.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
     var x = (e.clientX - rect.left) / rect.width * W;
-    var y = (e.clientY - rect.top) / rect.height * H;
+    var y = (e.clientY - rect.top) / rect.height * HT - HEAD;
     var mx = lastPt ? x - lastPt[0] : 0, my = lastPt ? y - lastPt[1] : 0;
     lastPt = [x, y];
     for (var i = 0; i < parts.length; i++) {
@@ -734,11 +875,13 @@
     resize();
     if (reduce && reduce.matches) {
       setControl(false);
-      clock = warm(38);                 // a settled arrangement, held still
+      seedParticles();
+      clock = warm(40, true);           // a frame with some mix mid-fall
       still();
     } else {
       setControl(true);
-      clock = warm(24);
+      seedParticles();
+      clock = warm(24, true);
       start();
       draw();
     }
@@ -753,14 +896,6 @@
 
   boot();
 })();
-</script>
-
-<script>
-  // Stamped by `vinaigresque deploy` on the droplet with the deployed commit.
-  // The anchored sed in bin/vinaigresque rewrites exactly this line, so keep
-  // the two-space indentation and the single quotes.
-  const BUILD = 'dev';
-  document.querySelector('footer').textContent = 'vinaigresque.com · ' + BUILD;
 </script>
 </body>
 </html>
