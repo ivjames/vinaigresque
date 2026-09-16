@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vinaigresque</title>
+<meta name="description" content="Vinaigresque — a mustard-free vinaigrette mix. Three parts oil, one part vinegar, no mustard.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f6f1e4">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f6f1e4'/><rect x='6' y='6' width='20' height='15' rx='2' fill='%23c8a227'/><rect x='6' y='21' width='20' height='5' rx='2' fill='%236b3b3b'/><circle cx='16' cy='14' r='3.2' fill='%236b3b3b'/></svg>">
+<style>
+  /* The label. The holding page's palette, untouched: this direction is that
+     page grown into a real one, not a new one. Everything below is set the
+     way a printed label is set — one serif, one monospace for the small
+     details, thin rules, and more paper than ink. */
+  :root {
+    --bg:      #f6f1e4;   /* cream */
+    --ink:     #2e2a20;   /* near-black, warmed */
+    --muted:   #6f6452;   /* aged label ink */
+    --oil:     #c8a227;   /* olive oil — three parts */
+    --vinegar: #6b3b3b;   /* red wine vinegar — one part */
+    --herb:    #6b7f4e;   /* green herb */
+    --rule:    #d9cfb8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:      #191712;
+      --ink:     #efe7d5;
+      --muted:   #a0967f;
+      --rule:    #3a342a;
+      --oil:     #d9b23a;
+      --vinegar: #73403f;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { height: 100%; scroll-behavior: smooth; }
+  body {
+    min-height: 100%;
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+                 Georgia, "Times New Roman", serif;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    padding: 0 16px;
+  }
+  a { color: inherit; }
+  :focus-visible {
+    outline: 2px solid var(--herb);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  /* The small print. Uppercase, tracked, monospace — the holding page's
+     "Under development" line, promoted to a system. */
+  .mono, .masthead, figcaption, .note, .details, footer, label {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .72rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .sheet {
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+
+  /* ---- Masthead: one rule, two facts. ---- */
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .masthead a { text-decoration: none; }
+  .masthead a:hover { text-decoration: underline; text-underline-offset: .3em; }
+
+  /* ---- Hero: the bottle, the name, the line, the button. Centred, as the
+     holding page was, and in the same order. ---- */
+  .hero {
+    text-align: center;
+    padding: clamp(3rem, 8vw, 5.5rem) 0 clamp(3rem, 7vw, 4.5rem);
+    border-bottom: 1px solid var(--rule);
+  }
+  .cruet {
+    display: block;
+    width: clamp(120px, 30vw, 176px);
+    height: auto;
+    margin: 0 auto 2.5rem;
+  }
+  .cruet .glass   { fill: none; stroke: var(--rule); stroke-width: 2; }
+  .cruet .cap     { fill: var(--rule); }
+  .cruet .oil     { fill: var(--oil);     opacity: .9; }
+  .cruet .vinegar { fill: var(--vinegar); opacity: .9; }
+
+  h1 {
+    font-size: clamp(2.8rem, 11vw, 4.5rem);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1;
+    margin: 0;
+  }
+  h1 .accent { color: var(--herb); }
+  .tagline {
+    margin: 1.1rem 0 0;
+    font-size: clamp(1.1rem, 3.6vw, 1.3rem);
+    font-style: italic;
+    color: var(--muted);
+  }
+  .hero .details {
+    margin: 1.75rem 0 0;
+  }
+  .hero .details span { white-space: nowrap; }
+  /* The dot trails its item, so a line that breaks here ends on a dot rather
+     than starting on one. */
+  .hero .details span:not(:last-child)::after {
+    content: "·";
+    margin-left: .6em;
+  }
+
+  .button {
+    display: inline-block;
+    margin-top: 2.25rem;
+    padding: .8em 1.6em;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--bg);
+    font: inherit;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .78rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  .button:hover { background: var(--bg); color: var(--ink); }
+
+  /* ---- The label's columns: a running head at the left, the text at the
+     right, as on the back of any bottle worth reading. ---- */
+  .section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .9rem 2.5rem;
+    padding: clamp(2.5rem, 6vw, 4rem) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  @media (min-width: 720px) {
+    .section { grid-template-columns: 11rem 1fr; }
+  }
+  .section h2 {
+    margin: 0;
+    padding-top: .35rem;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .72rem;
+    font-weight: 400;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .section h2::before {
+    content: "§ ";
+  }
+  .section > div { max-width: 32rem; }
+  .section p { margin: 0 0 1.1rem; }
+  .section p:last-child { margin-bottom: 0; }
+  .section p.lede {
+    font-size: clamp(1.15rem, 2.4vw, 1.3rem);
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+
+  /* A slot. Anything in square brackets is a fact not yet known, and is
+     dressed so that no one mistakes it for one that is. */
+  .slot {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .82em;
+    color: var(--muted);
+    border-bottom: 1px dashed var(--rule);
+  }
+
+  .details { margin: 0; }
+  .details dl { margin: 0; }
+  .details dl div { display: flex; gap: 1rem; padding: .45rem 0; border-top: 1px solid var(--rule); }
+  .details dl div:last-child { border-bottom: 1px solid var(--rule); }
+  .details dt { flex: 0 0 7rem; margin: 0; }
+  .details dd { margin: 0; color: var(--ink); }
+  .details dd .slot { color: var(--muted); }
+
+  /* ---- The ratio. Four equal parts, three of them oil, one of them vinegar;
+     the whole of the instruction, drawn to scale. ---- */
+  .ratio {
+    margin: 1.5rem 0 0;
+  }
+  .ratio .bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    height: 2.25rem;
+    border: 1px solid var(--rule);
+    padding: 2px;
+    border-radius: 2px;
+  }
+  .ratio .bar span { display: block; border-radius: 1px; }
+  .ratio .bar .o { background: var(--oil);     opacity: .9; }
+  .ratio .bar .v { background: var(--vinegar); opacity: .9; }
+  .ratio .ticks {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: .3rem;
+  }
+  .ratio .ticks span {
+    border-left: 1px solid var(--rule);
+    height: .5rem;
+  }
+  .ratio .ticks span:last-child { border-right: 1px solid var(--rule); }
+  .ratio figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: .35rem;
+  }
+  .ratio figcaption b { font-weight: 400; color: var(--ink); }
+  .instruction {
+    font-size: clamp(1.15rem, 2.4vw, 1.35rem);
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+  .section p.note { margin: 1.25rem 0 0; }
+
+  /* ---- Closing: the form. It posts nowhere yet, and says so. ---- */
+  form { margin-top: .25rem; }
+  .field {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    align-items: stretch;
+  }
+  label { display: block; margin-bottom: .5rem; }
+  input[type="email"] {
+    flex: 1 1 14rem;
+    min-width: 0;
+    padding: .7em .9em;
+    font: inherit;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--muted);
+    border-radius: 2px;
+  }
+  input[type="email"]::placeholder { color: var(--muted); opacity: 1; }
+  .field .button { margin-top: 0; flex: 0 0 auto; }
+
+  footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1.5rem 0 2.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="masthead">
+    <a href="https://vinaigresque.com">vinaigresque.com</a>
+    <span>Mustard-free</span>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="name">
+      <!-- The holding page's cruet, still. The one on the holding page moves
+           if it can; this one is a label, and a label stays put. -->
+      <svg class="cruet" viewBox="0 0 48 100" role="img"
+           aria-label="A cruet, three parts oil over one part vinegar">
+        <defs>
+          <clipPath id="body">
+            <path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94
+                     L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
+          </clipPath>
+        </defs>
+        <rect class="cap" x="18.5" y="1" width="11" height="8" rx="2"/>
+        <g clip-path="url(#body)">
+          <rect class="oil"     x="0" y="36" width="48" height="43.5"/>
+          <rect class="vinegar" x="0" y="79.5" width="48" height="20.5"/>
+        </g>
+        <path class="glass" d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88
+                               Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
+      </svg>
+
+      <h1 id="name">Vinaigresque<span class="accent">.</span></h1>
+      <p class="tagline">A mustard-free vinaigrette mix.</p>
+
+      <p class="details">
+        <span>Three parts oil</span>
+        <span>One part vinegar</span>
+        <span>No mustard</span>
+      </p>
+
+      <a class="button" href="#notify">Notify me</a>
+    </section>
+
+    <section class="section" aria-labelledby="what">
+      <h2 id="what">What it is</h2>
+      <div>
+        <p class="lede">Most vinaigrettes contain mustard, and not for the
+        taste of it.</p>
+        <p>Mustard is the emulsifier. It is what persuades oil and vinegar,
+        which would rather not, to stay together for the length of a salad.
+        Vinaigresque leaves it out. What you taste is the oil you chose, the
+        vinegar you chose, and the mix &mdash; and nothing that tastes of
+        mustard.</p>
+        <p><span class="slot">[one sentence on what holds it together
+        instead, once that is settled]</span></p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="why">
+      <h2 id="why">Why no mustard</h2>
+      <div>
+        <p>Some people do not care for mustard in a dressing. Some cannot have
+        it at all. <span class="slot">[allergen statement &mdash; none until it
+        can be made]</span></p>
+        <p>Either way, this is a vinaigrette in which mustard is absent rather
+        than merely quiet. There is none to declare, and none to taste.</p>
+        <div class="details" style="margin-top:1.75rem">
+          <dl>
+            <div><dt>Contents</dt><dd><span class="slot">[ingredient list]</span></dd></div>
+            <div><dt>Net</dt><dd><span class="slot">[pack size]</span></dd></div>
+            <div><dt>Price</dt><dd><span class="slot">[price]</span></dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="how">
+      <h2 id="how">How to use it</h2>
+      <div>
+        <p class="instruction">Three parts oil to one part vinegar. Add
+        <span class="slot">[quantity]</span> of the mix. Shake.</p>
+
+        <figure class="ratio" role="img"
+                aria-label="Four equal parts: three of oil, one of vinegar">
+          <div class="bar" aria-hidden="true">
+            <span class="o"></span><span class="o"></span><span class="o"></span><span class="v"></span>
+          </div>
+          <div class="ticks" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+          <figcaption aria-hidden="true">
+            <span><b>3</b> oil</span>
+            <span><b>1</b> vinegar</span>
+          </figcaption>
+        </figure>
+
+        <p class="note">By volume. The ratio is the recipe&rsquo;s, not a suggestion.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="notify-h" id="notify">
+      <h2 id="notify-h">Notify me</h2>
+      <div>
+        <p>It is not for sale yet. Leave an address and you will hear once,
+        when it is, and not otherwise.</p>
+        <form action="#" method="get">
+          <label for="email">Email</label>
+          <div class="field">
+            <input type="email" id="email" name="email" autocomplete="email"
+                   placeholder="you@example.com" required>
+            <button class="button" type="submit">Notify me</button>
+          </div>
+        </form>
+        <p class="note"><span class="slot">[form target]</span> &mdash; this form
+        posts nowhere yet.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>vinaigresque.com</span>
+    <span>Under development</span>
+  </footer>
+
+</div>
+</body>
+</html>
