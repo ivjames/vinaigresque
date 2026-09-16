@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vinaigresque</title>
+<meta name="description" content="Vinaigresque — a mustard-free vinaigrette mix. Under development.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f6f1e4">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f6f1e4'/><rect x='6' y='6' width='20' height='12' rx='2' fill='%23c8a227'/><rect x='6' y='18' width='20' height='8' rx='2' fill='%236b7f4e'/></svg>">
+<style>
+  :root {
+    --bg:      #f6f1e4;   /* cream */
+    --ink:     #2e2a20;   /* near-black, warmed */
+    --muted:   #6f6452;   /* aged label ink */
+    --oil:     #c8a227;   /* olive oil, the top layer */
+    --vinegar: #6b3b3b;   /* red wine vinegar, the bottom layer */
+    --herb:    #6b7f4e;   /* green herb */
+    --rule:    #d9cfb8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:    #191712;
+      --ink:   #efe7d5;
+      --muted: #a0967f;
+      --rule:  #3a342a;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+                 Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 16px;
+    text-align: center;
+  }
+  main { max-width: 34rem; }
+
+  /* The separation: oil floating on vinegar, which is the whole point of a
+     vinaigrette and the only ornament on the page. */
+  .cruet {
+    display: block;
+    width: 62px;
+    height: auto;
+    margin: 0 auto 2.25rem;
+  }
+  .cruet .glass { fill: none; stroke: var(--rule); stroke-width: 2; }
+  .cruet .cap    { fill: var(--rule); }
+  .cruet .oil     { fill: var(--oil);     opacity: .9; }
+  .cruet .vinegar { fill: var(--vinegar); opacity: .9; }
+
+  h1 {
+    font-size: clamp(2.6rem, 11vw, 4.25rem);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1;
+    margin: 0;
+  }
+  h1 .accent { color: var(--herb); }
+
+  .tagline {
+    margin: 1.1rem 0 0;
+    font-size: clamp(1rem, 3.4vw, 1.2rem);
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    width: 3.5rem;
+    margin: 2.25rem auto;
+  }
+
+  .status {
+    margin: 0;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  footer {
+    margin-top: 3.5rem;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .68rem;
+    letter-spacing: .1em;
+    color: var(--muted);
+    opacity: .7;
+  }
+</style>
+</head>
+<body>
+  <main>
+    <svg class="cruet" viewBox="0 0 48 100" aria-hidden="true">
+      <defs>
+        <clipPath id="body">
+          <path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94
+                   L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
+        </clipPath>
+      </defs>
+      <rect class="cap" x="18.5" y="1" width="11" height="8" rx="2"/>
+      <g clip-path="url(#body)">
+        <rect class="oil"     x="0" y="48" width="48" height="22"/>
+        <rect class="vinegar" x="0" y="70" width="48" height="30"/>
+      </g>
+      <path class="glass" d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88
+                             Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
+    </svg>
+
+    <h1>Vinaigresque<span class="accent">.</span></h1>
+    <p class="tagline">A mustard-free vinaigrette mix.</p>
+
+    <hr>
+
+    <p class="status">Under development</p>
+  </main>
+
+  <footer>vinaigresque.com</footer>
+
+<script>
+  // Stamped by `vinaigresque deploy` on the droplet with the deployed commit.
+  // The anchored sed in bin/vinaigresque rewrites exactly this line, so keep
+  // the two-space indentation and the single quotes.
+  const BUILD = 'dev';
+  document.querySelector('footer').textContent = 'vinaigresque.com · ' + BUILD;
+</script>
+</body>
+</html>
