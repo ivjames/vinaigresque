@@ -4,79 +4,159 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vinaigresque</title>
-<meta name="description" content="Vinaigresque — a mustard-free vinaigrette mix. Under development.">
+<meta name="description" content="Vinaigresque — a mustard-free vinaigrette mix. Add your own oil and vinegar, shake, and dress the salad. Under development.">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#f6f1e4">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f6f1e4'/><rect x='6' y='6' width='20' height='15' rx='2' fill='%23c8a227'/><rect x='6' y='21' width='20' height='5' rx='2' fill='%236b3b3b'/><circle cx='16' cy='14' r='3.2' fill='%236b3b3b'/></svg>">
+<meta name="theme-color" content="#FAF6EC">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23FAF6EC'/><text x='5' y='25' font-family='Georgia,serif' font-size='26' fill='%232E2A1F'>V</text><circle cx='26.5' cy='22.5' r='2.6' fill='%236B7F4E'/></svg>">
 <style>
+  /* Light mode only. The dark landing page this site opened with is kept as
+     a family reference and nothing more; there is deliberately no
+     prefers-color-scheme block here. */
   :root {
-    --bg:      #f6f1e4;   /* cream */
-    --ink:     #2e2a20;   /* near-black, warmed */
-    --muted:   #6f6452;   /* aged label ink */
-    --oil:     #c8a227;   /* olive oil — three parts, and so the body */
-    --vinegar: #6b3b3b;   /* red wine vinegar — one part, and so the globs */
-    --herb:    #6b7f4e;   /* green herb */
-    --rule:    #d9cfb8;
+    --cream:    #FAF6EC;   /* background */
+    --ink:      #2E2A1F;   /* olive brown: text and line work */
+    --muted:    #5E5849;   /* secondary copy: 6.6:1 on cream. Taupe is never text. */
+    --sage:     #6B7F4E;   /* the period, icons, thin accents: 4.1:1, so never small text */
+    --sage-ink: #5A6C40;   /* sage for buttons and links, taken down to 5.3:1 */
+    --gold:     #D4B04C;   /* the oil */
+    --burgundy: #7A2E34;   /* the vinegar, and one accent */
+    --taupe:    #D8CDBA;   /* rules, the bottle's glass, structure */
+    --panel:    #F3EDDE;   /* one step below cream, for cards */
+
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+             Georgia, "Times New Roman", serif;
+    --sans:  Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+             "Helvetica Neue", Arial, sans-serif;
+    --mono:  ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+    --measure: 36rem;
+    --wide: 68rem;
+    --gutter: 16px;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg:      #191712;
-      --ink:     #efe7d5;
-      --muted:   #a0967f;
-      --rule:    #3a342a;
-      --oil:     #d9b23a;
-      --vinegar: #73403f;
-    }
-  }
+
   * { box-sizing: border-box; }
-  html { height: 100%; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body {
-    min-height: 100%;
     margin: 0;
-    background: var(--bg);
+    background: var(--cream);
     color: var(--ink);
-    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
-                 Georgia, "Times New Roman", serif;
+    font-family: var(--sans);
+    font-size: 1.0625rem;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .serif { font-family: var(--serif); font-weight: 400; }
+  h2 {
+    font-size: clamp(1.9rem, 4.6vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin: 0 0 .5rem;
+  }
+  h3 { font-size: 1.3rem; line-height: 1.2; margin: 0 0 .35rem; }
+  p { margin: 0 0 1rem; }
+  a { color: var(--sage-ink); text-underline-offset: .15em; }
+  a:hover { color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--sage-ink); outline-offset: 4px; }
+
+  .wrap { width: 100%; max-width: var(--wide); margin: 0 auto; padding: 0 var(--gutter); }
+  .measure { max-width: var(--measure); }
+  .lede { font-family: var(--serif); font-size: clamp(1.15rem, 2.4vw, 1.35rem); line-height: 1.45; }
+  .muted { color: var(--muted); }
+  .kicker {
+    font-family: var(--sans);
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .9rem;
+  }
+  .rule { border: 0; border-top: 1px solid var(--taupe); margin: 0; }
+
+  /* Header */
+  .top {
     display: flex;
-    flex-direction: column;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 0;
+  }
+  .brand { font-family: var(--serif); font-size: 1.35rem; color: var(--ink); text-decoration: none; }
+  .brand .dot, h1 .dot { color: var(--sage); }
+  .nav { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; margin: 0; padding: 0; list-style: none; }
+  .nav a {
+    font-size: .78rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+  }
+  .nav a:hover { color: var(--ink); }
+  @media (max-width: 599px) {
+    .top { flex-direction: column; align-items: flex-start; gap: .6rem; padding-bottom: .9rem; }
+    .nav { gap: .25rem 1rem; }
+  }
+
+  /* Hero */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
     align-items: center;
-    justify-content: center;
-    padding: 48px 16px;
+    padding-top: 2.5rem;
+    padding-bottom: 3.5rem;
     text-align: center;
   }
-  main { max-width: 34rem; }
+  .hero-copy { max-width: var(--measure); margin: 0 auto; }
+  h1 {
+    font-size: clamp(2.9rem, 10vw, 5rem);
+    letter-spacing: -0.015em;
+    line-height: 1;
+    margin: 0;
+  }
+  .tagline {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1.15rem, 3.2vw, 1.5rem);
+    color: var(--muted);
+    margin: .8rem 0 1.2rem;
+  }
+  .cta { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; align-items: center; justify-content: center; margin-top: 1.4rem; }
+  .btn {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--cream);
+    background: var(--sage-ink);
+    border: 0;
+    border-radius: 3px;
+    padding: .8rem 1.4rem;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .btn:hover { background: var(--ink); color: var(--cream); }
+  .cta .quiet { font-size: .95rem; }
 
-  /* The bottle: vinegar globules rising and falling through the oil, with
-     the herbs and spices suspended in the convection. Three parts oil to one
-     of vinegar, so the oil is the body and the vinegar is what globs. Canvas
-     does the work; the inline SVG below it is what a reader without JS gets,
-     and the script hides it once the simulation is running. */
+  /* The bottle: the same lava lamp the holding page carried, now the hero
+     mark. Canvas does the work; the inline SVG under it is what a reader
+     without JS gets, and the script hides it once the simulation runs. */
   .bottle {
     position: relative;
-    width: clamp(104px, 34vw, 152px);
+    width: clamp(120px, 32vw, 176px);
     aspect-ratio: 48 / 100;
-    margin: 0 auto 2.25rem;
+    margin: 0 auto;
     touch-action: manipulation;
   }
   .bottle[role="button"] { cursor: pointer; }
-  .bottle:focus-visible {
-    outline: 2px solid var(--herb);
-    outline-offset: 7px;
-    border-radius: 4px;
-  }
-  .bottle > * {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
+  .bottle:focus-visible { outline: 2px solid var(--sage-ink); outline-offset: 7px; border-radius: 4px; }
+  .bottle > * { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .bottle.live .cruet { display: none; }
-  .cruet .glass { fill: none; stroke: var(--rule); stroke-width: 2; }
-  .cruet .cap    { fill: var(--rule); }
-  .cruet .oil     { fill: var(--oil);     opacity: .9; }
-  .cruet .vinegar { fill: var(--vinegar); opacity: .9; }
+  .cruet .glass { fill: none; stroke: var(--taupe); stroke-width: 2; }
+  .cruet .cap { fill: var(--taupe); }
+  .cruet .oil { fill: var(--gold); opacity: .8; }
+  .cruet .glob { fill: var(--burgundy); opacity: .92; }
+  .cruet .herb { fill: var(--sage); }
 
   @keyframes shake {
     0%, 100% { transform: translate(0, 0) rotate(0); }
@@ -86,91 +166,312 @@
     88%      { transform: translate(1%, 0)    rotate(.7deg); }
   }
   .bottle.shaking { animation: shake .62s ease-in-out; }
+  @media (prefers-reduced-motion: reduce) { .bottle.shaking { animation: none; } }
 
-  h1 {
-    font-size: clamp(2.6rem, 11vw, 4.25rem);
-    font-weight: 400;
-    letter-spacing: -0.015em;
-    line-height: 1;
+  @media (min-width: 760px) {
+    .hero {
+      grid-template-columns: 3fr 2fr;
+      text-align: left;
+      padding-top: 3.5rem;
+      padding-bottom: 4.5rem;
+      gap: 3rem;
+    }
+    .hero-copy { margin: 0; }
+    .cta { justify-content: flex-start; }
+    .bottle { width: clamp(150px, 18vw, 210px); }
+  }
+
+  /* Signals: the four lines of directional copy */
+  .signals {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem 1.5rem;
+    padding: 1.75rem 0;
     margin: 0;
+    list-style: none;
   }
-  h1 .accent { color: var(--herb); }
+  .signals li { font-family: var(--serif); font-size: 1.1rem; line-height: 1.3; }
+  .signals small { display: block; font-family: var(--sans); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: .3rem; }
+  @media (min-width: 760px) { .signals { grid-template-columns: repeat(4, 1fr); } }
 
-  .tagline {
-    margin: 1.1rem 0 0;
-    font-size: clamp(1rem, 3.4vw, 1.2rem);
-    font-style: italic;
-    color: var(--muted);
+  /* Sections */
+  section.block { padding-top: 3.5rem; padding-bottom: 3.5rem; }  /* longhand: the shorthand would zero .wrap's gutter */
+  @media (min-width: 760px) { section.block { padding-top: 4.5rem; padding-bottom: 4.5rem; } }
+  .head { max-width: var(--measure); margin-bottom: 2rem; }
+
+  .steps { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 0; padding: 0; list-style: none; counter-reset: step; }
+  .steps li { counter-increment: step; padding-top: .9rem; border-top: 1px solid var(--taupe); }
+  .steps li::before {
+    content: counter(step);
+    display: inline-grid;
+    place-items: center;
+    width: 1.9rem; height: 1.9rem;
+    border-radius: 50%;
+    background: var(--sage);
+    color: var(--cream);
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    margin-bottom: .6rem;
+  }
+  .steps p:last-child { margin-bottom: 0; }
+  @media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+
+  .story { display: grid; grid-template-columns: 1fr; gap: 1.5rem 3rem; }
+  .story .aside { font-family: var(--serif); font-style: italic; font-size: 1.25rem; color: var(--muted); line-height: 1.35; }
+  @media (min-width: 760px) { .story { grid-template-columns: 2fr 1fr; align-items: start; } }
+
+  .cards { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  .card {
+    background: var(--panel);
+    border-radius: 6px;
+    padding: 1.35rem 1.35rem 1.2rem;
+    display: flex; flex-direction: column; gap: .25rem;
+  }
+  .card .tag { font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .card .profile { font-family: var(--serif); font-size: 1.05rem; margin: 0; }
+  .card .pair { font-size: .92rem; color: var(--muted); margin: .4rem 0 0; }
+  .card .pair b { font-weight: 500; color: var(--ink); }
+  @media (min-width: 600px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 960px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+
+  .pairings { width: 100%; border-collapse: collapse; font-size: .98rem; }
+  .pairings th, .pairings td { text-align: left; vertical-align: top; padding: .8rem .75rem .8rem 0; border-top: 1px solid var(--taupe); }
+  .pairings th { font-family: var(--serif); font-weight: 400; font-size: 1.1rem; white-space: nowrap; }
+  .pairings thead th { font-family: var(--sans); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); border-top: 0; padding-top: 0; }
+  @media (max-width: 599px) {
+    .pairings thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .pairings tr { display: block; padding: .8rem 0; border-top: 1px solid var(--taupe); }
+    .pairings th, .pairings td { display: block; border: 0; padding: 0 0 .15rem; white-space: normal; }
+    .pairings td::before { content: attr(data-label) " "; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
   }
 
-  hr {
-    border: 0;
-    border-top: 1px solid var(--rule);
-    width: 3.5rem;
-    margin: 2.25rem auto;
-  }
-
+  /* Conversion */
+  .waitlist { background: var(--panel); border-radius: 8px; padding: 2rem var(--gutter); }
+  @media (min-width: 760px) { .waitlist { padding: 3rem; } }
   .status {
-    margin: 0;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-family: var(--mono);
     font-size: .72rem;
     letter-spacing: .18em;
     text-transform: uppercase;
     color: var(--muted);
+    margin: 0 0 1rem;
   }
+  form.join { display: flex; flex-wrap: wrap; gap: .75rem; max-width: 30rem; }
+  form.join[hidden] { display: none; }  /* author display would otherwise beat the attribute */
+  form.join label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  form.join input {
+    flex: 1 1 14rem;
+    font: inherit;
+    padding: .75rem .9rem;
+    border: 1px solid var(--taupe);
+    border-radius: 3px;
+    background: var(--cream);
+    color: var(--ink);
+  }
+  form.join input::placeholder { color: var(--muted); }
 
-  footer {
-    margin-top: 3.5rem;
-    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-    font-size: .68rem;
-    letter-spacing: .1em;
-    color: var(--muted);
-    opacity: .7;
-  }
-
-  @media (max-height: 720px) {
-    body { padding: 32px 16px; }
-    .bottle { width: clamp(88px, 26vw, 116px); margin-bottom: 1.6rem; }
-    h1 { font-size: clamp(2.2rem, 8vw, 3.2rem); }
-    hr { margin: 1.6rem auto; }
-    footer { margin-top: 2.25rem; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .bottle.shaking { animation: none; }
-  }
+  /* Footer */
+  footer { padding-top: 2.5rem; padding-bottom: 3rem; }
+  .foot { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: baseline; justify-content: space-between; }
+  .foot .nav a { font-size: .74rem; }
+  .build { font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; color: var(--muted); }
 </style>
 </head>
 <body>
-  <main>
-    <div class="bottle" id="bottle">
-      <svg class="cruet" viewBox="0 0 48 100" aria-hidden="true">
-        <defs>
-          <clipPath id="body">
-            <path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94
-                     L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
-          </clipPath>
-        </defs>
-        <rect class="cap" x="18.5" y="1" width="11" height="8" rx="2"/>
-        <g clip-path="url(#body)">
-          <rect class="oil"     x="0" y="36" width="48" height="43.5"/>
-          <rect class="vinegar" x="0" y="79.5" width="48" height="20.5"/>
-        </g>
-        <path class="glass" d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88
-                               Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
-      </svg>
-      <canvas id="lava" aria-hidden="true"></canvas>
+  <header class="wrap">
+    <div class="top">
+      <a class="brand" href="#top">Vinaigresque<span class="dot">.</span></a>
+      <nav aria-label="Sections">
+        <ul class="nav">
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#why">Why mustard-free</a></li>
+          <li><a href="#flavors">Flavors</a></li>
+          <li><a href="#pairings">Pairings</a></li>
+          <li><a href="#waitlist">Waitlist</a></li>
+        </ul>
+      </nav>
+    </div>
+    <hr class="rule">
+  </header>
+
+  <main id="top">
+    <section class="wrap hero">
+      <div class="hero-copy">
+        <p class="kicker">Good ingredients go further.</p>
+        <h1>Vinaigresque<span class="dot">.</span></h1>
+        <p class="tagline">A mustard-free vinaigrette mix.</p>
+        <p class="lede">A small pouch of dried herbs, garlic, onion and pepper. Add your own oil and vinegar, shake, and dress the salad the way you like it.</p>
+        <div class="cta">
+          <a class="btn" href="#waitlist" id="hero-cta">Coming soon</a>
+          <a class="quiet" href="#how">How it works</a>
+        </div>
+      </div>
+
+      <div class="bottle" id="bottle">
+        <svg class="cruet" viewBox="0 0 48 100" aria-hidden="true">
+          <defs>
+            <clipPath id="body">
+              <path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94
+                       L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
+            </clipPath>
+          </defs>
+          <rect class="cap" x="18.5" y="1" width="11" height="8" rx="2"/>
+          <g clip-path="url(#body)">
+            <rect class="oil" x="0" y="36" width="48" height="64"/>
+            <circle class="glob" cx="19" cy="58" r="5.2"/>
+            <circle class="glob" cx="30" cy="70" r="3.6"/>
+            <circle class="glob" cx="17" cy="82" r="4.4"/>
+            <circle class="glob" cx="31" cy="87" r="2.8"/>
+            <circle class="herb" cx="27" cy="52" r=".9"/>
+            <circle class="herb" cx="14" cy="70" r=".8"/>
+            <circle class="herb" cx="34" cy="60" r=".7"/>
+            <circle class="herb" cx="24" cy="76" r=".9"/>
+          </g>
+          <path class="glass" d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88
+                                 Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
+        </svg>
+        <canvas id="lava" aria-hidden="true"></canvas>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <hr class="rule">
+      <ul class="signals">
+        <li>Simple ingredients.<small>Remarkable salads.</small></li>
+        <li>Good ingredients go further.<small>Your oil, your vinegar.</small></li>
+        <li>Mustard-free.<small>All of the flavor.</small></li>
+        <li>Same salad.<small>A more interesting story.</small></li>
+      </ul>
+      <hr class="rule">
     </div>
 
-    <h1>Vinaigresque<span class="accent">.</span></h1>
-    <p class="tagline">A mustard-free vinaigrette mix.</p>
+    <section class="wrap block" id="how">
+      <div class="head">
+        <p class="kicker">How it works</p>
+        <h2>Mix. Add oil and vinegar. Shake.</h2>
+        <p class="muted">One pouch makes about eight servings of fresh dressing. It is dry until you make it, so make only what you need.</p>
+      </div>
+      <ol class="steps">
+        <li>
+          <h3>Add the mix</h3>
+          <p>Empty the pouch into a jar or bottle, or take a spoonful for a single salad.</p>
+        </li>
+        <li>
+          <h3>Add oil and vinegar</h3>
+          <p>Three parts oil to one part vinegar. For a whole pouch, that is ¾ cup oil and ¼ cup vinegar. For one salad, 1½ tablespoons oil and ½ tablespoon vinegar.</p>
+          <p class="muted">Extra-virgin olive oil and red wine vinegar is the house pairing. Others below.</p>
+        </li>
+        <li>
+          <h3>Shake or whisk</h3>
+          <p>Shake until it comes together, then dress the salad. It will separate again as it sits. That is what dressing without mustard does, so shake it before each pour.</p>
+        </li>
+      </ol>
+    </section>
 
-    <hr>
+    <section class="wrap block" id="why">
+      <div class="story">
+        <div>
+          <p class="kicker">Why mustard-free</p>
+          <h2>A small mix for a brighter table.</h2>
+          <p>Most vinaigrettes lean on mustard. It holds the oil and vinegar together and it carries a lot of the flavor, which is why so many dressings taste faintly of the same thing.</p>
+          <p>Vinaigresque leaves it out. What is left is herbs, garlic, onion and pepper doing the work, and a dressing that tastes like the oil and vinegar you chose. Nothing to hold it together, so you shake it. That is the whole trick.</p>
+          <p>It is a pantry mix, not a bottled dressing: dry until you want it, and fresh every time you make it.</p>
+        </div>
+        <p class="aside">Salads deserve better.</p>
+      </div>
+    </section>
 
-    <p class="status">Under development</p>
+    <section class="wrap block" id="flavors">
+      <div class="head">
+        <p class="kicker">Flavors</p>
+        <h2>Classic first. The rest are in development.</h2>
+        <p class="muted">One base blend, and a short list of directions it can take. Every flavor uses the same bottle and the same three steps.</p>
+      </div>
+      <ul class="cards">
+        <li class="card">
+          <span class="tag">The base blend</span>
+          <h3>Classic Italian Herb</h3>
+          <p class="profile">Herbal, garlicky, familiar.</p>
+          <p class="pair"><b>Pair with</b> red wine vinegar and olive oil.</p>
+        </li>
+        <li class="card">
+          <span class="tag">In development</span>
+          <h3>Lemon Herb</h3>
+          <p class="profile">Bright, clean, lighter.</p>
+          <p class="pair"><b>Pair with</b> white wine or champagne vinegar and a mild olive oil.</p>
+        </li>
+        <li class="card">
+          <span class="tag">In development</span>
+          <h3>Garlic &amp; Herb</h3>
+          <p class="profile">More savory, garlic-forward.</p>
+          <p class="pair"><b>Pair with</b> red wine vinegar and a robust olive oil.</p>
+        </li>
+        <li class="card">
+          <span class="tag">In development</span>
+          <h3>Greek Herb</h3>
+          <p class="profile">Oregano-forward, lemony, greener.</p>
+          <p class="pair"><b>Pair with</b> red or white wine vinegar and olive oil.</p>
+        </li>
+        <li class="card">
+          <span class="tag">In development</span>
+          <h3>Roasted Red Pepper</h3>
+          <p class="profile">Sweet pepper, garlic, herbs.</p>
+          <p class="pair"><b>Pair with</b> red wine or sherry vinegar and olive oil.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="wrap block" id="pairings">
+      <div class="head">
+        <p class="kicker">Oil and vinegar</p>
+        <h2>Pair. Make it yours.</h2>
+        <p class="muted">The pouch stays the same. The vinegar you reach for is what changes the dressing, and the oil follows the vinegar.</p>
+      </div>
+      <table class="pairings">
+        <thead>
+          <tr><th scope="col">Vinegar</th><th scope="col">What it does</th><th scope="col">Oil to use</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Red wine</th><td data-label="What it does">Classic, robust.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
+          <tr><th scope="row">White wine or champagne</th><td data-label="What it does">Lighter, brighter.</td><td data-label="Oil">A mild olive oil.</td></tr>
+          <tr><th scope="row">Balsamic</th><td data-label="What it does">Sweeter, darker, richer.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
+          <tr><th scope="row">Apple cider</th><td data-label="What it does">Fruitier, rounder.</td><td data-label="Oil">A mild olive oil, or avocado oil.</td></tr>
+          <tr><th scope="row">Sherry</th><td data-label="What it does">Nutty, savory, complex.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
+          <tr><th scope="row">Rice</th><td data-label="What it does">Clean and light.</td><td data-label="Oil">A neutral oil, or a mild olive oil.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="wrap block" id="waitlist">
+      <div class="waitlist">
+        <p class="status">Under development</p>
+        <h2>Not on shelves yet.</h2>
+        <p class="measure">Vinaigresque is being made in small batches while the recipe and the pouch are finished.</p>
+        <p id="join-open" hidden>Leave an address and hear when it is ready.</p>
+        <form class="join" method="post" hidden>
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
+          <button class="btn" type="submit">Join the waitlist</button>
+        </form>
+        <p class="muted" id="join-closed">The waitlist is not open yet. Check back.</p>
+      </div>
+    </section>
   </main>
 
-  <footer>vinaigresque.com</footer>
+  <footer class="wrap">
+    <hr class="rule">
+    <div class="foot" style="padding-top:1.5rem">
+      <a class="brand" href="#top">Vinaigresque<span class="dot">.</span></a>
+      <ul class="nav">
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#why">Why mustard-free</a></li>
+        <li><a href="#flavors">Flavors</a></li>
+        <li><a href="#pairings">Pairings</a></li>
+        <li><a href="#waitlist">Waitlist</a></li>
+      </ul>
+      <span class="build">vinaigresque.com · <span id="build">dev</span></span>
+    </div>
+  </footer>
 
 <script>
 (function () {
@@ -229,10 +530,10 @@
   }
 
   function readPalette() {
-    oil         = hex('--oil', '#c8a227');
-    vinegar     = hex('--vinegar', '#6b3b3b');
-    cream       = hex('--bg', '#f6f1e4');
-    glassRule   = hex('--rule', '#d9cfb8');
+    oil         = hex('--gold', '#D4B04C');
+    vinegar     = hex('--burgundy', '#7A2E34');
+    cream       = hex('--cream', '#FAF6EC');
+    glassRule   = hex('--taupe', '#D8CDBA');
     // Three parts of oil is a large field of colour rather than a band, and
     // at full strength that field reads as mustard — which this is not. So
     // the body is the token lifted towards the pale green-gold of the oil.
@@ -309,15 +610,16 @@
     }
   }
 
-  /* ---- Herbs and spices. No mustard seed, which is the whole point of the
-     product and so of the bottle. ---- */
+  /* ---- What is in the blend, and nothing that is not: the three herbs,
+     the two powders, and pepper. No mustard seed, which is the whole point
+     of the product and so of the bottle. Salt and sugar dissolve. ---- */
   var SPICES = [
-    { n: 5, shape: 'flake',  rad: [0.85, 1.7],  cols: ['#6b7f4e', '#5c7442', '#7d8f58'] }, // oregano
-    { n: 3, shape: 'flake',  rad: [0.65, 1.15], cols: ['#8aa15c', '#94a967'] },            // parsley
-    { n: 3, shape: 'needle', rad: [1.5, 2.4],   cols: ['#4f6b3f', '#5f7a49'] },            // rosemary
-    { n: 4, shape: 'flake',  rad: [0.7, 1.35],  cols: ['#b5432c', '#c65a33', '#9c3a26'] }, // chilli
-    { n: 4, shape: 'speck',  rad: [0.42, 0.78], cols: ['#2a241c', '#3b3328'] },            // black pepper
-    { n: 3, shape: 'chip',   rad: [0.7, 1.25],  cols: ['#e8dcc0', '#d6c49c'] }             // garlic
+    { n: 5, shape: 'flake', rad: [0.85, 1.7],  cols: ['#6b7f4e', '#5c7442', '#7d8f58'] }, // oregano
+    { n: 4, shape: 'flake', rad: [0.65, 1.15], cols: ['#8aa15c', '#94a967'] },            // parsley
+    { n: 4, shape: 'flake', rad: [0.8, 1.5],   cols: ['#4f6b3f', '#5f7a49', '#3f5a33'] }, // basil
+    { n: 5, shape: 'speck', rad: [0.42, 0.78], cols: ['#2a241c', '#3b3328'] },            // black pepper
+    { n: 3, shape: 'chip',  rad: [0.7, 1.25],  cols: ['#e8dcc0', '#d6c49c'] },            // garlic
+    { n: 2, shape: 'chip',  rad: [0.6, 1.1],   cols: ['#efe4cf', '#e2d3b2'] }             // onion
   ];
 
   var parts = [];
@@ -415,12 +717,6 @@
         ctx.moveTo(p.pts[0][0], p.pts[0][1]);
         for (var v = 1; v < p.pts.length; v++) ctx.lineTo(p.pts[v][0], p.pts[v][1]);
         ctx.closePath();
-        ctx.fill();
-      } else if (p.shape === 'needle') {
-        ctx.beginPath();
-        ctx.moveTo(-p.rad, 0);
-        ctx.quadraticCurveTo(0, -p.rad * 0.34, p.rad, 0);
-        ctx.quadraticCurveTo(0, p.rad * 0.34, -p.rad, 0);
         ctx.fill();
       } else if (p.shape === 'chip') {
         ctx.beginPath();
@@ -722,13 +1018,6 @@
     }, { threshold: 0.01 }).observe(holder);
   }
 
-  var darkQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
-  function onScheme() {
-    readPalette();
-    if (!running) draw();
-  }
-  if (darkQuery && darkQuery.addEventListener) darkQuery.addEventListener('change', onScheme);
-
   function boot() {
     holder.classList.add('live');
     resize();
@@ -756,11 +1045,33 @@
 </script>
 
 <script>
+  // The waitlist has nowhere to post yet. Set this to a form endpoint (a
+  // Formspree-style URL, or whatever is chosen) and the form appears in place
+  // of the closed notice and the hero button starts asking for an address.
+  // Left empty, a reader without JS and a reader with it see the same honest
+  // line: not open yet.
+  var WAITLIST_ENDPOINT = '';
+  (function () {
+    if (!WAITLIST_ENDPOINT) return;
+    var form = document.querySelector('form.join');
+    var closed = document.getElementById('join-closed');
+    if (!form) return;
+    form.setAttribute('action', WAITLIST_ENDPOINT);
+    form.removeAttribute('hidden');
+    var open = document.getElementById('join-open');
+    if (open) open.removeAttribute('hidden');
+    if (closed) closed.remove();
+    var cta = document.getElementById('hero-cta');
+    if (cta) cta.textContent = 'Join the waitlist';
+  })();
+</script>
+
+<script>
   // Stamped by `vinaigresque deploy` on the droplet with the deployed commit.
   // The anchored sed in bin/vinaigresque rewrites exactly this line, so keep
   // the two-space indentation and the single quotes.
   const BUILD = 'dev';
-  document.querySelector('footer').textContent = 'vinaigresque.com · ' + BUILD;
+  document.getElementById('build').textContent = BUILD;
 </script>
 </body>
 </html>
