@@ -7,14 +7,14 @@
 <meta name="description" content="Vinaigresque — a mustard-free vinaigrette mix. Under development.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#f6f1e4">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f6f1e4'/><rect x='6' y='6' width='20' height='12' rx='2' fill='%23c8a227'/><rect x='6' y='18' width='20' height='8' rx='2' fill='%236b3b3b'/><circle cx='16' cy='22' r='3' fill='%23c8a227'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f6f1e4'/><rect x='6' y='6' width='20' height='15' rx='2' fill='%23c8a227'/><rect x='6' y='21' width='20' height='5' rx='2' fill='%236b3b3b'/><circle cx='16' cy='14' r='3.2' fill='%236b3b3b'/></svg>">
 <style>
   :root {
     --bg:      #f6f1e4;   /* cream */
     --ink:     #2e2a20;   /* near-black, warmed */
     --muted:   #6f6452;   /* aged label ink */
-    --oil:     #c8a227;   /* olive oil — the lava */
-    --vinegar: #6b3b3b;   /* red wine vinegar — the medium it rises through */
+    --oil:     #c8a227;   /* olive oil — three parts, and so the body */
+    --vinegar: #6b3b3b;   /* red wine vinegar — one part, and so the globs */
     --herb:    #6b7f4e;   /* green herb */
     --rule:    #d9cfb8;
   }
@@ -46,10 +46,11 @@
   }
   main { max-width: 34rem; }
 
-  /* The bottle: oil globules rising and falling through vinegar, with the
-     herbs and spices suspended in the convection. Canvas does the work; the
-     inline SVG below it is what a reader without JS gets, and the script
-     hides it once the simulation is running. */
+  /* The bottle: vinegar globules rising and falling through the oil, with
+     the herbs and spices suspended in the convection. Three parts oil to one
+     of vinegar, so the oil is the body and the vinegar is what globs. Canvas
+     does the work; the inline SVG below it is what a reader without JS gets,
+     and the script hides it once the simulation is running. */
   .bottle {
     position: relative;
     width: clamp(104px, 34vw, 152px);
@@ -139,8 +140,8 @@
         </defs>
         <rect class="cap" x="18.5" y="1" width="11" height="8" rx="2"/>
         <g clip-path="url(#body)">
-          <rect class="oil"     x="0" y="36" width="48" height="24"/>
-          <rect class="vinegar" x="0" y="60" width="48" height="40"/>
+          <rect class="oil"     x="0" y="36" width="48" height="43.5"/>
+          <rect class="vinegar" x="0" y="79.5" width="48" height="20.5"/>
         </g>
         <path class="glass" d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88
                                Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
@@ -197,7 +198,7 @@
   function rand(a, b) { return a + Math.random() * (b - a); }
 
   /* ---- Colours come from the stylesheet so the page keeps one palette. ---- */
-  var oil, oilEdge, oilMid, oilCore, vinegar, vinegarDeep, cream, glassRule;
+  var oil, oilTop, oilMid, oilDeep, vinegar, globRim, globBody, cream, glassRule;
 
   function hex(name, fallback) {
     var v = getComputedStyle(document.documentElement)
@@ -219,10 +220,17 @@
     vinegar     = hex('--vinegar', '#6b3b3b');
     cream       = hex('--bg', '#f6f1e4');
     glassRule   = hex('--rule', '#d9cfb8');
-    oilEdge     = mix(oil, [92, 46, 20], 0.42);
-    oilMid      = mix(oil, [255, 236, 170], 0.14);
-    oilCore     = mix(oil, [255, 244, 198], 0.46);
-    vinegarDeep = mix(vinegar, [0, 0, 0], 0.38);
+    // Three parts of oil is a large field of colour rather than a band, and
+    // at full strength that field reads as mustard — which this is not. So
+    // the body is the token lifted towards the pale green-gold of the oil.
+    oilTop      = mix(oil, [255, 250, 225], 0.44);
+    oilMid      = mix(oil, [255, 246, 205], 0.2);
+    oilDeep     = mix(oil, [120, 70, 16], 0.34);
+    // The globs are the token pulled towards wine: against pale oil the
+    // token on its own goes muddy.
+    globBody    = mix(vinegar, [122, 26, 46], 0.45);
+    // A droplet is thin at its edge, so there it takes the colour of the oil.
+    globRim     = mix(globBody, oil, 0.3);
   }
   readPalette();
 
@@ -232,13 +240,13 @@
   var HEAT_Y = 82;                 // only the base warms
   var COOL_Y = 56;                 // only the top cools
   var blobs = [];
-  for (var i = 0; i < 6; i++) {
-    var r = rand(2.8, 5.2);
+  for (var i = 0; i < 7; i++) {
+    var r = rand(3.0, 5.5);
     blobs.push({
       x: CX + rand(-8, 8), y: rand(46, 90), r: r, r2: r * r,
       vx: 0, vy: 0,
       // Staggered so the eight of them never cycle in step.
-      temp: i / 6 + rand(-0.06, 0.06),
+      temp: i / 7 + rand(-0.06, 0.06),
       rate: rand(0.13, 0.19), ph: rand(0, 6.283)
     });
   }
@@ -277,9 +285,9 @@
         var a = blobs[i], c = blobs[j];
         var dx = c.x - a.x, dy = c.y - a.y;
         var d = Math.sqrt(dx * dx + dy * dy) || 0.001;
-        var min = (a.r + c.r) * 0.86;
+        var min = (a.r + c.r) * 1.05;
         if (d < min) {
-          var f = (min - d) / min * 5.5 * dt;
+          var f = (min - d) / min * 7.0 * dt;
           dx /= d; dy /= d;
           a.x -= dx * f * min * 0.5; a.y -= dy * f * min * 0.5;
           c.x += dx * f * min * 0.5; c.y += dy * f * min * 0.5;
@@ -405,6 +413,9 @@
         ctx.beginPath();
         ctx.ellipse(0, 0, p.rad, p.rad * 0.62, 0, 0, 6.283);
         ctx.fill();
+        ctx.strokeStyle = 'rgba(74,52,20,.45)';     // or they vanish into the oil
+        ctx.lineWidth = 0.16;
+        ctx.stroke();
       } else {
         ctx.beginPath();
         ctx.arc(0, 0, p.rad, 0, 6.283);
@@ -418,8 +429,8 @@
   /* ---- Metaball field, on a fixed low-res grid that is then scaled up.
      The kernel is inverse-quartic rather than the usual inverse-square: the
      square one bridges two globules while they are still a radius and a half
-     apart, so a bottleful reads as one lump instead of six. ---- */
-  var FS = 3;                                   // grid cells per bottle unit
+     apart, so a bottleful reads as one lump instead of seven. ---- */
+  var FS = 5;                                   // grid cells per bottle unit
   var FW = W * FS, FH = H * FS;
   var field = new Float32Array(FW * FH);
   var fcan = document.createElement('canvas');
@@ -449,17 +460,17 @@
     d.fill(0);
     for (var c = 0, o = 0; c < field.length; c++, o += 4) {
       var f = field[c];
-      if (f < 0.74) continue;
-      var a = (f - 0.74) / 0.56; if (a > 1) a = 1;
+      if (f < 0.94) continue;
+      // The edge is one field cell wide, so the globule has an outline
+      // rather than a halo. Everything inside it is flat but for a thin
+      // rim and a slow deepening through the middle.
+      var a = (f - 0.94) / 0.13; if (a > 1) a = 1;
       a = a * a * (3 - a - a);                       // smoothstep
-      // Rim, body, then a highlight only well inside the globule.
-      var k = (f - 1.3) / 5.5; if (k < 0) k = 0; if (k > 1) k = 1;
-      var lo, hi, m;
-      if (k < 0.45) { lo = oilEdge; hi = oilMid; m = k / 0.45; }
-      else { lo = oilMid; hi = oilCore; m = (k - 0.45) / 0.55; m *= m; }
-      d[o]     = lo[0] + (hi[0] - lo[0]) * m;
-      d[o + 1] = lo[1] + (hi[1] - lo[1]) * m;
-      d[o + 2] = lo[2] + (hi[2] - lo[2]) * m;
+      var rim = (f - 1.0) / 0.28; if (rim < 0) rim = 0; if (rim > 1) rim = 1;
+      rim = rim * rim * (3 - rim - rim);
+      d[o]     = globRim[0] + (globBody[0] - globRim[0]) * rim;
+      d[o + 1] = globRim[1] + (globBody[1] - globRim[1]) * rim;
+      d[o + 2] = globRim[2] + (globBody[2] - globRim[2]) * rim;
       d[o + 3] = a * 255;
     }
     fctx.putImageData(fimg, 0, 0);
@@ -486,17 +497,18 @@
     ctx.save();
     ctx.clip(bodyPath);
 
-    // The vinegar the globules travel through.
+    // The oil the globules travel through — the three parts of the three
+    // to one, which is why it is the body of the bottle and not the globs.
     var g = ctx.createLinearGradient(0, SURFACE, 0, 94);
-    g.addColorStop(0, css(mix(vinegar, [255, 255, 255], 0.1), 1));
-    g.addColorStop(0.62, css(vinegar, 1));
-    g.addColorStop(1, css(vinegarDeep, 1));
+    g.addColorStop(0, css(oilTop, 1));
+    g.addColorStop(0.58, css(oilMid, 1));
+    g.addColorStop(1, css(oilDeep, 1));
     ctx.fillStyle = g;
     ctx.fillRect(0, SURFACE, W, 94 - SURFACE);
 
     // Warmth at the base, which is what is meant to be moving all of this.
     var bulb = ctx.createRadialGradient(CX, 95, 1, CX, 95, 26);
-    bulb.addColorStop(0, css(mix(oil, [255, 235, 190], 0.6), 0.2));
+    bulb.addColorStop(0, css(mix(oil, [255, 246, 214], 0.75), 0.3));
     bulb.addColorStop(1, css(oil, 0));
     ctx.fillStyle = bulb;
     ctx.fillRect(0, 60, W, 34);
@@ -506,13 +518,21 @@
     renderField();
     ctx.imageSmoothingEnabled = true;
     ctx.drawImage(fcan, 0, 0, FW, FH, 0, 0, W, H);
+    for (var bi = 0; bi < blobs.length; bi++) {
+      var sb = blobs[bi];
+      ctx.fillStyle = 'rgba(255,240,224,.19)';
+      ctx.beginPath();
+      ctx.ellipse(sb.x - sb.r * 0.36, sb.y - sb.r * 0.42,
+                  sb.r * 0.15, sb.r * 0.075, -0.55, 0, 6.283);
+      ctx.fill();
+    }
 
     drawParticles(true);
 
     // Empty neck above the liquid, then the meniscus across it.
     ctx.fillStyle = css(cream, 1);
     ctx.fillRect(0, 0, W, SURFACE);
-    ctx.fillStyle = css(mix(vinegar, [255, 255, 255], 0.22), 0.9);
+    ctx.fillStyle = css(mix(oil, [255, 255, 255], 0.3), 0.9);
     ctx.beginPath();
     ctx.ellipse(CX, SURFACE, wall(SURFACE) + 0.6, 1.15, 0, 0, 6.283);
     ctx.fill();
