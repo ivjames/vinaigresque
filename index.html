@@ -29,8 +29,9 @@
     }
   }
   * { box-sizing: border-box; }
-  html, body { height: 100%; }
+  html { height: 100%; }
   body {
+    min-height: 100%;
     margin: 0;
     background: var(--bg);
     color: var(--ink);
@@ -125,6 +126,14 @@
     letter-spacing: .1em;
     color: var(--muted);
     opacity: .7;
+  }
+
+  @media (max-height: 720px) {
+    body { padding: 32px 16px; }
+    .bottle { width: clamp(88px, 26vw, 116px); margin-bottom: 1.6rem; }
+    h1 { font-size: clamp(2.2rem, 8vw, 3.2rem); }
+    hr { margin: 1.6rem auto; }
+    footer { margin-top: 2.25rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
