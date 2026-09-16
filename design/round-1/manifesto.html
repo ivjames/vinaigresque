@@ -235,6 +235,10 @@
     opacity: 1;
     transform: none;
   }
+  /* A statement still waiting its turn must not print as blank paper. */
+  @media print {
+    .reveal .st.pending > * { opacity: 1; transform: none; transition: none; }
+  }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
   }
