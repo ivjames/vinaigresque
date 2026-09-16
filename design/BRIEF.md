@@ -117,11 +117,14 @@ of it. Do not redraw the bottle from scratch; extend what is there.
    ≥ 3 : 1 against what they sit on; visible focus styles;
    `prefers-reduced-motion` honoured; semantic landmarks; one `h1`;
    images and SVG have alt text or `aria-hidden`. Compute the ratios.
-5. The call to action: there is no backend. The page keeps a
-   `WAITLIST_ENDPOINT` constant; empty, the form stays hidden and the copy
-   says the list is not open, and the hero button reads "Coming soon". Do
-   not wire it to a real service without being told which, and do not
-   invent a `mailto:` address.
+5. The call to action: there is no backend, and the list is not open.
+   While it is closed the form is `hidden` in the HTML, the panel says the
+   list is not open, and the hero button reads "Coming soon". Opening it is
+   an HTML edit, not a script: set the form's `action`, remove `hidden`,
+   drop the closed line, relabel the button. A reader without JavaScript
+   must see the same state as everyone else, so no toggle that only a
+   script can flip. Do not wire it to a real service without being told
+   which, and do not invent a `mailto:` address.
 6. `<meta name="robots" content="noindex">` stays until told otherwise.
 7. Under ~60KB. Keep the inline data-URI favicon.
 8. No build stamp on the page (see `DEPLOY.md`).
