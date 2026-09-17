@@ -250,13 +250,27 @@
   @media (min-width: 760px) { .cards { grid-template-columns: repeat(3, 1fr); } }
 
   .pairings { width: 100%; border-collapse: collapse; font-size: .98rem; }
-  .pairings th, .pairings td { text-align: left; vertical-align: top; padding: .8rem .75rem .8rem 0; border-top: 1px solid var(--taupe); }
+  .pairings th, .pairings td { text-align: left; vertical-align: top; padding: .8rem .75rem; border-top: 1px solid var(--taupe); }
   .pairings th { font-family: var(--serif); font-weight: 400; font-size: 1.1rem; white-space: nowrap; }
+  /* Each row is tinted with its vinegar: a wash of the colour over cream,
+     kept faint enough that ink stays above 7:1 on every one, and a firm
+     edge in the vinegar's own colour. The name in the row is the
+     differentiator; the tint is a second cue, never the only one. */
+  .pairings tbody tr { background: var(--tint, transparent); }
+  .pairings tbody th { border-left: 4px solid var(--edge, var(--taupe)); }
+  .v-red      { --tint: #EDE2DA;      --edge: #7A2E34; }
+  .v-white    { --tint: #F3EBCF;    --edge: #D9C46A; }
+  .v-balsamic { --tint: #EDE1D3; --edge: #4A2A16; }
+  .v-cider    { --tint: #F4E8D3;    --edge: #C98A2B; }
+  .v-sherry   { --tint: #F0E5D6;   --edge: #9C5A24; }
+  .v-rice     { --tint: #F1ECDB;     --edge: #DDD4B4; }
   .pairings thead th { font-family: var(--sans); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); border-top: 0; padding-top: 0; }
   @media (max-width: 599px) {
     .pairings thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-    .pairings tr { display: block; padding: .8rem 0; border-top: 1px solid var(--taupe); }
+    .pairings tr { display: block; padding: .8rem .75rem; border-top: 1px solid var(--taupe); }
     .pairings th, .pairings td { display: block; border: 0; padding: 0 0 .15rem; white-space: normal; }
+    .pairings tbody th { border-left: 4px solid var(--edge, var(--taupe)); padding-left: .6rem; margin: 0 0 .2rem -.75rem; }
+    .pairings tbody td { padding-left: 0; }
     .pairings td::before { content: attr(data-label) " "; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
   }
 
@@ -461,12 +475,12 @@
           <tr><th scope="col">Vinegar</th><th scope="col">What it does</th><th scope="col">Oil to use</th></tr>
         </thead>
         <tbody>
-          <tr><th scope="row">Red wine</th><td data-label="What it does">Classic, robust.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
-          <tr><th scope="row">White wine or champagne</th><td data-label="What it does">Lighter, brighter.</td><td data-label="Oil">A mild olive oil.</td></tr>
-          <tr><th scope="row">Balsamic</th><td data-label="What it does">Sweeter, darker, richer.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
-          <tr><th scope="row">Apple cider</th><td data-label="What it does">Fruitier, rounder.</td><td data-label="Oil">A mild olive oil, or avocado oil.</td></tr>
-          <tr><th scope="row">Sherry</th><td data-label="What it does">Nutty, savory, complex.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
-          <tr><th scope="row">Rice</th><td data-label="What it does">Clean and light.</td><td data-label="Oil">A neutral oil, or a mild olive oil.</td></tr>
+          <tr class="v-red"><th scope="row">Red wine</th><td data-label="What it does">Classic, robust.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
+          <tr class="v-white"><th scope="row">White wine or champagne</th><td data-label="What it does">Lighter, brighter.</td><td data-label="Oil">A mild olive oil.</td></tr>
+          <tr class="v-balsamic"><th scope="row">Balsamic</th><td data-label="What it does">Sweeter, darker, richer.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
+          <tr class="v-cider"><th scope="row">Apple cider</th><td data-label="What it does">Fruitier, rounder.</td><td data-label="Oil">A mild olive oil, or avocado oil.</td></tr>
+          <tr class="v-sherry"><th scope="row">Sherry</th><td data-label="What it does">Nutty, savory, complex.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
+          <tr class="v-rice"><th scope="row">Rice</th><td data-label="What it does">Clean and light.</td><td data-label="Oil">A neutral oil, or a mild olive oil.</td></tr>
         </tbody>
       </table>
     </section>
