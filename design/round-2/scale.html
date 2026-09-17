@@ -128,16 +128,21 @@
     text-align: center;
   }
   .hero-copy { max-width: var(--measure); margin: 0 auto; min-width: 0; }
-  /* The name: 5rem on the shipped page, 8rem here (128px at 1440, 54px at
-     360). One word, so it never wraps; the vw term is set so that it fits
-     its column at every width the two-column layout is used at. */
+  /* The name: 5rem on the shipped page, 7rem here (112px at 1440, 56px at
+     360). One word, so it cannot wrap, and the cap is set by the widest
+     system serif fallback (DejaVu Serif sets it at ~575px in a 598px column
+     at 1440; Iowan and Palatino are narrower) so it never reaches the bottle. */
   h1 {
-    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-size: clamp(3.5rem, 10vw, 7rem);
     letter-spacing: -0.03em;
     line-height: .95;
     margin: 0 0 .1em;
     white-space: nowrap;
   }
+  /* Two columns from 1000px: the name shares the row with the bottle, so
+     here alone it is held to what the widest fallback serif fits in the
+     column (measured: DejaVu Serif, 3.5rem floor still wins below ~700px). */
+  @media (min-width: 1000px) { h1 { font-size: clamp(3.5rem, 8vw, 7rem); } }
   .tagline {
     font-family: var(--serif);
     font-style: italic;
@@ -267,14 +272,14 @@
   .story { display: grid; grid-template-columns: 1fr; gap: 2rem 4rem; }
   .story .body { max-width: var(--measure); }
   .story .body p { font-size: 1.1rem; }
+  .story .body p.kicker { font-size: .72rem; }   /* or the body rule above outranks .kicker */
   .story .aside { font-family: var(--serif); font-style: italic; font-size: 1.6rem; color: var(--muted); line-height: 1.25; text-align: center; margin: 0; }
   @media (min-width: 760px) {
     .story { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: end; }
     .story .aside { text-align: left; }
     .story-fig { align-items: flex-start; }
-    .story-fig img { width: min(215px, 22vw); }   /* native 172 wide, so capped at that below */
+    .story-fig img { width: 172px; }   /* native width */
   }
-  @media (min-width: 760px) { .story-fig img { width: 172px; } }
 
   .cards { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 0; padding: 0; list-style: none; }
   .card {
