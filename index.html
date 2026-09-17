@@ -229,11 +229,13 @@
   @media (min-width: 600px) { .head-fig .bottles { width: clamp(180px, 22vw, 260px); margin: 0 0 .25rem; } }
 
   @media (min-width: 740px) {
-    /* The bottle column scales from 190px on an iPad mini to 250px from
-       1000px up; the cluster and its overhang scale with it, so the still
-       life keeps its proportions and never reaches the copy. */
+    /* The bottle sets the column's height, and the copy sits on its base,
+       so the bottle's width is what decides how much air is left above the
+       name. This ramp (160px on an iPad mini, 195px from 1440 up) leaves
+       about 50 to 75px above the name at every width, tracking the name's
+       own growth from 8vw to its 7rem cap. */
     .hero {
-      --bottle: clamp(190px, 25vw, 250px);
+      --bottle: clamp(160px, calc(123px + 5vw), 195px);
       grid-template-columns: minmax(0, 1fr) var(--bottle);
       grid-template-rows: 1fr auto;
       align-items: start;
