@@ -229,24 +229,27 @@
   @media (min-width: 600px) { .head-fig .bottles { width: clamp(180px, 22vw, 260px); margin: 0 0 .25rem; } }
 
   @media (min-width: 740px) {
-    /* The bottle column scales from 190px on an iPad mini to 250px from
-       1000px up; the cluster and its overhang scale with it, so the still
-       life keeps its proportions and never reaches the copy. */
+    /* The bottle sets the column's height, and the copy sits on its base,
+       so the bottle's width is what decides how much air is left above the
+       name. This ramp (160px on an iPad mini, 195px from 1440 up) leaves
+       about 50 to 75px above the name at every width, tracking the name's
+       own growth from 8vw to its 7rem cap. */
     .hero {
-      --bottle: clamp(190px, 25vw, 250px);
+      --bottle: clamp(160px, calc(123px + 5vw), 195px);
       grid-template-columns: minmax(0, 1fr) var(--bottle);
-      grid-template-rows: auto 1fr;
+      grid-template-rows: 1fr auto;
       align-items: start;
       text-align: left;
       padding-top: 1rem;
       padding-bottom: 2.5rem;
       gap: 0 clamp(2rem, 5vw, 4rem);
     }
-    /* The copy block spans the bottle: the name starts right under the
-       rule, with the bottle's cap landing about at the tagline, and the
-       cluster sits on the bottle's base line. The rows are auto and 1fr,
-       so whatever height the bottle has, the block fills it. */
-    .hero-copy { grid-column: 1; grid-row: 1; margin: 0; max-width: none; }
+    /* The copy block sits on the bottle's base line: the cluster is on the
+       base, and the copy sits directly above it. The rows are 1fr and auto,
+       with the copy aligned to the end of the first, so whatever height the
+       bottle has, the spare air is above the name rather than between the
+       lede and the herbs. */
+    .hero-copy { grid-column: 1; grid-row: 1; align-self: end; margin: 0; max-width: none; }
     .hero-copy .lede, .hero-copy .tagline { max-width: var(--measure); }
     .hero-mark { grid-column: 2; grid-row: 1 / 3; }
     .bottle { width: var(--bottle); }
@@ -817,7 +820,7 @@
   // rationed by a rate: every flake released above the mouth is paired with
   // one already inside, which fades out first and IS the one that comes back
   // round. A constant count by construction, not by tuning.
-  var DROP_EVERY = 1.6;     // seconds between releases, jittered
+  var DROP_EVERY = 0.9;     // seconds between releases, jittered
   var FADE_OUT = 0.9, FADE_IN = 0.45;
 
   var parts = [];
@@ -925,7 +928,7 @@
           // no sideways kick the flow lifts the whole lot straight back up
           // and it piles under the surface in one clump.
           p.dry = false;
-          p.vy *= 0.7;
+          p.vy *= 0.85;
           p.vx += rand(-3.5, 3.5);
         }
         continue;
@@ -944,8 +947,12 @@
       // against the depth distribution over simulated 8-minute runs, because
       // every other combination tried drained one end of the bottle: too
       // light and the rising column collects the lot under the mouth, too
-      // heavy and it all ends up on the floor.
-      fy += 1.3;
+      // heavy and it all ends up on the floor. Re-swept when the drop rate
+      // went from 1.6s to 0.9s: at the old weight the faster turnover put
+      // half the mix under the mouth, and this one gets the median trip to
+      // the floor from 55s down to 28s with the floor share held near 5%.
+      // Loosening the damping instead was what started the floor pile.
+      fy += 3.6;
       // Near the surface the cell turns over outwards, but its sideways
       // force is proportional to the offset from centre — which is zero at
       // the centre, exactly where the neck delivers everything. Without this
