@@ -33,7 +33,14 @@ ingredient lists, dates, barcodes and net weights are placeholder art.
   Mustard is the usual emulsifier; without it the dressing separates as it
   sits, and that is accepted: it is made fresh and shaken before serving.
   Say that plainly. Do not claim it is emulsifier-free, gum-free, or
-  anything-else-free, and do not frame it as an allergy or health product.
+  anything-else-free, and do not frame it as a health product.
+- **Origin:** the creator had a bad reaction to mustard, and that is why the
+  mix exists. Mustard is one of Health Canada's priority food allergens, on
+  the enhanced-labelling list since 2012, and the page may say so. This is a
+  selling point and may lead the "why" section. State it as a fact about
+  the recipe — there is no mustard in it — never as a safety promise: no
+  "safe for", "allergen-free" or cross-contact claims, because those depend
+  on how and where it is made, which is not settled.
 - **3 : 1 oil to vinegar**, three parts oil to one part vinegar. One pouch
   makes about **eight servings**. For a whole pouch that is ¾ cup oil and
   ¼ cup vinegar; for one salad, 1½ tablespoons oil and ½ tablespoon vinegar.
@@ -60,8 +67,9 @@ ingredient lists, dates, barcodes and net weights are placeholder art.
 ## What is NOT known — do not invent it
 
 No price, no launch date, no shipping, no stockists, no testimonials, no
-founder story, no ingredient weights, no nutrition figures, no allergen or
-cross-contact language, no claims beyond mustard-free. Pouch size and
+founder story beyond the origin above (no name, no date, no medical detail),
+no ingredient weights, no nutrition figures, no cross-contact or "safe for"
+language, no claims beyond mustard-free. Pouch size and
 artwork are not settled, so **no packaging imagery** until they are. The
 exact prepared volume per pouch is not measured, so keep serving language at
 "about eight servings" and the ratio above.
