@@ -166,6 +166,8 @@
   .cluster .c-garlic { width: min(96px, 26vw); }
   .cluster .c-pepper { width: min(90px, 24vw); }
   .step-fig { height: 84px; width: auto; display: block; margin-bottom: .6rem; }
+  .step-figs { display: flex; align-items: flex-end; gap: .75rem; margin-bottom: .6rem; }
+  .step-figs .step-fig { margin-bottom: 0; }
   .card .ico { position: absolute; top: 1rem; right: 1rem; width: 52px; height: auto; }
   .story-fig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: .9rem; }
   .story-fig img { width: min(280px, 72vw); height: auto; }
@@ -356,7 +358,10 @@
           <p>Empty the pouch into a jar or bottle, or take a spoonful for a single salad.</p>
         </li>
         <li>
-          <img class="step-fig" src="assets/img/vinegar.webp" width="240" height="360" alt="" loading="lazy">
+          <div class="step-figs">
+            <img class="step-fig" src="assets/img/oil.webp" width="240" height="360" alt="" loading="lazy">
+            <img class="step-fig" src="assets/img/vinegar.webp" width="240" height="360" alt="" loading="lazy">
+          </div>
           <h3>Add oil and vinegar</h3>
           <p>Three parts oil to one part vinegar. For a whole pouch, that is ¾ cup oil and ¼ cup vinegar. For one salad, 1½ tablespoons oil and ½ tablespoon vinegar.</p>
           <p class="muted">Extra-virgin olive oil and red wine vinegar is the house pairing. Others below.</p>
