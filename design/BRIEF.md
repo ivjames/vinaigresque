@@ -37,9 +37,11 @@ ingredient lists, dates, barcodes and net weights are placeholder art.
 - **3 : 1 oil to vinegar**, three parts oil to one part vinegar. One pouch
   makes about **eight servings**. For a whole pouch that is ¾ cup oil and
   ¼ cup vinegar; for one salad, 1½ tablespoons oil and ½ tablespoon vinegar.
-- The mix is dried herbs, garlic, onion and pepper. Name them at that level.
-  The bottle animation shows oregano, parsley, basil, black pepper, garlic
-  and onion; nothing else belongs in it, and no mustard seed ever.
+- The mix is dried oregano, parsley and basil, garlic and onion powder,
+  black pepper, salt and a little sugar: the packet's ingredient list at the
+  name level, which the page may show. Never weights or proportions. The
+  bottle animation shows the herbs, the powders and the pepper; salt and
+  sugar dissolve, nothing else belongs in it, and no mustard seed ever.
 - Extra-virgin olive oil and red wine vinegar are the house pairing. The
   pairing guide on the page (red wine, white wine or champagne, balsamic,
   apple cider, sherry, rice; olive oil, mild olive oil, avocado, neutral) is

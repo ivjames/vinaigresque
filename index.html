@@ -45,7 +45,6 @@
 
     /* Rhythm. Between sections is where the air goes; inside them, less. */
     --between: clamp(4rem, 9vw, 7.5rem);
-    --within: 1.25rem;
   }
 
   * { box-sizing: border-box; }
@@ -60,7 +59,7 @@
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, .serif { font-family: var(--serif); font-weight: 400; }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 400; }
   /* Section heads: 4.25rem (68px at 1440). Tight leading and a touch of
      negative tracking, which display sizes want. */
   h2 {
@@ -186,25 +185,47 @@
   .bottle.shaking { animation: shake .62s ease-in-out; }
   @media (prefers-reduced-motion: reduce) { .bottle.shaking { animation: none; } }
 
-  /* Imagery: renders lifted from the packet's boards, keyed onto the page.
-     Each is shown at or below its native pixel size so nothing is upscaled. */
-  .hero-mark { position: relative; display: flex; flex-direction: column; align-items: center; }
-  /* The cluster is placed, not stacked: it sits at the foot of the bottle,
-     overlapping the base and pushed off-centre to the left, so the two read
-     as one still life rather than a mark with a caption. Native 290px; never
-     shown above 270. It leans left, and leftward overflow does not scroll. */
+  /* Imagery: the owner's alpha-channel WebP art, keyed straight onto cream
+     or panel. Each is shown below its native pixel size so nothing is
+     upscaled; the natives are in the markup's width/height attributes. */
+  .hero > * { min-width: 0; }                     /* grid items may shrink below their min-content */
+  .hero-mark { position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; }
+  /* The cluster is placed, not stacked: basil, a head of garlic and a heap
+     of peppercorns sit at the foot of the bottle, overlapping the base and
+     pushed off-centre to the left, so the two read as one still life rather
+     than a mark with a caption. The three are sized as one group (each a
+     share of the group's width, bottoms aligned) so the group scales with
+     the column: 300px wide here, 380px beside the bottle, which keeps the
+     widest piece (basil, native 346) at 141px at most. It leans left, and
+     leftward overflow does not scroll. */
   .cluster {
-    width: min(250px, 72vw);
-    height: auto;
     position: relative;
-    margin-top: -3.5rem;
-    left: -8%;
     z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4%;
+    width: min(300px, 72vw);
+    margin-top: -3rem;
+    left: -6%;
   }
+  .cluster img { display: block; height: auto; min-width: 0; }
+  .cluster .c-basil  { width: 37%; }
+  .cluster .c-garlic { width: 30%; }
+  .cluster .c-pepper { width: 25%; }
   .story-fig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: .9rem; }
-  .story-fig img { width: min(160px, 40vw); height: auto; }
+  .story-fig img { width: min(280px, 72vw); height: auto; }   /* oregano sprig, native 581 */
+  /* What is in the mix: eight pieces of the art with their names, on the
+     panel field. Each image is a 3:2 box the width of its cell (capped at
+     150px, so it never nears the 300px natives) with the art fitted inside,
+     so the eight captions sit on one line. Ink on panel is 12.3:1. */
+  .whats-in { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem .75rem; margin: 1.75rem 0 0; padding: 0; list-style: none; }
+  .whats-in li { text-align: center; }
+  .whats-in img { display: block; width: 100%; max-width: 150px; height: auto; aspect-ratio: 3 / 2; object-fit: contain; margin: 0 auto .5rem; }
+  .whats-in span { font-family: var(--serif); font-size: 1rem; }
+  @media (min-width: 600px) { .whats-in { grid-template-columns: repeat(4, 1fr); } }
   .head-fig { display: flex; align-items: flex-end; gap: 1.5rem; }
-  .head-fig .sprig { width: 104px; height: auto; flex: 0 0 auto; margin-bottom: .4rem; }
+  .head-fig .sprig { width: 80px; height: auto; flex: 0 0 auto; margin-bottom: .4rem; }   /* the vinegar bottle, native 126x360 */
 
   @media (min-width: 1000px) {
     .hero {
@@ -218,7 +239,7 @@
     .hero-copy .lede, .hero-copy .tagline { max-width: var(--measure); }
     .bottle { width: 250px; }
     .hero-mark { align-items: flex-start; }
-    .cluster { width: 270px; margin-top: -3.75rem; left: -8.75rem; }
+    .cluster { width: 380px; margin-top: -3.5rem; left: -8.75rem; }
   }
 
   /* Signals: the three lines of directional copy the hero does not already
@@ -244,24 +265,34 @@
   .head { max-width: var(--head-measure); margin-bottom: 2rem; }
   .head .muted { max-width: var(--measure); font-size: 1.1rem; }
 
-  /* Steps: the plates are the row's main event. Each render sits at native
-     size, centred on a --panel plate, and the text follows at body size.
-     The numeral is in the plate's corner, on the panel and never on the
-     picture: the widest render is 170px and the numeral box ends 39px in
-     from the corner, so with a plate at least 250px wide or 175px tall the
-     two cannot meet — and every plate here is one or the other. */
+  /* Steps: the plates are the row's main event. Each render sits below
+     native size, centred on a --panel plate, and the text follows at body
+     size. The numeral is in the plate's corner, on the panel and never on
+     the picture: the numeral box ends 39px in from the top, and the plate's
+     top padding is 44px, so the picture starts below it whatever its width.
+     Two display heights, so the three read as one row: the wide art (the
+     oregano heap and the salad) is set by width, the two bottles by height,
+     with the bottles a little taller than the wide pieces because a bottle
+     is thin and needs the height to hold its share of the row. */
   .steps { display: grid; grid-template-columns: 1fr; gap: 1.75rem; margin: 0; padding: 0; list-style: none; counter-reset: step; }
   .steps li { counter-increment: step; }
   .plate {
+    --tall: 128px;    /* the bottles: native 119x360 and 126x360 */
+    --wide: 170px;    /* the heap (native 300x199) and the salad (669x470) */
     position: relative;
     background: var(--panel);
     border-radius: 8px;
-    height: 170px;
-    display: grid;
-    place-items: center;
+    height: 190px;
+    padding: 2.75rem .75rem .75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 1rem;
   }
-  .plate img { display: block; width: auto; height: auto; max-width: 100%; }   /* native: 165x95, 140x92, 170x95 */
+  .plate img { display: block; height: auto; width: auto; max-width: 100%; }
+  .plate .fig-wide { width: 100%; max-width: var(--wide); }
+  .plate .fig-tall { height: var(--tall); }
+  .plate .figs { display: flex; align-items: flex-end; gap: 1rem; }
   .plate::before {
     content: counter(step);
     position: absolute;
@@ -278,7 +309,7 @@
   .steps p:last-child { margin-bottom: 0; }
   @media (min-width: 760px) {
     .steps { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-    .plate { height: 200px; }
+    .plate { height: 230px; --tall: 168px; --wide: 210px; }
   }
 
   /* The field: the one section carried on --panel rather than the open
@@ -300,13 +331,13 @@
     .story { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: end; }
     .story .aside { text-align: left; }
     .story-fig { align-items: flex-start; }
-    .story-fig img { width: 172px; }   /* native width */
+    .story-fig img { width: 100%; max-width: 340px; }   /* the 2fr column: 249px at 760, 339px at 1440 */
   }
 
   /* Flavours: the ingredient is the card. Each icon sits on a cream dish at
-     the head of its card at native size, and the name comes after it. Five
-     in one row from 1000px, so there is no three-and-two hole; the status
-     is text, not a colour. */
+     the head of its card, fitted into an 88px box (all five natives are
+     larger), and the name comes after it. Five in one row from 1000px, so
+     there is no three-and-two hole; the status is text, not a colour. */
   .cards { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 0; padding: 0; list-style: none; }
   .card {
     background: var(--panel);
@@ -316,13 +347,13 @@
     text-align: center;
   }
   .dish {
-    width: 104px; height: 104px;
+    width: 112px; height: 112px;
     border-radius: 50%;
     background: var(--cream);
     display: grid; place-items: center;
     margin-bottom: .7rem;
   }
-  .dish img { display: block; width: auto; height: auto; max-width: 94px; max-height: 88px; }   /* native: 94x87, 94x87, 57x65, 94x87, 54x76 */
+  .dish img { display: block; width: 88px; height: 88px; object-fit: contain; }
   .card .tag { font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
   .card h3 { font-size: 1.4rem; margin-top: .1rem; }
   .card .profile { font-family: var(--serif); font-size: 1.1rem; margin: 0; }
@@ -340,16 +371,36 @@
 
   /* Pairings: the vinegar names carry the scale, the rest stays quiet. */
   .pairings { width: 100%; border-collapse: collapse; font-size: 1rem; }
-  .pairings th, .pairings td { text-align: left; vertical-align: baseline; padding: 1rem .75rem 1rem 0; border-top: 1px solid var(--taupe); }
+  .pairings th, .pairings td { text-align: left; vertical-align: baseline; padding: 1rem .75rem; border-top: 1px solid var(--taupe); }
   .pairings th { font-family: var(--serif); font-weight: 400; font-size: 1.55rem; line-height: 1.1; letter-spacing: -0.01em; white-space: nowrap; }
+  /* Each row is tinted with its vinegar: a wash of the colour over cream,
+     kept light enough that ink stays above 9:1 on every one (measured:
+     9.8 on red wine, the darkest, to 11.6 on rice) and the muted labels of
+     the phone layout above 4.5:1 (4.8 to 5.7), with an edge in the
+     vinegar's own colour on the row head. The name in the row is the
+     differentiator; the tint is a second cue, never the only one. */
+  .pairings tbody tr { background: var(--tint, transparent); }
+  .pairings tbody th { border-left: 4px solid var(--edge, var(--taupe)); }
+  .v-red      { --tint: #E3D2CB; --edge: #7A2E34; }
+  .v-white    { --tint: #EEE4BD; --edge: #D9C46A; }
+  .v-balsamic { --tint: #E4D4C3; --edge: #4A2A16; }
+  .v-cider    { --tint: #EFDEC2; --edge: #C98A2B; }
+  .v-sherry   { --tint: #E8D8C6; --edge: #9C5A24; }
+  .v-rice     { --tint: #EDE7D3; --edge: #DDD4B4; }
   .pairings thead th { font-family: var(--sans); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); border-top: 0; padding-top: 0; padding-bottom: .5rem; }
-  .pairings tbody tr:first-child th, .pairings tbody tr:first-child td { border-top: 2px solid var(--ink); }
+  .pairings thead th:first-child { padding-left: calc(.75rem + 4px); }   /* over the edge, so the column heads align with the names */
+  @media (min-width: 600px) {
+    .pairings tbody tr:first-child th, .pairings tbody tr:first-child td { border-top: 2px solid var(--ink); }
+  }
+  /* Below 600px each row is a block: tint, the edge on the row head, and
+     the column heads repeated as labels. The ink rule opens the first block
+     and nothing else in it carries a border. */
   @media (max-width: 599px) {
     .pairings thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-    .pairings tr { display: block; padding: 1rem 0; border-top: 1px solid var(--taupe); }
+    .pairings tr { display: block; padding: 1rem .75rem; border-top: 1px solid var(--taupe); }
     .pairings tbody tr:first-child { border-top: 2px solid var(--ink); }
     .pairings th, .pairings td { display: block; border: 0; padding: 0 0 .2rem; white-space: normal; }
-    .pairings th { padding-bottom: .4rem; }
+    .pairings tbody th { border-left: 4px solid var(--edge, var(--taupe)); padding-left: .6rem; padding-bottom: .4rem; margin: 0 0 .2rem -.75rem; }
     .pairings td::before { content: attr(data-label) " "; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
   }
 
@@ -424,7 +475,11 @@
         </svg>
         <canvas id="lava" aria-hidden="true"></canvas>
       </div>
-      <img class="cluster" src="assets/img/cluster.png" width="290" height="150" alt="">
+      <div class="cluster" aria-hidden="true">
+        <img class="c-basil" src="assets/img/basil.webp" width="346" height="240" alt="">
+        <img class="c-garlic" src="assets/img/garlic.webp" width="254" height="200" alt="">
+        <img class="c-pepper" src="assets/img/pepper.webp" width="300" height="167" alt="">
+      </div>
       </div>
     </section>
 
@@ -446,18 +501,23 @@
       </div>
       <ol class="steps">
         <li>
-          <div class="plate"><img src="assets/img/step-mix.png" width="165" height="95" alt="A small bowl of the dry mix, with some spilled beside it" loading="lazy"></div>
+          <div class="plate"><img class="fig-wide" src="assets/img/dried-oregano.webp" width="300" height="199" alt="" loading="lazy"></div>
           <h3>Add the mix</h3>
           <p>Empty the pouch into a jar or bottle, or take a spoonful for a single salad.</p>
         </li>
         <li>
-          <div class="plate"><img src="assets/img/step-shake.png" width="140" height="92" alt="A capped jar of dressing, mid-shake" loading="lazy"></div>
+          <div class="plate">
+            <div class="figs">
+              <img class="fig-tall" src="assets/img/oil.webp" width="119" height="360" alt="" loading="lazy">
+              <img class="fig-tall" src="assets/img/vinegar.webp" width="126" height="360" alt="" loading="lazy">
+            </div>
+          </div>
           <h3>Add oil and vinegar</h3>
           <p>Three parts oil to one part vinegar. For a whole pouch, that is ¾ cup oil and ¼ cup vinegar. For one salad, 1½ tablespoons oil and ½ tablespoon vinegar.</p>
           <p class="muted">Extra-virgin olive oil and red wine vinegar is the house pairing. Others below.</p>
         </li>
         <li>
-          <div class="plate"><img src="assets/img/step-toss.png" width="170" height="95" alt="A bowl of dressed green salad with radish and tomato" loading="lazy"></div>
+          <div class="plate"><img class="fig-wide" src="assets/img/salad.webp" width="669" height="470" alt="" loading="lazy"></div>
           <h3>Shake or whisk</h3>
           <p>Shake until it comes together, then dress the salad. It separates again as it sits, so shake it before each pour.</p>
         </li>
@@ -470,10 +530,20 @@
           <p class="kicker">Why mustard-free</p>
           <h2>A small mix for a brighter table.</h2>
           <p>Most vinaigrettes lean on mustard. It holds the oil and vinegar together and it carries a lot of the flavor, which is why so many dressings taste faintly of the same thing.</p>
-          <p>Vinaigresque leaves it out, so the dressing tastes like the oil and vinegar you chose. Nothing holds it together, which is why it is made fresh and shaken before serving. That is the whole trick.</p>
+          <p>Vinaigresque leaves it out, so the dressing tastes like the oil and vinegar you chose. Nothing holds it together, which is why it is made fresh and shaken before serving. That is the whole trick. It is a pantry mix, not a bottled dressing.</p>
+          <ul class="whats-in" aria-label="What is in the mix">
+            <li><img src="assets/img/dried-oregano.webp" width="300" height="199" alt="" loading="lazy"><span>Oregano</span></li>
+            <li><img src="assets/img/dried-parsley.webp" width="300" height="173" alt="" loading="lazy"><span>Parsley</span></li>
+            <li><img src="assets/img/dried-basil.webp" width="300" height="187" alt="" loading="lazy"><span>Basil</span></li>
+            <li><img src="assets/img/garlic-powder.webp" width="300" height="185" alt="" loading="lazy"><span>Garlic</span></li>
+            <li><img src="assets/img/onion-powder.webp" width="300" height="171" alt="" loading="lazy"><span>Onion</span></li>
+            <li><img src="assets/img/pepper.webp" width="300" height="167" alt="" loading="lazy"><span>Black pepper</span></li>
+            <li><img src="assets/img/salt.webp" width="300" height="178" alt="" loading="lazy"><span>Salt</span></li>
+            <li><img src="assets/img/sugar.webp" width="300" height="176" alt="" loading="lazy"><span>A little sugar</span></li>
+          </ul>
         </div>
         <figure class="story-fig">
-          <img src="assets/img/radish.png" width="172" height="215" alt="Radishes with their leaves, and a few loose peppercorns" loading="lazy">
+          <img src="assets/img/oregano.webp" width="581" height="400" alt="A sprig of fresh oregano" loading="lazy">
           <figcaption class="aside">Salads deserve better.</figcaption>
         </figure>
       </div>
@@ -486,35 +556,35 @@
       </div>
       <ul class="cards">
         <li class="card">
-          <div class="dish"><img src="assets/img/ico-herb.png" width="94" height="87" alt="" loading="lazy"></div>
+          <div class="dish"><img src="assets/img/basil.webp" width="346" height="240" alt="" loading="lazy"></div>
           <span class="tag">The base blend</span>
           <h3>Classic Italian Herb</h3>
           <p class="profile">Herbal, garlicky, familiar.</p>
           <p class="pair"><b>Pair with</b> red wine vinegar and olive oil.</p>
         </li>
         <li class="card">
-          <div class="dish"><img src="assets/img/ico-lemon.png" width="94" height="87" alt="" loading="lazy"></div>
+          <div class="dish"><img src="assets/img/lemon.webp" width="286" height="200" alt="" loading="lazy"></div>
           <span class="tag">In development</span>
           <h3>Lemon Herb</h3>
           <p class="profile">Bright, clean, lighter.</p>
           <p class="pair"><b>Pair with</b> white wine or champagne vinegar and a mild olive oil.</p>
         </li>
         <li class="card">
-          <div class="dish"><img src="assets/img/ico-garlic.png" width="57" height="65" alt="" loading="lazy"></div>
+          <div class="dish"><img src="assets/img/garlic.webp" width="254" height="200" alt="" loading="lazy"></div>
           <span class="tag">In development</span>
           <h3>Garlic &amp; Herb</h3>
           <p class="profile">More savory, garlic-forward.</p>
           <p class="pair"><b>Pair with</b> red wine vinegar and a robust olive oil.</p>
         </li>
         <li class="card">
-          <div class="dish"><img src="assets/img/ico-dill.png" width="94" height="87" alt="" loading="lazy"></div>
+          <div class="dish"><img src="assets/img/oregano.webp" width="581" height="400" alt="" loading="lazy"></div>
           <span class="tag">In development</span>
           <h3>Greek Herb</h3>
           <p class="profile">Oregano-forward, lemony, greener.</p>
           <p class="pair"><b>Pair with</b> red or white wine vinegar and olive oil.</p>
         </li>
         <li class="card">
-          <div class="dish"><img src="assets/img/ico-pepper.png" width="54" height="76" alt="" loading="lazy"></div>
+          <div class="dish"><img src="assets/img/red-pepper.webp" width="177" height="200" alt="" loading="lazy"></div>
           <span class="tag">In development</span>
           <h3>Roasted Red Pepper</h3>
           <p class="profile">Sweet pepper, garlic, herbs.</p>
@@ -530,19 +600,19 @@
           <h2>Pair. Make it yours.</h2>
           <p class="muted">The pouch stays the same. The vinegar you reach for is what changes the dressing, and the oil follows the vinegar.</p>
         </div>
-        <img class="sprig" src="assets/img/sprig.png" width="130" height="110" alt="" loading="lazy">
+        <img class="sprig" src="assets/img/vinegar.webp" width="126" height="360" alt="" loading="lazy">
       </div>
       <table class="pairings">
         <thead>
           <tr><th scope="col">Vinegar</th><th scope="col">What it does</th><th scope="col">Oil to use</th></tr>
         </thead>
         <tbody>
-          <tr><th scope="row">Red wine</th><td data-label="What it does">Classic, robust.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
-          <tr><th scope="row">White wine or champagne</th><td data-label="What it does">Lighter, brighter.</td><td data-label="Oil">A mild olive oil.</td></tr>
-          <tr><th scope="row">Balsamic</th><td data-label="What it does">Sweeter, darker, richer.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
-          <tr><th scope="row">Apple cider</th><td data-label="What it does">Fruitier, rounder.</td><td data-label="Oil">A mild olive oil, or avocado oil.</td></tr>
-          <tr><th scope="row">Sherry</th><td data-label="What it does">Nutty, savory, complex.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
-          <tr><th scope="row">Rice</th><td data-label="What it does">Clean and light.</td><td data-label="Oil">A neutral oil, or a mild olive oil.</td></tr>
+          <tr class="v-red"><th scope="row">Red wine</th><td data-label="What it does">Classic, robust.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
+          <tr class="v-white"><th scope="row">White wine or champagne</th><td data-label="What it does">Lighter, brighter.</td><td data-label="Oil">A mild olive oil.</td></tr>
+          <tr class="v-balsamic"><th scope="row">Balsamic</th><td data-label="What it does">Sweeter, darker, richer.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
+          <tr class="v-cider"><th scope="row">Apple cider</th><td data-label="What it does">Fruitier, rounder.</td><td data-label="Oil">A mild olive oil, or avocado oil.</td></tr>
+          <tr class="v-sherry"><th scope="row">Sherry</th><td data-label="What it does">Nutty, savory, complex.</td><td data-label="Oil">Extra-virgin olive oil.</td></tr>
+          <tr class="v-rice"><th scope="row">Rice</th><td data-label="What it does">Clean and light.</td><td data-label="Oil">A neutral oil, or a mild olive oil.</td></tr>
         </tbody>
       </table>
     </section>
