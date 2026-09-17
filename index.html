@@ -820,7 +820,7 @@
   // rationed by a rate: every flake released above the mouth is paired with
   // one already inside, which fades out first and IS the one that comes back
   // round. A constant count by construction, not by tuning.
-  var DROP_EVERY = 1.6;     // seconds between releases, jittered
+  var DROP_EVERY = 0.9;     // seconds between releases, jittered
   var FADE_OUT = 0.9, FADE_IN = 0.45;
 
   var parts = [];
@@ -928,7 +928,7 @@
           // no sideways kick the flow lifts the whole lot straight back up
           // and it piles under the surface in one clump.
           p.dry = false;
-          p.vy *= 0.7;
+          p.vy *= 0.85;
           p.vx += rand(-3.5, 3.5);
         }
         continue;
@@ -947,8 +947,12 @@
       // against the depth distribution over simulated 8-minute runs, because
       // every other combination tried drained one end of the bottle: too
       // light and the rising column collects the lot under the mouth, too
-      // heavy and it all ends up on the floor.
-      fy += 1.3;
+      // heavy and it all ends up on the floor. Re-swept when the drop rate
+      // went from 1.6s to 0.9s: at the old weight the faster turnover put
+      // half the mix under the mouth, and this one gets the median trip to
+      // the floor from 55s down to 28s with the floor share held near 5%.
+      // Loosening the damping instead was what started the floor pile.
+      fy += 3.6;
       // Near the surface the cell turns over outwards, but its sideways
       // force is proportional to the offset from centre — which is zero at
       // the centre, exactly where the neck delivers everything. Without this
