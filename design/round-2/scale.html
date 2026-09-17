@@ -133,12 +133,16 @@
      system serif fallback (DejaVu Serif sets it at ~575px in a 598px column
      at 1440; Iowan and Palatino are narrower) so it never reaches the bottle. */
   h1 {
-    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-size: clamp(3.5rem, 10vw, 7rem);
     letter-spacing: -0.03em;
     line-height: .95;
     margin: 0 0 .1em;
     white-space: nowrap;
   }
+  /* Two columns from 1000px: the name shares the row with the bottle, so
+     here alone it is held to what the widest fallback serif fits in the
+     column (measured: DejaVu Serif, 3.5rem floor still wins below ~700px). */
+  @media (min-width: 1000px) { h1 { font-size: clamp(3.5rem, 8vw, 7rem); } }
   .tagline {
     font-family: var(--serif);
     font-style: italic;
