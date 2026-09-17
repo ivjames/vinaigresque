@@ -754,6 +754,32 @@
       rate: rand(0.13, 0.19), ph: rand(0, 6.283)
     });
   }
+  // Three parts oil to one part vinegar, held rather than averaged: seven
+  // radii drawn at random total anywhere from 12% to 41% of the liquid, so
+  // one load reads 7:1 and the next 1.4:1. Scale them together so the
+  // globules are always a quarter of the liquid's cross-section, keeping
+  // the size variety and fixing the ratio.
+  var VINEGAR = 1 / 4;
+  (function normaliseBlobs() {
+    var liquid = 0, y;
+    for (y = SURFACE; y < 94; y += 0.25) liquid += 2 * wall(y + 0.125) * 0.25;
+    var area = 0, i;
+    for (i = 0; i < blobs.length; i++) area += Math.PI * blobs[i].r2;
+    var k = Math.sqrt(liquid * VINEGAR / area);
+    for (i = 0; i < blobs.length; i++) {
+      blobs[i].r *= k;
+      blobs[i].r2 = blobs[i].r * blobs[i].r;
+    }
+  })();
+  // How fast heat crosses between two globules that are touching, as a
+  // share of their temperature difference per second. A riser brushing a
+  // descender cools a little and warms it a little. It has to be gentle:
+  // about three pairs are touching at any moment, and at 0.3 the heat
+  // equalises across the lot and the lamp parks (mean vertical speed 3.06
+  // to 0.40 over a simulated 8 minutes). At 0.03 it keeps about 90% of
+  // its speed and still turns each globule around three times a minute.
+  // Weighted by area, so the smaller of the two takes more of the change.
+  var EXCHANGE = 0.03;
 
   function stepBlobs(dt, t) {
     var i, j, b;
@@ -795,6 +821,10 @@
           dx /= d; dy /= d;
           a.x -= dx * f * min * 0.5; a.y -= dy * f * min * 0.5;
           c.x += dx * f * min * 0.5; c.y += dy * f * min * 0.5;
+          // Touching, so heat flows from the warmer to the cooler.
+          var q = (a.temp - c.temp) * EXCHANGE * dt, cap = a.r2 + c.r2;
+          a.temp -= q * c.r2 / cap;
+          c.temp += q * a.r2 / cap;
         }
       }
     }
