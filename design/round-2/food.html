@@ -9,19 +9,20 @@
 <meta name="theme-color" content="#FAF6EC">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23FAF6EC'/><text x='5' y='25' font-family='Georgia,serif' font-size='26' fill='%232E2A1F'>V</text><circle cx='26.5' cy='22.5' r='2.6' fill='%236B7F4E'/></svg>">
 <style>
-  /* Light mode only. The dark landing page this site opened with is kept as
-     a family reference and nothing more; there is deliberately no
-     prefers-color-scheme block here. */
+  /* Round 2, "food": the packet says food-first and the shipped page is
+     text-first. Same tokens, same copy, same facts; the photographs lead and
+     the type steps back. Light mode only, and deliberately no dark-scheme
+     media block. */
   :root {
     --cream:    #FAF6EC;   /* background */
-    --ink:      #2E2A1F;   /* olive brown: text and line work */
-    --muted:    #5E5849;   /* secondary copy: 6.6:1 on cream. Taupe is never text. */
+    --ink:      #2E2A1F;   /* olive brown: text and line work. 13.3:1 on cream, 12.3:1 on panel */
+    --muted:    #5E5849;   /* secondary copy: 6.6:1 on cream, 6.1:1 on panel. Taupe is never text. */
     --sage:     #6B7F4E;   /* the period and thin accents: 4.1:1, so never behind or as small text */
-    --sage-ink: #5A6C40;   /* sage for buttons, links and the step numerals, taken down to 5.3:1 */
+    --sage-ink: #5A6C40;   /* sage for links and the step numerals: 5.3:1 on cream, cream on it 5.3:1 */
     --gold:     #D4B04C;   /* the oil */
     --burgundy: #7A2E34;   /* the vinegar, and one accent */
     --taupe:    #D8CDBA;   /* rules, the bottle's glass, structure */
-    --panel:    #F3EDDE;   /* one step below cream, for cards */
+    --panel:    #F3EDDE;   /* one step below cream: the plates the food sits on */
 
     --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
              Georgia, "Times New Roman", serif;
@@ -29,10 +30,8 @@
              "Helvetica Neue", Arial, sans-serif;
     --mono:  ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
-    --measure: 36rem;
+    --measure: 34rem;
     --wide: 68rem;
-    /* 16px on a phone, growing with the viewport to 88px: 43px at 834, 78px
-       at 1280. Exterior margin is what makes the page read as a page. */
     --gutter: clamp(16px, calc(8vw - 24px), 88px);
   }
 
@@ -44,18 +43,27 @@
     background: var(--cream);
     color: var(--ink);
     font-family: var(--sans);
-    font-size: 1.0625rem;
+    font-size: 1rem;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, .serif { font-family: var(--serif); font-weight: 400; }
-  h2 {
-    font-size: clamp(1.9rem, 4.6vw, 2.6rem);
-    line-height: 1.1;
+
+  /* Type. Two display sizes on the whole page: the wordmark and the section
+     heads. Everything else is body size or the one serif lede, so the
+     photographs are the largest things in every section but the first. */
+  h1, h2, .serif { font-family: var(--serif); font-weight: 400; }
+  h1 {
+    font-size: clamp(2.3rem, 5.6vw, 3.3rem);
     letter-spacing: -0.01em;
+    line-height: 1.02;
+    margin: 0;
+  }
+  h2 {
+    font-size: clamp(1.45rem, 2.6vw, 1.85rem);
+    line-height: 1.15;
     margin: 0 0 .5rem;
   }
-  h3 { font-size: 1.3rem; line-height: 1.2; margin: 0 0 .35rem; }
+  h3 { font-family: var(--sans); font-weight: 600; font-size: 1rem; line-height: 1.3; margin: 0 0 .3rem; }
   p { margin: 0 0 1rem; }
   a { color: var(--sage-ink); text-underline-offset: .15em; }
   a:hover { color: var(--ink); }
@@ -63,15 +71,15 @@
 
   .wrap { width: 100%; max-width: var(--wide); margin: 0 auto; padding: 0 var(--gutter); }
   .measure { max-width: var(--measure); }
-  .lede { font-family: var(--serif); font-size: clamp(1.15rem, 2.4vw, 1.35rem); line-height: 1.45; }
+  .lede { font-family: var(--serif); font-size: 1.15rem; line-height: 1.45; }
   .muted { color: var(--muted); }
   .kicker {
     font-family: var(--sans);
-    font-size: .72rem;
-    letter-spacing: .18em;
+    font-size: .7rem;
+    letter-spacing: .1em;
     text-transform: uppercase;
     color: var(--muted);
-    margin: 0 0 .9rem;
+    margin: 0 0 .6rem;
   }
   .rule { border: 0; border-top: 1px solid var(--taupe); margin: 0; }
 
@@ -83,12 +91,12 @@
     gap: 1rem;
     padding: 1.1rem 0;
   }
-  .brand { font-family: var(--serif); font-size: 1.35rem; color: var(--ink); text-decoration: none; }
+  .brand { font-family: var(--serif); font-size: 1.3rem; color: var(--ink); text-decoration: none; }
   .brand .dot, h1 .dot { color: var(--sage); }
   .nav { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; margin: 0; padding: 0; list-style: none; }
   .nav a {
-    font-size: .78rem;
-    letter-spacing: .12em;
+    font-size: .76rem;
+    letter-spacing: .1em;
     text-transform: uppercase;
     text-decoration: none;
     color: var(--muted);
@@ -99,32 +107,28 @@
     .nav { gap: .25rem 1rem; }
   }
 
-  /* Hero */
+  /* Hero: the still life comes first, in the DOM and on the page. On a phone
+     it is the first thing under the header; on a desktop it takes the left
+     half and the copy answers it from the right. */
   .hero {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.75rem;
     align-items: center;
-    padding-top: 2rem;
-    padding-bottom: 2.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: 2.25rem;
     text-align: center;
   }
   .hero-copy { max-width: var(--measure); margin: 0 auto; }
-  h1 {
-    font-size: clamp(2.9rem, 10vw, 5rem);
-    letter-spacing: -0.015em;
-    line-height: 1;
-    margin: 0;
-  }
   .tagline {
     font-family: var(--serif);
     font-style: italic;
-    font-size: clamp(1.15rem, 3.2vw, 1.5rem);
+    font-size: 1.15rem;
     color: var(--muted);
-    margin: .8rem 0 1.2rem;
+    margin: .6rem 0 1rem;
   }
-  .cta { margin: 1.4rem 0 0; }
-  .cta .quiet { font-size: .95rem; }
+  .cta { margin: 1rem 0 0; }
+  .cta .quiet { font-size: .92rem; }
 
   /* The bottle: the same lava lamp the holding page carried, now the hero
      mark. Open at the top, with the mix falling in, because the product is
@@ -157,119 +161,161 @@
   .bottle.shaking { animation: shake .62s ease-in-out; }
   @media (prefers-reduced-motion: reduce) { .bottle.shaking { animation: none; } }
 
-  /* Imagery: renders lifted from the packet's boards, keyed onto the page.
-     Each is shown below its native pixel size so nothing is upscaled. */
-  .hero-mark { display: flex; flex-direction: column; align-items: center; }
-  .cluster { display: flex; align-items: flex-end; justify-content: center; gap: .6rem; margin-top: -.25rem; }
-  .cluster img { height: auto; }
-  .cluster .c-basil { width: min(110px, 30vw); }
-  .cluster .c-garlic { width: min(96px, 26vw); }
-  .cluster .c-pepper { width: min(90px, 24vw); }
-  .step-fig { height: 84px; width: auto; display: block; margin-bottom: .6rem; }
-  .card .ico { position: absolute; top: 1rem; right: 1rem; width: 52px; height: auto; }
-  .story-fig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: .9rem; }
-  .story-fig img { width: min(280px, 72vw); height: auto; }
-  .whats-in { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem .75rem; margin: 1.75rem 0 0; padding: 0; list-style: none; }
-  .whats-in li { text-align: center; }
-  .whats-in img { height: 96px; width: auto; max-width: 100%; object-fit: contain; display: block; margin: 0 auto .5rem; }  /* one box height, so the captions line up */
-  .whats-in span { font-family: var(--serif); font-size: 1rem; }
-  @media (min-width: 600px) { .whats-in { grid-template-columns: repeat(4, 1fr); } }
-  .head-fig { display: flex; align-items: flex-end; gap: 1.5rem; }
-  .head-fig .sprig { width: 84px; height: auto; flex: 0 0 auto; margin-bottom: .4rem; }
+  /* Imagery. Every render is shown at or below its native pixel size, so
+     nothing is upscaled; what changes from the shipped page is that each one
+     is given a plate to sit on and the room to be looked at. */
+  .still { display: flex; flex-direction: column; align-items: center; }
+  .cluster { width: min(290px, 100%); height: auto; margin-top: -.5rem; }   /* native 290 x 150 */
 
   @media (min-width: 760px) {
     .hero {
-      grid-template-columns: 3fr 2fr;
+      grid-template-columns: 1fr 1fr;
       text-align: left;
-      padding-top: 2.75rem;
-      padding-bottom: 3.25rem;
+      padding-top: 2rem;
+      padding-bottom: 3rem;
       gap: 3rem;
     }
     .hero-copy { margin: 0; }
-    .cta { justify-content: flex-start; }
-    .bottle { width: clamp(140px, 16vw, 190px); }
-    .cluster { margin-top: -1rem; }
+    .bottle { width: 190px; }
+    .cluster { margin-top: -1.25rem; }
   }
 
-  /* Signals: the four lines of directional copy */
+  /* Signals: the four lines of directional copy, at body size now */
   .signals {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem 1.5rem;
-    padding: 1.25rem 0;
+    gap: 1rem 1.5rem;
+    padding: 1.1rem 0;
     margin: 0;
     list-style: none;
   }
-  .signals li { font-family: var(--serif); font-size: 1.1rem; line-height: 1.3; }
-  .signals small { display: block; font-family: var(--sans); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: .3rem; }
+  .signals li { font-family: var(--serif); font-size: 1rem; line-height: 1.3; }
+  .signals small { display: block; font-family: var(--sans); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: .25rem; }
   @media (min-width: 760px) { .signals { grid-template-columns: repeat(4, 1fr); } }
 
   /* Sections */
   section.block { padding-top: 2.5rem; padding-bottom: 2.5rem; }  /* longhand: the shorthand would zero .wrap's gutter */
   @media (min-width: 760px) { section.block { padding-top: 3.25rem; padding-bottom: 3.25rem; } }
   .head { max-width: var(--measure); margin-bottom: 1.5rem; }
+  .head p:last-child { margin-bottom: 0; }
 
-  .steps { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 0; padding: 0; list-style: none; counter-reset: step; }
-  .steps li { counter-increment: step; padding-top: .9rem; border-top: 1px solid var(--taupe); }
-  .steps li::before {
-    content: counter(step);
-    display: inline-grid;
-    place-items: center;
-    width: 1.9rem; height: 1.9rem;
-    border-radius: 50%;
-    background: var(--sage-ink);   /* not --sage: cream on it is 4.1:1, short of AA for a numeral this size */
-    color: var(--cream);
-    font-family: var(--serif);
-    font-size: 1.05rem;
-    margin-bottom: .6rem;
-  }
-  .steps p:last-child { margin-bottom: 0; }
-  @media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
-
-  .story { display: grid; grid-template-columns: 1fr; gap: 1.5rem 3rem; }
-  .story .aside { font-family: var(--serif); font-style: italic; font-size: 1.25rem; color: var(--muted); line-height: 1.35; text-align: center; margin: 0; }
-  @media (min-width: 760px) { .story { grid-template-columns: 2fr 1fr; align-items: start; } }
-
-  .cards { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 0; padding: 0; list-style: none; }
-  .card {
+  /* How it works: three plates in a row, the renders at native size on
+     them, and the text underneath at body size. The numeral sits in the
+     plate's corner, on the panel and never on the picture: the widest render
+     is 170px and sits at least 38px in from the plate edge while the numeral
+     box ends 39px in, so the corner is clear at every width. */
+  .steps { display: grid; grid-template-columns: 1fr; gap: 1.75rem; margin: 0; padding: 0; list-style: none; counter-reset: step; }
+  .steps li { counter-increment: step; }
+  .plate {
     position: relative;
     background: var(--panel);
-    border-radius: 6px;
-    padding: 1.2rem 4.6rem 1.1rem 1.2rem;   /* right: room for the icon, which is absolutely placed */
-    display: flex; flex-direction: column; gap: .25rem;
+    border-radius: 8px;
+    height: 170px;
+    display: grid;
+    place-items: center;
+    margin-bottom: .9rem;
   }
-  .card .tag { font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-  .card .profile { font-family: var(--serif); font-size: 1.05rem; margin: 0; }
-  .card .pair { font-size: .92rem; color: var(--muted); margin: .4rem 0 0; }
+  .plate img { display: block; width: auto; height: auto; max-width: 100%; }   /* native: 165x95, 140x92, 170x95 */
+  .plate::before {
+    content: counter(step);
+    position: absolute;
+    top: .75rem; left: .75rem;
+    display: grid;
+    place-items: center;
+    width: 1.7rem; height: 1.7rem;
+    border-radius: 50%;
+    background: var(--sage-ink);   /* cream on it is 5.3:1 */
+    color: var(--cream);
+    font-family: var(--serif);
+    font-size: .95rem;
+  }
+  .steps p { font-size: .95rem; margin: 0 0 .6rem; }
+  .steps p:last-child { margin-bottom: 0; }
+  @media (min-width: 760px) {
+    .steps { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .plate { height: 200px; }
+  }
+
+  /* Why mustard-free: the radish is the one render that is a real
+     photograph rather than a cutout, so it is printed as one, on a plate
+     with its caption, and it comes first. */
+  .story { display: grid; grid-template-columns: 1fr; gap: 1.75rem 3rem; }
+  .story-fig {
+    margin: 0;
+    background: var(--panel);
+    border-radius: 8px;
+    padding: 1.25rem 1.25rem 1.1rem;
+    display: flex; flex-direction: column; align-items: center; gap: .8rem;
+    justify-self: center;
+    width: min(100%, 22rem);
+  }
+  .story-fig img { width: 172px; height: auto; border-radius: 4px; display: block; }   /* native 172 x 215 */
+  .story .aside { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--muted); line-height: 1.35; text-align: center; margin: 0; }
+  .story-copy p:last-child { margin-bottom: 0; }
+  @media (min-width: 760px) {
+    .story { grid-template-columns: 16rem 1fr; align-items: start; }
+    .story-fig { width: 100%; justify-self: stretch; }
+  }
+
+  /* Flavors: the ingredient is the card. Each icon sits on a cream plate at
+     the head of its card at native size, and the name comes after it. */
+  .cards { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  .card {
+    background: var(--panel);
+    border-radius: 8px;
+    padding: 1.4rem 1.2rem 1.25rem;
+    display: flex; flex-direction: column; align-items: center; gap: .2rem;
+    text-align: center;
+  }
+  .dish {
+    width: 104px; height: 104px;
+    border-radius: 50%;
+    background: var(--cream);
+    display: grid; place-items: center;
+    margin-bottom: .7rem;
+  }
+  .dish img { display: block; width: auto; height: auto; max-width: 94px; max-height: 88px; }   /* native: 94x87, 94x87, 57x65, 94x87, 54x76 */
+  .card .tag { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .card h3 { margin-top: .1rem; }
+  .card .profile { font-family: var(--serif); font-size: 1rem; margin: 0; }
+  .card .pair { font-size: .9rem; color: var(--muted); margin: .4rem 0 0; }
   .card .pair b { font-weight: 500; color: var(--ink); }
   @media (min-width: 600px) { .cards { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 760px) { .cards { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1000px) { .cards { grid-template-columns: repeat(5, 1fr); gap: .9rem; } .card { padding: 1.3rem .75rem 1.15rem; } .card h3 { line-height: 1.25; } .card .pair { font-size: .88rem; } }
 
-  .pairings { width: 100%; border-collapse: collapse; font-size: .98rem; }
+  /* Oil and vinegar: the sprig leads the head at native size */
+  .head-fig { display: flex; flex-direction: column; gap: .75rem 1.75rem; max-width: none; }
+  .sprig-crop { width: 118px; height: 110px; overflow: hidden; flex: 0 0 auto; }   /* the PNG's right 12px carry a dotted artefact */
+  .head-fig .sprig { width: 130px; height: 110px; display: block; }   /* native 130 x 110, shown 1:1 and cropped, not scaled */
+  .head-fig > div { max-width: var(--measure); }
+  @media (min-width: 760px) { .head-fig { flex-direction: row; align-items: flex-end; } .sprig-crop { margin-bottom: .2rem; } }
+
+  .pairings { width: 100%; border-collapse: collapse; font-size: .95rem; }
   .pairings th, .pairings td { text-align: left; vertical-align: top; padding: .8rem .75rem .8rem 0; border-top: 1px solid var(--taupe); }
-  .pairings th { font-family: var(--serif); font-weight: 400; font-size: 1.1rem; white-space: nowrap; }
-  .pairings thead th { font-family: var(--sans); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); border-top: 0; padding-top: 0; }
+  .pairings th { font-weight: 600; white-space: nowrap; }
+  .pairings thead th { font-weight: 400; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border-top: 0; padding-top: 0; }
   @media (max-width: 599px) {
     .pairings thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     .pairings tr { display: block; padding: .8rem 0; border-top: 1px solid var(--taupe); }
     .pairings th, .pairings td { display: block; border: 0; padding: 0 0 .15rem; white-space: normal; }
-    .pairings td::before { content: attr(data-label) " "; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .pairings td::before { content: attr(data-label) " "; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
   }
 
-  /* Conversion */
+  /* Under development: text, and only text */
   .status {
     font-family: var(--mono);
-    font-size: .72rem;
-    letter-spacing: .18em;
+    font-size: .7rem;
+    letter-spacing: .14em;
     text-transform: uppercase;
     color: var(--muted);
-    margin: 0 0 1rem;
+    margin: 0 0 .8rem;
   }
 
   /* Footer */
   footer { padding-top: 2.5rem; padding-bottom: 3rem; }
   .foot { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: baseline; justify-content: space-between; }
-  .foot .nav a { font-size: .74rem; }
+  .foot .nav a { font-size: .72rem; }
   .build { font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; color: var(--muted); }
 </style>
 </head>
@@ -291,15 +337,7 @@
 
   <main id="top">
     <section class="wrap hero">
-      <div class="hero-copy">
-        <p class="kicker">Good ingredients go further.</p>
-        <h1>Vinaigresque<span class="dot">.</span></h1>
-        <p class="tagline">A mustard-free vinaigrette mix.</p>
-        <p class="lede">A small pouch of dried herbs, garlic, onion and pepper. Add your own oil and vinegar, shake, and dress the salad the way you like it.</p>
-        <p class="cta"><a class="quiet" href="#how">How it works</a></p>
-      </div>
-
-      <div class="hero-mark">
+      <div class="still">
       <div class="bottle" id="bottle">
         <svg class="cruet" viewBox="0 -22 48 122" aria-hidden="true">
           <defs>
@@ -324,11 +362,15 @@
         </svg>
         <canvas id="lava" aria-hidden="true"></canvas>
       </div>
-      <div class="cluster" aria-hidden="true">
-        <img class="c-basil" src="assets/img/basil.webp" width="360" height="240" alt="">
-        <img class="c-garlic" src="assets/img/garlic.webp" width="300" height="200" alt="">
-        <img class="c-pepper" src="assets/img/pepper.webp" width="300" height="200" alt="">
+      <img class="cluster" src="../../assets/img/cluster.png" width="290" height="150" alt="Basil and oregano sprigs, a garlic clove and a scatter of black peppercorns">
       </div>
+
+      <div class="hero-copy">
+        <p class="kicker">Good ingredients go further.</p>
+        <h1>Vinaigresque<span class="dot">.</span></h1>
+        <p class="tagline">A mustard-free vinaigrette mix.</p>
+        <p class="lede">A small pouch of dried herbs, garlic, onion and pepper. Add your own oil and vinegar, shake, and dress the salad the way you like it.</p>
+        <p class="cta"><a class="quiet" href="#how">How it works</a></p>
       </div>
     </section>
 
@@ -351,18 +393,18 @@
       </div>
       <ol class="steps">
         <li>
-          <img class="step-fig" src="assets/img/dried-oregano.webp" width="300" height="200" alt="" loading="lazy">
+          <div class="plate"><img src="../../assets/img/step-mix.png" width="165" height="95" alt="A small bowl of the dry mix, with some spilled beside it"></div>
           <h3>Add the mix</h3>
           <p>Empty the pouch into a jar or bottle, or take a spoonful for a single salad.</p>
         </li>
         <li>
-          <img class="step-fig" src="assets/img/vinegar.webp" width="240" height="360" alt="" loading="lazy">
+          <div class="plate"><img src="../../assets/img/step-shake.png" width="140" height="92" alt="A capped jar of dressing, mid-shake"></div>
           <h3>Add oil and vinegar</h3>
           <p>Three parts oil to one part vinegar. For a whole pouch, that is ¾ cup oil and ¼ cup vinegar. For one salad, 1½ tablespoons oil and ½ tablespoon vinegar.</p>
           <p class="muted">Extra-virgin olive oil and red wine vinegar is the house pairing. Others below.</p>
         </li>
         <li>
-          <img class="step-fig" src="assets/img/salad.webp" width="700" height="470" alt="" loading="lazy">
+          <div class="plate"><img src="../../assets/img/step-toss.png" width="170" height="95" alt="A bowl of dressed green salad with radish and tomato"></div>
           <h3>Shake or whisk</h3>
           <p>Shake until it comes together, then dress the salad. It will separate again as it sits. That is what dressing without mustard does, so shake it before each pour.</p>
         </li>
@@ -371,27 +413,17 @@
 
     <section class="wrap block" id="why">
       <div class="story">
-        <div>
+        <figure class="story-fig">
+          <img src="../../assets/img/radish.png" width="172" height="215" alt="Radishes with their leaves, and a few loose peppercorns">
+          <figcaption class="aside">Salads deserve better.</figcaption>
+        </figure>
+        <div class="story-copy">
           <p class="kicker">Why mustard-free</p>
           <h2>A small mix for a brighter table.</h2>
           <p>Most vinaigrettes lean on mustard. It holds the oil and vinegar together and it carries a lot of the flavor, which is why so many dressings taste faintly of the same thing.</p>
           <p>Vinaigresque leaves it out. What is left is herbs, garlic, onion and pepper doing the work, and a dressing that tastes like the oil and vinegar you chose. Nothing to hold it together, so you shake it. That is the whole trick.</p>
           <p>It is a pantry mix, not a bottled dressing: dry until you want it, and fresh every time you make it.</p>
-          <ul class="whats-in" aria-label="What is in the mix">
-            <li><img src="assets/img/dried-oregano.webp" width="300" height="200" alt="" loading="lazy"><span>Oregano</span></li>
-            <li><img src="assets/img/dried-parsley.webp" width="300" height="200" alt="" loading="lazy"><span>Parsley</span></li>
-            <li><img src="assets/img/dried-basil.webp" width="300" height="200" alt="" loading="lazy"><span>Basil</span></li>
-            <li><img src="assets/img/garlic-powder.webp" width="300" height="200" alt="" loading="lazy"><span>Garlic</span></li>
-            <li><img src="assets/img/onion-powder.webp" width="300" height="200" alt="" loading="lazy"><span>Onion</span></li>
-            <li><img src="assets/img/pepper.webp" width="300" height="200" alt="" loading="lazy"><span>Black pepper</span></li>
-            <li><img src="assets/img/salt.webp" width="300" height="200" alt="" loading="lazy"><span>Salt</span></li>
-            <li><img src="assets/img/sugar.webp" width="300" height="200" alt="" loading="lazy"><span>A little sugar</span></li>
-          </ul>
         </div>
-        <figure class="story-fig">
-          <img src="assets/img/oregano.webp" width="600" height="400" alt="A sprig of fresh oregano" loading="lazy">
-          <figcaption class="aside">Salads deserve better.</figcaption>
-        </figure>
       </div>
     </section>
 
@@ -403,36 +435,36 @@
       </div>
       <ul class="cards">
         <li class="card">
+          <div class="dish"><img src="../../assets/img/ico-herb.png" width="94" height="87" alt=""></div>
           <span class="tag">The base blend</span>
-          <img class="ico" src="assets/img/basil.webp" width="360" height="240" alt="" loading="lazy">
           <h3>Classic Italian Herb</h3>
           <p class="profile">Herbal, garlicky, familiar.</p>
           <p class="pair"><b>Pair with</b> red wine vinegar and olive oil.</p>
         </li>
         <li class="card">
+          <div class="dish"><img src="../../assets/img/ico-lemon.png" width="94" height="87" alt=""></div>
           <span class="tag">In development</span>
-          <img class="ico" src="assets/img/ico-lemon.png" width="94" height="87" alt="" loading="lazy">
           <h3>Lemon Herb</h3>
           <p class="profile">Bright, clean, lighter.</p>
           <p class="pair"><b>Pair with</b> white wine or champagne vinegar and a mild olive oil.</p>
         </li>
         <li class="card">
+          <div class="dish"><img src="../../assets/img/ico-garlic.png" width="57" height="65" alt=""></div>
           <span class="tag">In development</span>
-          <img class="ico" src="assets/img/garlic.webp" width="300" height="200" alt="" loading="lazy">
           <h3>Garlic &amp; Herb</h3>
           <p class="profile">More savory, garlic-forward.</p>
           <p class="pair"><b>Pair with</b> red wine vinegar and a robust olive oil.</p>
         </li>
         <li class="card">
+          <div class="dish"><img src="../../assets/img/ico-dill.png" width="94" height="87" alt=""></div>
           <span class="tag">In development</span>
-          <img class="ico" src="assets/img/oregano.webp" width="600" height="400" alt="" loading="lazy">
           <h3>Greek Herb</h3>
           <p class="profile">Oregano-forward, lemony, greener.</p>
           <p class="pair"><b>Pair with</b> red or white wine vinegar and olive oil.</p>
         </li>
         <li class="card">
+          <div class="dish"><img src="../../assets/img/ico-pepper.png" width="54" height="76" alt=""></div>
           <span class="tag">In development</span>
-          <img class="ico" src="assets/img/ico-pepper.png" width="54" height="76" alt="" loading="lazy">
           <h3>Roasted Red Pepper</h3>
           <p class="profile">Sweet pepper, garlic, herbs.</p>
           <p class="pair"><b>Pair with</b> red wine or sherry vinegar and olive oil.</p>
@@ -442,12 +474,12 @@
 
     <section class="wrap block" id="pairings">
       <div class="head head-fig">
+        <div class="sprig-crop"><img class="sprig" src="../../assets/img/sprig.png" width="130" height="110" alt=""></div>
         <div>
           <p class="kicker">Oil and vinegar</p>
           <h2>Pair. Make it yours.</h2>
           <p class="muted">The pouch stays the same. The vinegar you reach for is what changes the dressing, and the oil follows the vinegar.</p>
         </div>
-        <img class="sprig" src="assets/img/vinegar.webp" width="240" height="360" alt="" loading="lazy">
       </div>
       <table class="pairings">
         <thead>
