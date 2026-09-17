@@ -160,11 +160,13 @@
   /* Imagery: renders lifted from the packet's boards, keyed onto the page.
      Each is shown below its native pixel size so nothing is upscaled. */
   .hero-mark { display: flex; flex-direction: column; align-items: center; }
-  .cluster { display: flex; align-items: flex-end; justify-content: center; gap: .6rem; margin-top: -.25rem; }
-  .cluster img { height: auto; }
-  .cluster .c-basil { width: min(110px, 30vw); }
-  .cluster .c-garlic { width: min(96px, 26vw); }
-  .cluster .c-pepper { width: min(90px, 24vw); }
+  .hero > * { min-width: 0; }                     /* grid items may shrink below their min-content */
+  .hero-mark { width: 100%; }
+  .cluster { display: flex; align-items: flex-end; justify-content: center; gap: 4%; width: 100%; max-width: 320px; margin-top: -.25rem; }
+  .cluster img { height: auto; min-width: 0; }   /* proportions of the group, so it scales with the column */
+  .cluster .c-basil { width: 34%; }
+  .cluster .c-garlic { width: 30%; }
+  .cluster .c-pepper { width: 28%; }
   .step-fig { height: 84px; width: auto; display: block; margin-bottom: .6rem; }
   .step-figs { display: flex; align-items: flex-end; gap: .75rem; margin-bottom: .6rem; }
   .step-figs .step-fig { margin-bottom: 0; }
@@ -327,9 +329,9 @@
         <canvas id="lava" aria-hidden="true"></canvas>
       </div>
       <div class="cluster" aria-hidden="true">
-        <img class="c-basil" src="assets/img/basil.webp" width="360" height="240" alt="">
-        <img class="c-garlic" src="assets/img/garlic.webp" width="300" height="200" alt="">
-        <img class="c-pepper" src="assets/img/pepper.webp" width="300" height="200" alt="">
+        <img class="c-basil" src="assets/img/basil.webp" width="346" height="240" alt="">
+        <img class="c-garlic" src="assets/img/garlic.webp" width="254" height="200" alt="">
+        <img class="c-pepper" src="assets/img/pepper.webp" width="300" height="167" alt="">
       </div>
       </div>
     </section>
@@ -353,21 +355,21 @@
       </div>
       <ol class="steps">
         <li>
-          <img class="step-fig" src="assets/img/dried-oregano.webp" width="300" height="200" alt="" loading="lazy">
+          <img class="step-fig" src="assets/img/dried-oregano.webp" width="300" height="199" alt="" loading="lazy">
           <h3>Add the mix</h3>
           <p>Empty the pouch into a jar or bottle, or take a spoonful for a single salad.</p>
         </li>
         <li>
           <div class="step-figs">
-            <img class="step-fig" src="assets/img/oil.webp" width="240" height="360" alt="" loading="lazy">
-            <img class="step-fig" src="assets/img/vinegar.webp" width="240" height="360" alt="" loading="lazy">
+            <img class="step-fig" src="assets/img/oil.webp" width="119" height="360" alt="" loading="lazy">
+            <img class="step-fig" src="assets/img/vinegar.webp" width="126" height="360" alt="" loading="lazy">
           </div>
           <h3>Add oil and vinegar</h3>
           <p>Three parts oil to one part vinegar. For a whole pouch, that is ¾ cup oil and ¼ cup vinegar. For one salad, 1½ tablespoons oil and ½ tablespoon vinegar.</p>
           <p class="muted">Extra-virgin olive oil and red wine vinegar is the house pairing. Others below.</p>
         </li>
         <li>
-          <img class="step-fig" src="assets/img/salad.webp" width="700" height="470" alt="" loading="lazy">
+          <img class="step-fig" src="assets/img/salad.webp" width="669" height="470" alt="" loading="lazy">
           <h3>Shake or whisk</h3>
           <p>Shake until it comes together, then dress the salad. It will separate again as it sits. That is what dressing without mustard does, so shake it before each pour.</p>
         </li>
@@ -383,18 +385,18 @@
           <p>Vinaigresque leaves it out. What is left is herbs, garlic, onion and pepper doing the work, and a dressing that tastes like the oil and vinegar you chose. Nothing to hold it together, so you shake it. That is the whole trick.</p>
           <p>It is a pantry mix, not a bottled dressing: dry until you want it, and fresh every time you make it.</p>
           <ul class="whats-in" aria-label="What is in the mix">
-            <li><img src="assets/img/dried-oregano.webp" width="300" height="200" alt="" loading="lazy"><span>Oregano</span></li>
-            <li><img src="assets/img/dried-parsley.webp" width="300" height="200" alt="" loading="lazy"><span>Parsley</span></li>
-            <li><img src="assets/img/dried-basil.webp" width="300" height="200" alt="" loading="lazy"><span>Basil</span></li>
-            <li><img src="assets/img/garlic-powder.webp" width="300" height="200" alt="" loading="lazy"><span>Garlic</span></li>
-            <li><img src="assets/img/onion-powder.webp" width="300" height="200" alt="" loading="lazy"><span>Onion</span></li>
-            <li><img src="assets/img/pepper.webp" width="300" height="200" alt="" loading="lazy"><span>Black pepper</span></li>
-            <li><img src="assets/img/salt.webp" width="300" height="200" alt="" loading="lazy"><span>Salt</span></li>
-            <li><img src="assets/img/sugar.webp" width="300" height="200" alt="" loading="lazy"><span>A little sugar</span></li>
+            <li><img src="assets/img/dried-oregano.webp" width="300" height="199" alt="" loading="lazy"><span>Oregano</span></li>
+            <li><img src="assets/img/dried-parsley.webp" width="300" height="173" alt="" loading="lazy"><span>Parsley</span></li>
+            <li><img src="assets/img/dried-basil.webp" width="300" height="187" alt="" loading="lazy"><span>Basil</span></li>
+            <li><img src="assets/img/garlic-powder.webp" width="300" height="185" alt="" loading="lazy"><span>Garlic</span></li>
+            <li><img src="assets/img/onion-powder.webp" width="300" height="171" alt="" loading="lazy"><span>Onion</span></li>
+            <li><img src="assets/img/pepper.webp" width="300" height="167" alt="" loading="lazy"><span>Black pepper</span></li>
+            <li><img src="assets/img/salt.webp" width="300" height="178" alt="" loading="lazy"><span>Salt</span></li>
+            <li><img src="assets/img/sugar.webp" width="300" height="176" alt="" loading="lazy"><span>A little sugar</span></li>
           </ul>
         </div>
         <figure class="story-fig">
-          <img src="assets/img/oregano.webp" width="600" height="400" alt="A sprig of fresh oregano" loading="lazy">
+          <img src="assets/img/oregano.webp" width="581" height="400" alt="A sprig of fresh oregano" loading="lazy">
           <figcaption class="aside">Salads deserve better.</figcaption>
         </figure>
       </div>
@@ -409,7 +411,7 @@
       <ul class="cards">
         <li class="card">
           <span class="tag">The base blend</span>
-          <img class="ico" src="assets/img/basil.webp" width="360" height="240" alt="" loading="lazy">
+          <img class="ico" src="assets/img/basil.webp" width="346" height="240" alt="" loading="lazy">
           <h3>Classic Italian Herb</h3>
           <p class="profile">Herbal, garlicky, familiar.</p>
           <p class="pair"><b>Pair with</b> red wine vinegar and olive oil.</p>
@@ -423,14 +425,14 @@
         </li>
         <li class="card">
           <span class="tag">In development</span>
-          <img class="ico" src="assets/img/garlic.webp" width="300" height="200" alt="" loading="lazy">
+          <img class="ico" src="assets/img/garlic.webp" width="254" height="200" alt="" loading="lazy">
           <h3>Garlic &amp; Herb</h3>
           <p class="profile">More savory, garlic-forward.</p>
           <p class="pair"><b>Pair with</b> red wine vinegar and a robust olive oil.</p>
         </li>
         <li class="card">
           <span class="tag">In development</span>
-          <img class="ico" src="assets/img/oregano.webp" width="600" height="400" alt="" loading="lazy">
+          <img class="ico" src="assets/img/oregano.webp" width="581" height="400" alt="" loading="lazy">
           <h3>Greek Herb</h3>
           <p class="profile">Oregano-forward, lemony, greener.</p>
           <p class="pair"><b>Pair with</b> red or white wine vinegar and olive oil.</p>
@@ -452,7 +454,7 @@
           <h2>Pair. Make it yours.</h2>
           <p class="muted">The pouch stays the same. The vinegar you reach for is what changes the dressing, and the oil follows the vinegar.</p>
         </div>
-        <img class="sprig" src="assets/img/vinegar.webp" width="240" height="360" alt="" loading="lazy">
+        <img class="sprig" src="assets/img/vinegar.webp" width="126" height="360" alt="" loading="lazy">
       </div>
       <table class="pairings">
         <thead>
