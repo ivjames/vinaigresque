@@ -146,3 +146,38 @@ of it. Do not redraw the bottle from scratch; extend what is there.
   `.claude/rules/lab980-conventions.md` say how. Merging does not deploy.
 - Your report back: what changed, which copy is placeholder, the ratios you
   measured, and anything you could not resolve. No file dumps.
+
+---
+
+# Round 2 (2026-09-17)
+
+Round 1 produced four directions (`design/round-1/`, merged in PR #3 after a
+Codex review). The decisions taken on it, which **override** anything above
+that conflicts:
+
+1. **The product is a mix the buyer adds to their own oil and vinegar** at
+   3 : 1. This is now confirmed and can be stated plainly; the "or a bottled
+   dressing" slot is retired. Still unknown and still slots: the ingredient
+   list, the amount of mix per batch, pack size, price, and what holds the
+   dressing together (only mustard's absence is known — never claim the
+   dressing is emulsifier-free, and never say "no measuring" when step 3
+   needs an amount of mix; Codex caught both in round 1).
+2. **The oil yellow is the brand colour. Own it.** In every direction the
+   oil token (or a saturated derivative of it) must be the dominant colour —
+   the ground, or the largest field on the page — not a swatch on cream.
+   Directions that used cream as the ground in round 1 are reworked around
+   the yellow. Keep it working in the dark scheme too: the yellow stays a
+   field there, not a thin accent. Text on it must still clear 4.5 : 1
+   (measure; ink on `#c8a227` passes, muted greys mostly do not).
+3. **No call to action yet.** Remove every form, button and "notify me" /
+   "buy" link. The page informs and stops: name, what it is, why no
+   mustard, how to use it, and the "under development" status the holding
+   page carries. No ask anywhere, no email field, no `mailto:`.
+4. **Three directions go forward:** `label`, `grocer`, `kitchen`.
+   `manifesto` is dropped. Each round-2 page starts from its round-1 file
+   and evolves it; it is not a fresh start.
+
+Round-2 files: `design/round-2/<slug>.html`, screenshots in
+`design/round-2/shots/`. Every hard constraint and the process from round 1
+still applies (one file, no external requests, JS optional, 360–1440px,
+light and dark, contrast measured, `noindex`, Playwright shots, under ~60KB).
