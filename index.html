@@ -224,8 +224,13 @@
   .whats-in img { display: block; width: 100%; max-width: 150px; height: auto; aspect-ratio: 3 / 2; object-fit: contain; margin: 0 auto .5rem; }
   .whats-in span { font-family: var(--serif); font-size: 1rem; }
   @media (min-width: 600px) { .whats-in { grid-template-columns: repeat(4, 1fr); } }
-  .head-fig { display: flex; align-items: flex-end; gap: 1.5rem; }
-  .head-fig .sprig { width: 80px; height: auto; flex: 0 0 auto; margin-bottom: .4rem; }   /* the vinegar bottle, native 126x360 */
+  /* The pairings head: copy on the left at the head measure, the six
+     vinegars at the right edge, bottoms aligned, the way the hero pairs
+     copy with the bottle. Below 600px the group drops under the copy. */
+  .head.head-fig { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1.5rem 2rem; max-width: none; }   /* .head.head-fig: outranks .head's max-width below */
+  .head-fig > div { flex: 1 1 20rem; max-width: var(--head-measure); min-width: 0; }
+  .head-fig .bottles { width: min(240px, 60vw); height: auto; flex: 0 0 auto; margin: 0 auto; }   /* six vinegars, native 720x724 */
+  @media (min-width: 600px) { .head-fig .bottles { width: clamp(180px, 22vw, 260px); margin: 0 0 .25rem; } }
 
   @media (min-width: 1000px) {
     .hero {
@@ -600,7 +605,7 @@
           <h2>Pair. Make it yours.</h2>
           <p class="muted">The pouch stays the same. The vinegar you reach for is what changes the dressing, and the oil follows the vinegar.</p>
         </div>
-        <img class="sprig" src="assets/img/vinegar.webp" width="126" height="360" alt="" loading="lazy">
+        <img class="bottles" src="assets/img/vinegars.webp" width="720" height="724" alt="" loading="lazy">
       </div>
       <table class="pairings">
         <thead>
