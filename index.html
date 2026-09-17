@@ -214,7 +214,7 @@
   .cluster .c-garlic { width: 30%; }
   .cluster .c-pepper { width: 25%; }
   .story-fig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: .9rem; }
-  .story-fig img { width: min(280px, 72vw); height: auto; }   /* oregano sprig, native 581 */
+  .story-fig img { width: min(240px, 60vw); height: auto; }   /* the tossed salad, native 600x915, tall */
   /* What is in the mix: eight pieces of the art with their names, on the
      panel field. Each image is a 3:2 box the width of its cell (capped at
      150px, so it never nears the 300px natives) with the art fitted inside,
@@ -338,9 +338,8 @@
   .story .aside { font-family: var(--serif); font-style: italic; font-size: 1.6rem; color: var(--muted); line-height: 1.25; text-align: center; margin: 0; }
   @media (min-width: 760px) {
     .story { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: end; }
-    .story .aside { text-align: left; }
-    .story-fig { align-items: flex-start; }
-    .story-fig img { width: 100%; max-width: 340px; }   /* the 2fr column: 249px at 760, 339px at 1440 */
+    .story-fig { align-items: center; }   /* the caption centres under the salad, not the column */
+    .story-fig img { width: 100%; max-width: 380px; }   /* tall art: 380px wide is 580px tall, level with the copy and its grid at 1440 */
   }
 
   /* Flavours: the ingredient is the card. Each icon sits on a cream dish at
@@ -552,7 +551,7 @@
           </ul>
         </div>
         <figure class="story-fig">
-          <img src="assets/img/oregano.webp" width="581" height="400" alt="A sprig of fresh oregano" loading="lazy">
+          <img src="assets/img/tossed.webp" width="600" height="915" alt="A tossed salad of leaves, tomato, cucumber and red onion, with the dressing pouring through it" loading="lazy">
           <figcaption class="aside">Salads deserve better.</figcaption>
         </figure>
       </div>
