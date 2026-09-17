@@ -202,7 +202,8 @@
   /* How it works: three plates in a row, the renders at native size on
      them, and the text underneath at body size. The numeral sits in the
      plate's corner, on the panel and never on the picture: the widest render
-     is 170px and the plate never narrower than 320px, so the corner is clear. */
+     is 170px and sits at least 38px in from the plate edge while the numeral
+     box ends 39px in, so the corner is clear at every width. */
   .steps { display: grid; grid-template-columns: 1fr; gap: 1.75rem; margin: 0; padding: 0; list-style: none; counter-reset: step; }
   .steps li { counter-increment: step; }
   .plate {
@@ -392,7 +393,7 @@
       </div>
       <ol class="steps">
         <li>
-          <div class="plate"><img src="../../assets/img/step-mix.png" width="165" height="95" alt="A small bowl of the dry mix, with a spoonful beside it"></div>
+          <div class="plate"><img src="../../assets/img/step-mix.png" width="165" height="95" alt="A small bowl of the dry mix, with some spilled beside it"></div>
           <h3>Add the mix</h3>
           <p>Empty the pouch into a jar or bottle, or take a spoonful for a single salad.</p>
         </li>
