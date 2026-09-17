@@ -146,3 +146,30 @@ of it. Do not redraw the bottle from scratch; extend what is there.
   `.claude/rules/lab980-conventions.md` say how. Merging does not deploy.
 - Your report back: what changed, which copy is placeholder, the ratios you
   measured, and anything you could not resolve. No file dumps.
+
+---
+
+# Round 2 (2026-09-17)
+
+Decisions taken on 2026-09-17, on top of the packet brief above. Where the
+two differ, this section wins; where it is silent, the packet brief stands.
+
+1. **The shipped `index.html` is the direction.** Round 2 iterates on it.
+   The round-1 files in `design/round-1/` are retired as directions and stay
+   only as a record; nothing is carried forward from them except by
+   deliberate choice.
+2. **The packet's brand system stands as written**: cream ground, gold is
+   the oil and not the page, light mode only. (An "own the yellow" override
+   was considered and withdrawn the same day.)
+3. **No call to action for now.** The hero "Coming soon" button and the
+   waitlist panel are removed, along with their nav and footer links. The
+   under-development line stays, as text. The packet brief's closed-waitlist
+   shape (hidden form, HTML edit to open) is set aside until there is a list
+   to open; do not reintroduce a button, form or `mailto:` without being
+   told.
+4. **Round-2 variants** are full alternative treatments of `index.html`,
+   one file each at `design/round-2/<slug>.html`, screenshots in
+   `design/round-2/shots/`. Each starts from the shipped page after the
+   CTA removal, keeps its content and facts, and changes what its stated
+   hypothesis calls for. Image paths from there are `../../assets/img/…`.
+   Every hard constraint and the process in the packet brief apply.
