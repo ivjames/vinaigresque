@@ -38,11 +38,13 @@ ingredient lists, dates, barcodes and net weights are placeholder art.
   mix exists. Mustard is one of Health Canada's priority food allergens, on
   the enhanced-labelling list since 2012, and the page may say so. This is a
   selling point and may lead the "why" section — but lead with the ideal
-  (one dressing for the whole table), not the story: the reaction is a
-  clause, not a paragraph. State it as a fact about the recipe — there is
-  no mustard in it — never as a safety promise: no
-  "safe for", "allergen-free" or cross-contact claims, because those depend
-  on how and where it is made, which is not settled.
+  (mustard absent rather than merely quiet), not the story: the reaction is
+  a clause, not a paragraph. State it as a fact about the recipe — there is
+  no mustard in it — never as a safety promise: no "safe for",
+  "allergen-free", "same salad as everyone else" or cross-contact claims,
+  and nothing that tells a reader who cannot have mustard that this is for
+  them, because that depends on how and where it is made, which is not
+  settled.
 - **3 : 1 oil to vinegar**, three parts oil to one part vinegar. One pouch
   makes about **eight servings**. For a whole pouch that is ¾ cup oil and
   ¼ cup vinegar; for one salad, 1½ tablespoons oil and ½ tablespoon vinegar.
