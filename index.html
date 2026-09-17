@@ -338,8 +338,7 @@
   .story .aside { font-family: var(--serif); font-style: italic; font-size: 1.6rem; color: var(--muted); line-height: 1.25; text-align: center; margin: 0; }
   @media (min-width: 760px) {
     .story { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: end; }
-    .story .aside { text-align: left; }
-    .story-fig { align-items: flex-start; }
+    .story-fig { align-items: center; }   /* the caption centres under the salad, not the column */
     .story-fig img { width: 100%; max-width: 380px; }   /* tall art: 380px wide is 580px tall, level with the copy and its grid at 1440 */
   }
 
