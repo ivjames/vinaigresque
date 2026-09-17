@@ -173,3 +173,30 @@ two differ, this section wins; where it is silent, the packet brief stands.
    CTA removal, keeps its content and facts, and changes what its stated
    hypothesis calls for. Image paths from there are `../../assets/img/…`.
    Every hard constraint and the process in the packet brief apply.
+
+---
+
+# Round 3 (2026-09-17)
+
+Decision on round 2: **`scale` is the base**, and three moves from the other
+variants fold into it. Round 3 produces the new `index.html`, landed by PR;
+it goes live at the next deploy.
+
+1. From `edit`: the copy cuts. The hero kicker, the strip's fourth line, the
+   how-it-works lede, step 3's repeat of the mustard explanation, the why
+   section's ingredient repeat and third paragraph, and the flavours lede go.
+   Every fact stays; only restatements leave.
+2. From `food`: the three step renders at native size on panel plates as the
+   how-it-works row's main event, with the numeral in the plate corner and
+   never over the picture.
+3. From `food`: five flavour cards in one row from 1000px, icons heading
+   each card, so there is no 3 + 2 hole.
+4. Everything else is `scale` as merged in #10: 7rem name capped beside the
+   bottle, the why section on the panel field, the between-section air, the
+   display numerals where they remain. The status heading comes down to the
+   ordinary h2 size; the round-2 review found 88px gave the least important
+   section the loudest voice.
+
+Image paths in `index.html` are `assets/img/…`. All hard constraints in the
+packet brief apply; the round-2 section's decisions (no CTA, cream ground,
+light only) still stand.
