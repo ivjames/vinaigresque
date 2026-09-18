@@ -133,3 +133,24 @@ pairs. Report back: the hypothesis, what each surface does, the ratios, and
 anything you could not resolve. No file dumps.
 
 Round files are exploration and are not linked from the site.
+
+---
+
+# Round 1 delivered (2026-09-18)
+
+Four directions, one file each in `design/packaging/round-1/`, screenshots
+in `shots/`. None is chosen; the round exists to be compared.
+
+| slug | hypothesis | what it found |
+|---|---|---|
+| `front` | The packet's simple front, literally: cream, ink, wordmark, cruet, flavor as an italic caption. | The top third of every pack is identical and the flavor is a caption line; reads at distance on wordmark, bottle and flavor alone. Photographic cutouts at 44 px would want vector icons in print. |
+| `bottle` | The cruet is the pack, 4.4 in tall, the only colour. | A sage leader from the add-oil cue into the bottle's mouth makes the picture "what you make", not "what is inside". The window variant is honest about the fill: a bottle-shaped window on a 5 × 8 pouch is about three-quarters empty film, and it loses the pack's only colour. Net weight sits in the gusset fold. |
+| `ingredients` | Food-first, the cutouts are the picture, cruet reduced to a seal. | Stays "specialty pantry" only with left-aligned type, level cutouts, no shadows, and about 1.3 in of empty cream between descriptor and food. UPC and basil fall in the gusset zone on the back. |
+| `label` | One band that is a sheet label today and the pouch's only print later. | A field colour with a cream window works from 3 × 2 in (Avery) to 6 × 3 in because every internal dimension is a fraction of band height. At 3 × 2 the net weight is 6.5 pt, on the floor. Field colour is by family, never the flavor's identifier. |
+
+Common to all four, and unresolved by design: gusset and seal keep-outs are
+drawn from the 3 in spec, not a converter's dieline; fonts rendered here are
+fallbacks, so measure widths again on a machine with the reference faces;
+the net-weight slot stays empty until the pouch is chosen and the fill is
+measured; and Greek Herb and Ginger Citrus have no `ico-*` icon, so those
+fronts use cutouts.

@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Vinaigresque — packaging round 1 — label</title>
+<style>
+  :root {
+    --cream:    #FAF6EC;
+    --ink:      #2E2A1F;
+    --muted:    #5E5849;
+    --sage:     #6B7F4E;
+    --sage-ink: #5A6C40;
+    --gold:     #D4B04C;
+    --burgundy: #7A2E34;
+    --taupe:    #D8CDBA;
+    --panel:    #F3EDDE;
+    --white:    #FFFFFF;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+             Georgia, "Times New Roman", serif;
+    --sans:  Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+             "Helvetica Neue", Arial, sans-serif;
+    --in: 96px;   /* the common scale: 1 in = 96 CSS px */
+  }
+  html { background: var(--panel); }
+  body {
+    margin: 0; background: var(--panel); color: var(--ink);
+    font-family: var(--sans); font-size: 14px; line-height: 1.5;
+    padding-top: 32px; padding-bottom: 96px; padding-left: 40px; padding-right: 40px;
+  }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.15; margin: 0 0 6px; }
+  h1 .dot { color: var(--sage); }
+  h2 { font-family: var(--serif); font-weight: 400; font-size: 20px; margin: 48px 0 8px; }
+  .intro { max-width: 62rem; }
+  .intro p { margin: 0 0 10px; max-width: 46rem; }
+  .intro dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; margin: 14px 0 0; max-width: 52rem; }
+  .intro dt { color: var(--muted); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; padding-top: 3px; }
+  .intro dd { margin: 0; }
+  .swatches { display: flex; gap: 14px; margin: 12px 0 0; flex-wrap: wrap; }
+  .swatches span { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+  .swatches i { width: 22px; height: 22px; border-radius: 4px; display: inline-block; }
+
+  figure { margin: 0 0 56px; display: block; width: fit-content; max-width: 100%; }
+  figcaption { font-size: 13px; color: var(--muted); margin: 0 0 12px; width: 0; min-width: 100%; box-sizing: border-box; }
+  figcaption b { color: var(--ink); font-weight: 600; }
+  .row { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; }
+  .row > figure { margin-right: 0; }
+  .shots { display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-end; }
+  .shots figure { margin-bottom: 8px; }
+  .shots figcaption { margin: 10px 0 0; font-size: 12px; }
+
+  /* ---- the cruet: the site's inline SVG, referenced once and used everywhere ---- */
+  .cruet-mark .glass { fill: none; stroke: var(--taupe); stroke-width: 2; }
+  .cruet-mark .oil   { fill: var(--gold); opacity: .8; }
+  .cruet-mark .glob  { fill: var(--burgundy); opacity: .92; }
+  .cruet-mark .herb  { fill: var(--sage); }
+
+  /* ---- the band: one artwork, sized from its height --h; width is air ---- */
+  .band {
+    --field: var(--sage-ink);
+    position: relative; box-sizing: border-box;
+    width: var(--w); height: var(--h);
+    background: var(--field); color: var(--cream);
+    padding: calc(var(--h) * .055);
+    display: flex; flex-direction: column; gap: calc(var(--h) * .04);
+    font-family: var(--sans); overflow: hidden;
+  }
+  .band[data-field="sage"]     { --field: var(--sage-ink); }
+  .band[data-field="burgundy"] { --field: var(--burgundy); }
+  .band[data-field="ink"]      { --field: var(--ink); }
+
+  .plate {
+    flex: 0 0 calc(var(--h) * .46); box-sizing: border-box; min-height: 0;
+    background: var(--cream); color: var(--ink);
+    display: flex; align-items: center; gap: calc(var(--h) * .045);
+    padding-top: calc(var(--h) * .04); padding-bottom: calc(var(--h) * .04);
+    padding-left: calc(var(--h) * .05); padding-right: calc(var(--h) * .05);
+  }
+  .plate .cruet { flex: 0 0 auto; height: calc(var(--h) * .38); width: calc(var(--h) * .38 * 48 / 112); display: block; }
+  .plate .words { min-width: 0; flex: 1 1 auto; }
+  .wordmark {
+    font-family: var(--serif); font-weight: 400; font-size: calc(var(--h) * .15);
+    line-height: 1; letter-spacing: -.01em; white-space: nowrap; margin: 0; color: var(--ink);
+  }
+  .wordmark .dot { color: var(--sage); }
+  .descriptor {
+    font-family: var(--serif); font-style: italic; font-size: calc(var(--h) * .062);
+    line-height: 1.2; margin: calc(var(--h) * .025) 0 0; color: var(--ink); white-space: nowrap;
+  }
+
+  .fieldzone { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; justify-content: space-between; }
+  .flavor-row { display: flex; align-items: center; gap: calc(var(--h) * .04); }
+  .coin {
+    flex: 0 0 auto; width: calc(var(--h) * .2); height: calc(var(--h) * .2);
+    border-radius: 50%; background: var(--cream); overflow: hidden; display: block;
+  }
+  .coin img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .flavor { font-family: var(--serif); font-weight: 400; font-size: calc(var(--h) * .105); line-height: 1.05; margin: 0; min-width: 0; color: var(--cream); }
+  .cue-row { display: flex; align-items: flex-end; justify-content: space-between; gap: calc(var(--h) * .04); }
+  .cue { font-size: calc(var(--h) * .048); line-height: 1.3; margin: 0; color: var(--cream); }
+  .netwt { font-size: calc(var(--h) * .045); line-height: 1.3; margin: 0; text-align: right; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; color: var(--cream); }
+
+  /* ---- pouches ---- */
+  .pouch {
+    --s: 1; position: relative; box-sizing: border-box; overflow: hidden;
+    background: var(--cream); border: 1px solid var(--taupe);
+  }
+  .standup {
+    width: calc(5 * var(--in) * var(--s)); height: calc(8 * var(--in) * var(--s));
+    border-radius: calc(4px * var(--s)) calc(4px * var(--s)) calc(14px * var(--s)) calc(14px * var(--s));
+  }
+  .pillow {
+    width: calc(3.5 * var(--in) * var(--s)); height: calc(6 * var(--in) * var(--s));
+    background: var(--white); border-radius: calc(3px * var(--s));
+  }
+  .sample {
+    width: calc(4.375 * var(--in) * var(--s)); height: calc(6 * var(--in) * var(--s));
+    background: var(--white);
+    border-radius: calc(4px * var(--s)) calc(4px * var(--s)) calc(12px * var(--s)) calc(12px * var(--s));
+  }
+  .guide { position: absolute; pointer-events: none; box-sizing: border-box; }
+  .safe { inset: calc(.25 * var(--in) * var(--s)); border: 1px dashed var(--taupe); }
+  .zone { left: 0; right: 0; background: repeating-linear-gradient(135deg, rgba(216,205,186,.6) 0 1.5px, transparent 1.5px 8px); }
+  .zone.top    { top: 0;    height: calc(.75 * var(--in) * var(--s)); border-bottom: 1px solid var(--taupe); }
+  .zone.gusset { bottom: 0; height: calc(1.5 * var(--in) * var(--s)); border-top: 1px solid var(--taupe); }
+  .zone.seal   { height: calc(.375 * var(--in) * var(--s)); }
+  .zone.seal.top    { top: 0;    height: calc(.375 * var(--in) * var(--s)); }
+  .zone.seal.bottom { bottom: 0; border-top: 1px solid var(--taupe); }
+  .tag {
+    position: absolute; font-size: 9px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); line-height: 1.2; margin: 0; pointer-events: none;
+  }
+  .tag.tl { left: 12px; top: 8px; }
+  .tag.bl { left: 12px; bottom: 8px; }
+  .tag.mid { left: 12px; }
+  .half .tag { display: none; }
+  .half .safe { border-width: 1px; }
+  .pouch .band { position: absolute; left: calc(.25 * var(--in) * var(--s)); }
+  .standup .band { top: calc(2.25 * var(--in) * var(--s)); }
+  .pillow  .band { top: calc(1.5 * var(--in) * var(--s)); }
+  .sample  .band { top: calc(1.5 * var(--in) * var(--s)); left: calc(.6875 * var(--in) * var(--s)); }
+  .sticker { box-shadow: 0 0 0 1px rgba(46,42,31,.10), 1px 2px 5px rgba(46,42,31,.22); }
+
+  /* ---- back ---- */
+  .backbody {
+    position: absolute; left: calc(.25 * var(--in)); top: calc(1 * var(--in));
+    width: calc(4.5 * var(--in)); height: calc(5.5 * var(--in));
+    display: flex; flex-direction: column; gap: 10px; color: var(--ink); box-sizing: border-box;
+  }
+  .backhead { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--taupe); padding-bottom: 6px; }
+  .backhead .wm { font-family: var(--serif); font-size: 18px; line-height: 1; }
+  .backhead .wm .dot { color: var(--sage); }
+  .backhead .fl { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--muted); }
+  .cols { display: flex; gap: 24px; flex: 1 1 auto; min-height: 0; }
+  .col.main { width: calc(2.5 * var(--in)); flex: 0 0 auto; }
+  .col.slots { width: calc(1.75 * var(--in)); flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px; }
+  .col.main h3 { font-family: var(--serif); font-weight: 400; font-size: 17px; line-height: 1.1; margin: 0 0 4px; color: var(--sage-ink); }
+  .col.main h3 + * { margin-top: 0; }
+  .col.main p { font-size: 11.3px; line-height: 1.35; margin: 0 0 10px; }
+  .col.main p.amount { margin: 0 0 4px; padding-left: 0; }
+  .col.main p.amount + p.amount { margin-bottom: 12px; }
+  .col.main p.amount b { font-family: var(--serif); font-weight: 400; font-size: 12.5px; }
+  .pairs { display: flex; gap: 16px; margin: 0 0 8px; }
+  .pairs div { flex: 1 1 0; font-size: 11.3px; line-height: 1.35; }
+  .pairs b { display: block; font-weight: 600; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+  .slot {
+    border: 1px dashed var(--muted); box-sizing: border-box; display: flex; align-items: center; justify-content: center;
+    font-size: 8.7px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); text-align: center; padding: 4px; line-height: 1.3;
+  }
+  .slot.nutrition { height: calc(2.6 * var(--in)); }
+  .slot.upc { width: calc(1.469 * var(--in)); height: calc(1.02 * var(--in)); }
+  .slot.lot { height: 30px; }
+  .backfoot { display: flex; gap: 10px; }
+  .backfoot .slot { flex: 1 1 0; height: 34px; }
+  .backfoot .slot.url { flex: 0 0 calc(1.75 * var(--in)); }
+
+  .notes { max-width: 52rem; }
+  .notes ul { padding-left: 1.2em; }
+  .notes li { margin: 0 0 6px; }
+  .notes code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <clipPath id="body">
+      <path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94
+               L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/>
+    </clipPath>
+    <g id="cruet-mark" class="cruet-mark">
+      <g clip-path="url(#body)">
+        <rect class="oil" x="0" y="36" width="48" height="64"/>
+        <circle class="glob" cx="19" cy="58" r="7.2"/>
+        <circle class="glob" cx="30" cy="70" r="5"/>
+        <circle class="glob" cx="17" cy="82" r="6.1"/>
+        <circle class="glob" cx="31" cy="87" r="3.9"/>
+        <circle class="herb" cx="27" cy="52" r=".9"/>
+        <circle class="herb" cx="14" cy="70" r=".8"/>
+        <circle class="herb" cx="34" cy="60" r=".7"/>
+        <circle class="herb" cx="24" cy="76" r=".9"/>
+      </g>
+      <path class="glass" d="M20,8 L20,30 C20,35 8,39 8,50 L8,88 Q8,94 14,94
+                             L34,94 Q40,94 40,88 L40,50 C40,39 28,35 28,30 L28,8"/>
+    </g>
+  </defs>
+</svg>
+
+<header class="intro">
+  <h1>Vinaigresque<span class="dot">.</span> — packaging round 1 — direction <em>label</em></h1>
+  <p><b>Hypothesis: a label system first, a pouch second.</b> One band carries the whole front — wordmark, descriptor, bottle mark, flavor with its icon, cue, net-weight slot — and is drawn so that it is the same artwork as a sheet label on a blank bag today and as the only printed area on a pouch later. The band is a field colour with a cream window: the field gives a sticker a deliberate edge on white or cream stock, and the window is where the wordmark keeps its sage period and the bottle keeps its cream ground, because neither survives on a dark field.</p>
+  <p><b>Scaling rule.</b> Every dimension inside the band is a fraction of the band's <em>height</em>; width is air. So the four label sizes (3 × 2, 4.5 × 2.5, 5 × 3, 6 × 3 in) are one file with one number changed, and the same band drops onto the pillow pouch (3 × 2), the stand-up pouch (4.5 × 2.5) and the jars (5 × 3, 6 × 3) without re-setting anything.</p>
+  <dl>
+    <dt>Field colour</dt><dd>By family, never the identifier: herb blends on sage-ink, citrus blends on ink, pepper on burgundy. Two citrus flavors share ink on purpose — name and icon tell them apart, colour only assists.</dd>
+    <dt>Icons</dt><dd>Classic Italian Herb <code>ico-herb</code> · Lemon Herb <code>ico-lemon</code> · Garlic &amp; Herb <code>ico-garlic</code> · Roasted Red Pepper <code>ico-pepper</code> · Greek Herb <code>oregano.webp</code> (no ico-) · Ginger Citrus <code>ginger.webp</code> (no ico-).</dd>
+    <dt>Scale</dt><dd>1 in = 96 px throughout. Type sizes stated in the size study below.</dd>
+  </dl>
+  <div class="swatches">
+    <span><i style="background:var(--sage-ink)"></i>sage-ink #5A6C40 — cream text 5.33 : 1</span>
+    <span><i style="background:var(--burgundy)"></i>burgundy #7A2E34 — cream text 8.58 : 1</span>
+    <span><i style="background:var(--ink)"></i>ink #2E2A1F — cream text 13.26 : 1</span>
+    <span><i style="background:var(--cream);border:1px solid var(--taupe)"></i>cream #FAF6EC — ink text 13.26 : 1</span>
+  </div>
+</header>
+
+<h2>1 · Stand-up pouch front</h2>
+<figure id="standup-front">
+  <figcaption><b>Stand-up pouch front · 5 × 8 in</b> (Vann's, 3 in base). Printed pouch, <b>plain cream</b> outside the band. The band is the 4.5 × 2.5 in size: it fits the 0.25 in safe inset exactly, sits 2.25 in from the top, below the seal-and-zipper zone and above the gusset fold. Guides: dashed = safe area; hatched = seal/zipper (top, 0.75 in assumed) and gusset zone (base; 3 in base, taken as folding 1.5 in up the face).</figcaption>
+  <div class="pouch standup">
+    <div class="guide zone top"></div>
+    <div class="guide zone gusset"></div>
+    <div class="guide safe"></div>
+    <p class="tag tl">Top seal / zipper · 0.75 in</p>
+    <p class="tag mid" style="top:492px">Plain cream · no print</p>
+    <p class="tag bl">Gusset zone · 3 in base · fold ≈ 1.5 in</p>
+    <div class="band" data-field="sage" style="--w:calc(4.5*var(--in)*var(--s));--h:calc(2.5*var(--in)*var(--s))">
+      <div class="plate">
+        <svg class="cruet" viewBox="0 -12 48 112" aria-hidden="true"><use href="#cruet-mark"/></svg>
+        <div class="words">
+          <p class="wordmark">Vinaigresque<span class="dot">.</span></p>
+          <p class="descriptor">A mustard-free vinaigrette mix.</p>
+        </div>
+      </div>
+      <div class="fieldzone">
+        <div class="flavor-row"><span class="coin"><img src="../../../assets/img/ico-herb.png" alt=""></span><p class="flavor">Classic Italian Herb</p></div>
+        <div class="cue-row"><p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p><p class="netwt">Net wt<br>[__ g / __ oz]</p></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<h2>2 · Pillow pouch front</h2>
+<figure id="pillow-front">
+  <figcaption><b>Pillow pouch front · 3.5 × 6 in</b> (Vann's 3.5 in width; 6 in is this round's working height). Printed pouch, <b>plain white</b> film outside the band, so the cream window shows what the band does on white stock (cream on white is 1.08 : 1 — the window reads as white, which is fine). The band is the 3 × 2 in size, the same size as the Avery prototype label. Hatched = end seals, 0.375 in assumed.</figcaption>
+  <div class="pouch pillow">
+    <div class="guide zone seal top"></div>
+    <div class="guide zone seal bottom"></div>
+    <div class="guide safe"></div>
+    <p class="tag mid" style="top:384px">Plain white · no print</p>
+    <div class="band" data-field="sage" style="--w:calc(3*var(--in)*var(--s));--h:calc(2*var(--in)*var(--s))">
+      <div class="plate">
+        <svg class="cruet" viewBox="0 -12 48 112" aria-hidden="true"><use href="#cruet-mark"/></svg>
+        <div class="words">
+          <p class="wordmark">Vinaigresque<span class="dot">.</span></p>
+          <p class="descriptor">A mustard-free vinaigrette mix.</p>
+        </div>
+      </div>
+      <div class="fieldzone">
+        <div class="flavor-row"><span class="coin"><img src="../../../assets/img/ico-herb.png" alt=""></span><p class="flavor">Classic Italian Herb</p></div>
+        <div class="cue-row"><p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p><p class="netwt">Net wt<br>[__ g / __ oz]</p></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<h2>3 · Jar label</h2>
+<figure id="jar-5x3">
+  <figcaption><b>Jar label · 5 × 3 in, flat</b> (Vann's 3.75 oz and 5.5 oz plastic). The band at its reference size: wordmark 33.5 pt, flavor 22.7 pt, descriptor 13.4 pt, cue 10.4 pt, net-weight slot 9.7 pt.</figcaption>
+  <div class="band" data-field="sage" style="--w:calc(5*var(--in));--h:calc(3*var(--in))">
+    <div class="plate">
+      <svg class="cruet" viewBox="0 -12 48 112" aria-hidden="true"><use href="#cruet-mark"/></svg>
+      <div class="words">
+        <p class="wordmark">Vinaigresque<span class="dot">.</span></p>
+        <p class="descriptor">A mustard-free vinaigrette mix.</p>
+      </div>
+    </div>
+    <div class="fieldzone">
+      <div class="flavor-row"><span class="coin"><img src="../../../assets/img/ico-herb.png" alt=""></span><p class="flavor">Classic Italian Herb</p></div>
+      <div class="cue-row"><p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p><p class="netwt">Net wt<br>[__ g / __ oz]</p></div>
+    </div>
+  </div>
+</figure>
+
+<h2>4 · Stand-up pouch back</h2>
+<figure id="standup-back">
+  <figcaption><b>Stand-up pouch back · 5 × 8 in.</b> Ink on plain cream inside the safe area, above the gusset. Directions, ingredients at the name level, the pairing guide, and labelled slots at plausible size: Nutrition Facts 1.75 × 2.6 in, UPC 1.469 × 1.02 in (UPC-A at 100 %), lot / best by, distributed by, URL. The per-salad amount of <em>mix</em> is not in the brief and is a slot.</figcaption>
+  <div class="pouch standup">
+    <div class="guide zone top"></div>
+    <div class="guide zone gusset"></div>
+    <div class="guide safe"></div>
+    <p class="tag tl">Top seal / zipper · 0.75 in</p>
+    <p class="tag bl">Gusset zone · 3 in base · fold ≈ 1.5 in</p>
+    <div class="backbody">
+      <header class="backhead"><span class="wm">Vinaigresque<span class="dot">.</span></span><span class="fl">Classic Italian Herb</span></header>
+      <div class="cols">
+        <div class="col main">
+          <h3>Mix.</h3>
+          <p>Three parts oil to one part vinegar. Add both, shake or whisk, dress the salad. There is no mustard in it to hold oil and vinegar together, so it separates as it sits — shake it again before it goes on.</p>
+          <p class="amount"><b>Whole pouch</b> — ¾ cup oil, ¼ cup vinegar, all of the mix.</p>
+          <p class="amount"><b>One salad</b> — 1½ tbsp oil, ½ tbsp vinegar, [__ tsp] mix.</p>
+          <h3>Ingredients.</h3>
+          <p>Dried oregano, dried parsley, dried basil, garlic powder, onion powder, black pepper, salt, sugar.</p>
+          <h3>Pair it.</h3>
+          <div class="pairs">
+            <div><b>Vinegar</b>Red wine · white wine or champagne · balsamic · apple cider · sherry · rice</div>
+            <div><b>Oil</b>Extra-virgin olive · mild olive · avocado · neutral</div>
+          </div>
+          <p>The house pairing is extra-virgin olive oil and red wine vinegar.</p>
+        </div>
+        <div class="col slots">
+          <div class="slot nutrition">[Nutrition Facts]</div>
+          <div class="slot upc">[UPC]</div>
+          <div class="slot lot">[Lot / best by]</div>
+        </div>
+      </div>
+      <footer class="backfoot">
+        <div class="slot dist">[Distributed by · city, state, zip]</div>
+        <div class="slot url">[vinaigresque.com]</div>
+      </footer>
+    </div>
+  </div>
+</figure>
+
+<h2>5 · Flavor family</h2>
+<figure id="family">
+  <figcaption><b>Stand-up pouch fronts at half scale · 5 × 8 in.</b> Classic Italian Herb (herb family, sage-ink, <code>ico-herb</code>), Lemon Herb (citrus family, ink, <code>ico-lemon</code>), Ginger Citrus (citrus family, ink, <code>ginger.webp</code>). A flavor changes the name, the coin and — by family, not by flavor — the field; the window and everything in it is constant. The two inks side by side are the point: colour alone never identifies a flavor here.</figcaption>
+  <div class="row">
+    <div class="pouch standup half" style="--s:.5">
+      <div class="guide zone top"></div><div class="guide zone gusset"></div><div class="guide safe"></div>
+      <div class="band" data-field="sage" style="--w:calc(4.5*var(--in)*var(--s));--h:calc(2.5*var(--in)*var(--s))">
+        <div class="plate">
+          <svg class="cruet" viewBox="0 -12 48 112" aria-hidden="true"><use href="#cruet-mark"/></svg>
+          <div class="words"><p class="wordmark">Vinaigresque<span class="dot">.</span></p><p class="descriptor">A mustard-free vinaigrette mix.</p></div>
+        </div>
+        <div class="fieldzone">
+          <div class="flavor-row"><span class="coin"><img src="../../../assets/img/ico-herb.png" alt=""></span><p class="flavor">Classic Italian Herb</p></div>
+          <div class="cue-row"><p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p><p class="netwt">Net wt<br>[__ g / __ oz]</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="pouch standup half" style="--s:.5">
+      <div class="guide zone top"></div><div class="guide zone gusset"></div><div class="guide safe"></div>
+      <div class="band" data-field="ink" style="--w:calc(4.5*var(--in)*var(--s));--h:calc(2.5*var(--in)*var(--s))">
+        <div class="plate">
+          <svg class="cruet" viewBox="0 -12 48 112" aria-hidden="true"><use href="#cruet-mark"/></svg>
+          <div class="words"><p class="wordmark">Vinaigresque<span class="dot">.</span></p><p class="descriptor">A mustard-free vinaigrette mix.</p></div>
+        </div>
+        <div class="fieldzone">
+          <div class="flavor-row"><span class="coin"><img src="../../../assets/img/ico-lemon.png" alt=""></span><p class="flavor">Lemon Herb</p></div>
+          <div class="cue-row"><p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p><p class="netwt">Net wt<br>[__ g / __ oz]</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="pouch standup half" style="--s:.5">
+      <div class="guide zone top"></div><div class="guide zone gusset"></div><div class="guide safe"></div>
+      <div class="band" data-field="ink" style="--w:calc(4.5*var(--in)*var(--s));--h:calc(2.5*var(--in)*var(--s))">
+        <div class="plate">
+          <svg class="cruet" viewBox="0 -12 48 112" aria-hidden="true"><use href="#cruet-mark"/></svg>
+          <div class="words"><p class="wordmark">Vinaigresque<span class="dot">.</span></p><p class="descriptor">A mustard-free vinaigrette mix.</p></div>
+        </div>
+        <div class="fieldzone">
+          <div class="flavor-row"><span class="coin"><img src="../../../assets/img/ginger.webp" alt=""></span><p class="flavor">Ginger Citrus</p></div>
+          <div class="cue-row"><p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p><p class="netwt">Net wt<br>[__ g / __ oz]</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<h2>6 · The four label sizes, and the sticker on today's blank bag</h2>
+<figure id="sizes">
+  <figcaption><b>Size study.</b> The same band at 3 × 2 in (Avery prototype label, drawn landscape), 4.5 × 2.5 in (4 oz glass; also the stand-up pouch's print), 5 × 3 in (3.75 and 5.5 oz plastic) and 6 × 3 in (8 oz plastic). Because every internal dimension is a fraction of height, the 5 × 3 and 6 × 3 bands are identical except for air; the 3 × 2 is the 5 × 3 at two-thirds. Last: a Pouch House 4.375 × 6 in blank sample, white, with the 3 × 2 sheet label applied as a sticker — the "today" state the hypothesis has to survive.</figcaption>
+  <div class="shots">
+    <figure>
+      <div class="band" data-field="sage" style="--w:calc(3*var(--in));--h:calc(2*var(--in))">
+        <div class="plate">
+          <svg class="cruet" viewBox="0 -12 48 112" aria-hidden="true"><use href="#cruet-mark"/></svg>
+          <div class="words"><p class="wordmark">Vinaigresque<span class="dot">.</span></p><p class="descriptor">A mustard-free vinaigrette mix.</p></div>
+        </div>
+        <div class="fieldzone">
+          <div class="flavor-row"><span class="coin"><img src="../../../assets/img/ico-herb.png" alt=""></span><p class="flavor">Classic Italian Herb</p></div>
+          <div class="cue-row"><p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p><p class="netwt">Net wt<br>[__ g / __ oz]</p></div>
+        </div>
+      </div>
+      <figcaption><b>3 × 2 in</b> · Avery prototype, pillow pouch<br>wordmark 22.3 pt · flavor 15.1 pt · descriptor 8.9 pt<br>cue 6.9 pt · net wt 6.5 pt</figcaption>
+    </figure>
+    <figure>
+      <div class="band" data-field="sage" style="--w:calc(4.5*var(--in));--h:calc(2.5*var(--in))">
+        <div class="plate">
+          <svg class="cruet" viewBox="0 -12 48 112" aria-hidden="true"><use href="#cruet-mark"/></svg>
+          <div class="words"><p class="wordmark">Vinaigresque<span class="dot">.</span></p><p class="descriptor">A mustard-free vinaigrette mix.</p></div>
+        </div>
+        <div class="fieldzone">
+          <div class="flavor-row"><span class="coin"><img src="../../../assets/img/ico-herb.png" alt=""></span><p class="flavor">Classic Italian Herb</p></div>
+          <div class="cue-row"><p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p><p class="netwt">Net wt<br>[__ g / __ oz]</p></div>
+        </div>
+      </div>
+      <figcaption><b>4.5 × 2.5 in</b> · 4 oz glass, stand-up pouch print<br>wordmark 27.9 pt · flavor 18.9 pt · descriptor 11.2 pt<br>cue 8.6 pt · net wt 8.1 pt</figcaption>
+    </figure>
+    <figure>
+      <div class="band" data-field="sage" style="--w:calc(5*var(--in));--h:calc(3*var(--in))">
+        <div class="plate">
+          <svg class="cruet" viewBox="0 -12 48 112" aria-hidden="true"><use href="#cruet-mark"/></svg>
+          <div class="words"><p class="wordmark">Vinaigresque<span class="dot">.</span></p><p class="descriptor">A mustard-free vinaigrette mix.</p></div>
+        </div>
+        <div class="fieldzone">
+          <div class="flavor-row"><span class="coin"><img src="../../../assets/img/ico-herb.png" alt=""></span><p class="flavor">Classic Italian Herb</p></div>
+          <div class="cue-row"><p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p><p class="netwt">Net wt<br>[__ g / __ oz]</p></div>
+        </div>
+      </div>
+      <figcaption><b>5 × 3 in</b> · 3.75 and 5.5 oz plastic<br>wordmark 33.5 pt · flavor 22.7 pt · descriptor 13.4 pt<br>cue 10.4 pt · net wt 9.7 pt</figcaption>
+    </figure>
+    <figure>
+      <div class="band" data-field="sage" style="--w:calc(6*var(--in));--h:calc(3*var(--in))">
+        <div class="plate">
+          <svg class="cruet" viewBox="0 -12 48 112" aria-hidden="true"><use href="#cruet-mark"/></svg>
+          <div class="words"><p class="wordmark">Vinaigresque<span class="dot">.</span></p><p class="descriptor">A mustard-free vinaigrette mix.</p></div>
+        </div>
+        <div class="fieldzone">
+          <div class="flavor-row"><span class="coin"><img src="../../../assets/img/ico-herb.png" alt=""></span><p class="flavor">Classic Italian Herb</p></div>
+          <div class="cue-row"><p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p><p class="netwt">Net wt<br>[__ g / __ oz]</p></div>
+        </div>
+      </div>
+      <figcaption><b>6 × 3 in</b> · 8 oz plastic<br>same type as 5 × 3; the extra inch is air</figcaption>
+    </figure>
+    <figure>
+      <div class="pouch sample">
+        <div class="guide zone seal top"></div>
+        <div class="guide zone gusset" style="height:calc(1*var(--in))"></div>
+        <p class="tag mid" style="top:372px">Blank sample · white · unprinted</p>
+        <div class="band sticker" data-field="sage" style="--w:calc(3*var(--in));--h:calc(2*var(--in))">
+          <div class="plate">
+            <svg class="cruet" viewBox="0 -12 48 112" aria-hidden="true"><use href="#cruet-mark"/></svg>
+            <div class="words"><p class="wordmark">Vinaigresque<span class="dot">.</span></p><p class="descriptor">A mustard-free vinaigrette mix.</p></div>
+          </div>
+          <div class="fieldzone">
+            <div class="flavor-row"><span class="coin"><img src="../../../assets/img/ico-herb.png" alt=""></span><p class="flavor">Classic Italian Herb</p></div>
+            <div class="cue-row"><p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p><p class="netwt">Net wt<br>[__ g / __ oz]</p></div>
+          </div>
+        </div>
+      </div>
+      <figcaption><b>Pouch House sample · 4.375 × 6 in</b>, blank white<br>3 × 2 in sheet label applied as a sticker</figcaption>
+    </figure>
+  </div>
+</figure>
+
+<section class="notes">
+  <h2>Notes and open points</h2>
+  <ul>
+    <li><b>Contrast, measured.</b> Cream on sage-ink 5.33 : 1; cream on burgundy 8.58 : 1; cream on ink 13.26 : 1; ink on cream 13.26 : 1 (wordmark, descriptor, back copy); sage-ink on cream 5.33 : 1 (back headings); muted on cream 6.56 : 1 (slot labels, guide tags). Not text: the sage period on cream 4.08 : 1, the cruet's taupe glass line on cream 1.46 : 1 (as on the site), and the cream window on white film 1.08 : 1.</li>
+    <li><b>Why a window.</b> Sage on sage-ink is 1.31 : 1, so the wordmark's period cannot sit on the field; and the bottle's burgundy globs vanish on burgundy and go muddy on sage-ink. The cream plate is not decoration — it is where the two brand marks are legible.</li>
+    <li><b>Smallest type.</b> At 3 × 2 in the net-weight slot is 6.5 pt and the cue 6.9 pt, above the 6 pt floor but with little to spare; the 3 × 2 is a prototype size, not a retail one.</li>
+    <li><b>Avery orientation</b> is assumed landscape (3 wide × 2 tall) to keep all four sizes in one aspect family (1.5 : 1 to 2 : 1). Portrait use would need a second layout and is not drawn.</li>
+    <li><b>Icons.</b> Two flavors have no <code>ico-*</code> file: Greek Herb and Ginger Citrus use the larger cutouts cropped into the coin. <code>ico-dill</code> has no flavor to serve.</li>
+    <li><b>Print realism.</b> Avery stock is white; the plate's cream is then a printed tint, and on inkjet it may read as faint or as white. The hatched seal and gusset depths are working assumptions, not Pouch House or Vann's specifications.</li>
+    <li><b>Back in the sticker phase.</b> The back content is drawn for the printed pouch. As a sheet label it does not fit a 3 × 2 in; which second label size carries it is open.</li>
+  </ul>
+</section>
+
+</body>
+</html>
