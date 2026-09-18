@@ -212,14 +212,17 @@
   .story-fig { margin: 0; display: flex; flex-direction: column; align-items: center; gap: .9rem; }
   .story-fig img { width: min(240px, 60vw); height: auto; }   /* the tossed salad, native 600x915, tall */
   /* What is in the mix: eight pieces of the art with their names, on the
-     panel field. Each image is a 3:2 box the width of its cell (capped at
+     panel field, in their own full-width row under the story grid rather
+     than inside the copy column: two across, four from 600px, all eight
+     from 900px. Each image is a 3:2 box the width of its cell (capped at
      150px, so it never nears the 300px natives) with the art fitted inside,
      so the eight captions sit on one line. Ink on panel is 12.3:1. */
-  .whats-in { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem .75rem; margin: 1.75rem 0 0; padding: 0; list-style: none; }
+  .whats-in { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem .75rem; margin: 3rem 0 0; padding: 0; list-style: none; }
   .whats-in li { text-align: center; }
   .whats-in img { display: block; width: 100%; max-width: 150px; height: auto; aspect-ratio: 3 / 2; object-fit: contain; margin: 0 auto .5rem; }
   .whats-in span { font-family: var(--serif); font-size: 1rem; }
   @media (min-width: 600px) { .whats-in { grid-template-columns: repeat(4, 1fr); } }
+  @media (min-width: 900px) { .whats-in { grid-template-columns: repeat(8, 1fr); gap: 1rem; margin-top: 3.5rem; } }
   /* The pairings head: copy on the left at the head measure, the six
      vinegars at the right edge, bottoms aligned, the way the hero pairs
      copy with the bottle. Below 600px the group drops under the copy. */
@@ -342,9 +345,9 @@
   .story .body p.kicker { font-size: .72rem; }   /* or the body rule above outranks .kicker */
   .story .aside { font-family: var(--serif); font-style: italic; font-size: 1.6rem; color: var(--muted); line-height: 1.25; text-align: center; margin: 0; }
   @media (min-width: 760px) {
-    .story { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: end; }
+    .story { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: start; }
     .story-fig { align-items: center; }   /* the caption centres under the salad, not the column */
-    .story-fig img { width: 100%; max-width: 380px; }   /* tall art: 380px wide is 580px tall, level with the copy and its grid at 1440 */
+    .story-fig img { width: 100%; max-width: 380px; }   /* tall art: 380px wide is 580px tall, its top level with the kicker */
   }
 
   /* Flavours: the ingredient is the card. Each icon sits on a cream dish at
@@ -549,21 +552,23 @@
           <p>Mustard is in most vinaigrettes, and in Canada it is a priority food allergen, one that has to be named on the label. The idea behind Vinaigresque, after its creator’s own bad reaction, was a vinaigrette in which mustard is absent rather than merely quiet: not less of it, not a milder kind, none in the recipe at all. There is no mustard in it, and there never was.</p>
           <p>Most vinaigrettes lean on mustard. It holds the oil and vinegar together and it carries a lot of the flavor, which is why so many dressings taste faintly of the same thing.</p>
           <p>Vinaigresque leaves it out, so the dressing tastes like the oil and vinegar you chose. Nothing holds it together, which is why it is made fresh and shaken before serving. That is the whole trick. It is a pantry mix, not a bottled dressing.</p>
-          <ul class="whats-in" aria-label="What is in the mix">
-            <li><img src="assets/img/dried-oregano.webp" width="300" height="199" alt="" loading="lazy"><span>Oregano</span></li>
-            <li><img src="assets/img/dried-parsley.webp" width="300" height="173" alt="" loading="lazy"><span>Parsley</span></li>
-            <li><img src="assets/img/dried-basil.webp" width="300" height="187" alt="" loading="lazy"><span>Basil</span></li>
-            <li><img src="assets/img/garlic-powder.webp" width="300" height="185" alt="" loading="lazy"><span>Garlic</span></li>
-            <li><img src="assets/img/onion-powder.webp" width="300" height="171" alt="" loading="lazy"><span>Onion</span></li>
-            <li><img src="assets/img/pepper.webp" width="300" height="167" alt="" loading="lazy"><span>Black pepper</span></li>
-            <li><img src="assets/img/salt.webp" width="300" height="178" alt="" loading="lazy"><span>Salt</span></li>
-            <li><img src="assets/img/sugar.webp" width="300" height="176" alt="" loading="lazy"><span>A little sugar</span></li>
-          </ul>
         </div>
         <figure class="story-fig">
           <img src="assets/img/tossed.webp" width="600" height="915" alt="A tossed salad of leaves, tomato, cucumber and red onion, with the dressing pouring through it" loading="lazy">
           <figcaption class="aside">Salads deserve better.</figcaption>
         </figure>
+      </div>
+      <div class="wrap">
+        <ul class="whats-in" aria-label="What is in the mix">
+          <li><img src="assets/img/dried-oregano.webp" width="300" height="199" alt="" loading="lazy"><span>Oregano</span></li>
+          <li><img src="assets/img/dried-parsley.webp" width="300" height="173" alt="" loading="lazy"><span>Parsley</span></li>
+          <li><img src="assets/img/dried-basil.webp" width="300" height="187" alt="" loading="lazy"><span>Basil</span></li>
+          <li><img src="assets/img/garlic-powder.webp" width="300" height="185" alt="" loading="lazy"><span>Garlic</span></li>
+          <li><img src="assets/img/onion-powder.webp" width="300" height="171" alt="" loading="lazy"><span>Onion</span></li>
+          <li><img src="assets/img/pepper.webp" width="300" height="167" alt="" loading="lazy"><span>Black pepper</span></li>
+          <li><img src="assets/img/salt.webp" width="300" height="178" alt="" loading="lazy"><span>Salt</span></li>
+          <li><img src="assets/img/sugar.webp" width="300" height="176" alt="" loading="lazy"><span>A little sugar</span></li>
+        </ul>
       </div>
     </section>
 
