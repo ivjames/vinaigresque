@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Vinaigresque packaging, round 1: front</title>
+<!--
+  Direction: front. Hypothesis: the packet's "unusually simple front", taken
+  literally. Cream ground, ink type, the serif wordmark large, the descriptor
+  under it as a tracked sans line, the bottle mark as the only picture, the
+  flavor in italic serif beneath the bottle as its caption, the oil-and-vinegar
+  cue and the net-weight slot small at the base. No fields, no bands, no
+  cutouts on the front except the one small ingredient beside the flavor name.
+
+  Scale: 1 in = 96 CSS px. Every surface is drawn at true proportion.
+  Guides (safe area, gusset zone, jar face) are dashed taupe and are not art.
+  Tokens, faces and the cruet are the site's own (index.html); nothing loads
+  from another host. Images come from ../../../assets/img/.
+-->
+<style>
+  :root {
+    --cream:    #FAF6EC;
+    --ink:      #2E2A1F;
+    --muted:    #5E5849;
+    --sage:     #6B7F4E;
+    --sage-ink: #5A6C40;
+    --gold:     #D4B04C;
+    --burgundy: #7A2E34;
+    --taupe:    #D8CDBA;
+    --panel:    #F3EDDE;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+             Georgia, "Times New Roman", serif;
+    --sans:  Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+             "Helvetica Neue", Arial, sans-serif;
+    --in: 96px;
+  }
+  * { box-sizing: border-box; }
+  html { background: #E9E4D8; }
+  body {
+    margin: 0;
+    padding: 32px 24px 64px;
+    background: #E9E4D8;      /* the desk the surfaces sit on, not a brand colour */
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  h1 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 0 0 4px; }
+  .intro { max-width: 640px; color: var(--muted); margin: 0 0 40px; }
+  .intro b { color: var(--ink); font-weight: 500; }
+
+  .surface { margin: 0 0 56px; }
+  .surface > .cap {
+    font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 10px;
+  }
+  .surface > .cap b { color: var(--ink); font-weight: 500; }
+  .surface > .note { max-width: 560px; color: var(--muted); font-size: 12.5px; margin: 10px 0 0; }
+
+  /* ---- a printed surface -------------------------------------------- */
+  .pack {
+    position: relative;
+    background: var(--cream);
+    color: var(--ink);
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(46,42,31,.18), 0 10px 30px rgba(46,42,31,.10);
+  }
+  .pack img { display: block; }
+
+  /* guides: dashed taupe, small muted labels; never part of the art */
+  .g { position: absolute; pointer-events: none; }
+  .g-safe { inset: calc(var(--in) * .25); border: 1px dashed var(--taupe); }
+  .g-gusset {
+    left: 0; right: 0; bottom: 0; height: calc(var(--in) * 3);
+    border-top: 1px dashed var(--taupe);
+  }
+  .g-gusset::after, .g-fold::after, .g-face::after, .g-safe::after {
+    position: absolute; right: 6px; top: 3px;
+    font: 7.5px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); white-space: nowrap;
+  }
+  .g-safe::after { content: "safe area · ¼ in"; right: 4px; top: 3px; }
+  .g-gusset::after { content: "3 in gusset zone"; }
+  .g-fold { left: 0; right: 0; bottom: calc(var(--in) * 1.5); border-top: 1px dotted var(--taupe); }
+  .g-fold::after { content: "base fold ≈ 1½ in"; }
+  /* the back has a slot under every point of the gusset line, so its label turns into the margin */
+  .back .g-gusset::after { writing-mode: vertical-rl; right: 4px; top: 6px; }
+  .g-face { top: 0; bottom: 0; border-left: 1px dashed var(--taupe); border-right: 1px dashed var(--taupe); }
+  .g-face::after { content: "front face · 2 in"; right: auto; left: 6px; }
+
+  /* the front stack: wordmark, descriptor, bottle, flavor, then the base */
+  .front { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .mark { font-family: var(--serif); font-weight: 400; line-height: 1; letter-spacing: -.012em; white-space: nowrap; margin: 0; }
+  .mark .dot { color: var(--sage); }
+  .desc {
+    font-family: var(--sans); font-weight: 500; letter-spacing: .17em; text-transform: uppercase;
+    margin: 0; white-space: nowrap;
+  }
+  .cruet { display: block; }
+  .cruet .glass { fill: none; stroke: var(--taupe); stroke-width: 2; }
+  .cruet .oil { fill: var(--gold); opacity: .8; }
+  .cruet .glob { fill: var(--burgundy); opacity: .92; }
+  .cruet .herb { fill: var(--sage); }
+  .flavor {
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-style: italic; font-weight: 400; line-height: 1.05;
+    margin: 0; white-space: nowrap;
+  }
+  .flavor img { object-fit: contain; }
+  .base { position: absolute; left: 0; right: 0; text-align: center; }
+  .cue { font-family: var(--sans); color: var(--muted); margin: 0; }
+  .netwt { font-family: var(--sans); font-weight: 500; letter-spacing: .16em; text-transform: uppercase; margin: 0; }
+  .netwt .slot { color: var(--muted); font-weight: 400; letter-spacing: .02em; }
+
+  /* 1. stand-up pouch front, 5 × 8 in ------------------------------------ */
+  .standup { width: calc(var(--in) * 5); height: calc(var(--in) * 8); }
+  .standup .front { padding-top: calc(var(--in) * .68); }
+  .standup .mark   { font-size: 62px; }
+  .standup .desc   { font-size: 14px; margin-top: 16px; }
+  .standup .cruet  { height: 210px; width: auto; margin-top: 22px; }
+  .standup .flavor { font-size: 34px; gap: 12px; margin-top: 16px; }
+  .standup .flavor img { width: 44px; height: 44px; }
+  .standup .base   { bottom: calc(var(--in) * 1.9); }
+  .standup .cue    { font-size: 12.5px; line-height: 1.5; }
+  .standup .netwt  { font-size: 11px; margin-top: 14px; }
+
+  /* 2. pillow pouch front, 3.5 × 6 in ------------------------------------ */
+  .pillow { width: calc(var(--in) * 3.5); height: calc(var(--in) * 6); }
+  .pillow .front { padding-top: calc(var(--in) * .7); }
+  .pillow .mark   { font-size: 46px; }
+  .pillow .desc   { font-size: 10.5px; margin-top: 12px; }
+  .pillow .cruet  { height: 192px; width: auto; margin-top: 20px; }
+  .pillow .flavor { font-size: 26px; gap: 9px; margin-top: 14px; }
+  .pillow .flavor img { width: 32px; height: 32px; }
+  .pillow .base   { bottom: calc(var(--in) * .55); }
+  .pillow .cue    { font-size: 10.5px; line-height: 1.5; }
+  .pillow .netwt  { font-size: 9px; margin-top: 10px; }
+
+  /* 3. jar label, 5 × 3 in flat ------------------------------------------ */
+  .jar { width: calc(var(--in) * 5); height: calc(var(--in) * 3); }
+  .jar .g-face { left: calc(var(--in) * 1.5); width: calc(var(--in) * 2); }
+  .jar .front { position: absolute; left: calc(var(--in) * 1.5); width: calc(var(--in) * 2); top: 0; bottom: 0; padding-top: calc(var(--in) * .28); }
+  .jar .mark   { font-size: 29px; }
+  .jar .desc   { font-size: 8.5px; margin-top: 7px; letter-spacing: .1em; }
+  .jar .cruet  { height: 112px; width: auto; margin-top: 10px; }
+  .jar .flavor { font-size: 18px; gap: 7px; margin-top: 8px; }
+  .jar .flavor img { width: 24px; height: 24px; }
+  .jar .wing { position: absolute; bottom: calc(var(--in) * .3); width: calc(var(--in) * 1.5); }
+  .jar .wing-l { left: 0; text-align: left; padding: 0 calc(var(--in) * .12) 0 calc(var(--in) * .3); }
+  .jar .wing-r { right: 0; text-align: right; padding: 0 calc(var(--in) * .3) 0 calc(var(--in) * .12); }
+  .jar .cue    { font-size: 8.5px; line-height: 1.5; }
+  .jar .netwt  { font-size: 8.5px; }
+
+  /* 4. stand-up pouch back, 5 × 8 in ------------------------------------- */
+  .back { padding: calc(var(--in) * .42) calc(var(--in) * .5) 0; font-family: var(--sans); }
+  .back .head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--taupe); padding-bottom: 10px; }
+  .back .head .mark { font-size: 22px; }
+  .back .head .flavor { font-size: 15px; }
+  .back h2 { font-family: var(--serif); font-weight: 400; font-size: 15.5px; line-height: 1.2; margin: 15px 0 4px; }
+  .back p, .back li { font-size: 10.5px; line-height: 1.45; margin: 0; color: var(--ink); }
+  .back .sub { color: var(--muted); }
+  .back .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 22px; }
+  .back ul { margin: 0; padding: 0; list-style: none; }
+  .back .sub b { font-weight: 500; color: var(--ink); }
+  .back .slots { position: absolute; left: calc(var(--in) * .5); right: calc(var(--in) * .5); bottom: calc(var(--in) * 1.6); display: grid; grid-template-columns: calc(var(--in) * 1.55) 1fr; gap: 12px; align-items: end; }
+  .slot-box {
+    border: 1px dashed var(--taupe); border-radius: 2px;
+    display: grid; place-items: center;
+    font-size: 8px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: center; line-height: 1.4;
+  }
+  .slot-box small { display: block; font-size: 8px; letter-spacing: .06em; text-transform: none; }
+  .back .slots .col { display: grid; gap: 10px; }
+  .nutrition { height: calc(var(--in) * 2); }
+  .distrib { height: calc(var(--in) * .6); }
+  .lot { height: calc(var(--in) * .38); }
+  .upc-row { display: grid; grid-template-columns: calc(var(--in) * 1.35) 1fr; gap: 10px; align-items: end; }
+  .upc { height: calc(var(--in) * .8); }
+  .url { height: calc(var(--in) * .38); }
+
+  /* 5. the family, half scale -------------------------------------------- */
+  .family { display: flex; gap: 20px; align-items: flex-start; }
+  .family .half { zoom: .5; }
+  .family-wrap { display: inline-block; padding: 16px; }
+</style>
+</head>
+<body>
+
+<h1>Vinaigresque packaging · round 1 · <em>front</em></h1>
+<p class="intro"><b>Hypothesis:</b> the packet's unusually simple front, taken literally. Six items, cream ground, ink type, one picture. The wordmark and descriptor are the constant block at the top of every pack; the bottle is the constant picture; the flavor is its caption, in italic serif with one small ingredient beside it, so the family reads as one brand with six members and the top third of every pack is identical. No fields, no bands. Guides are dashed taupe and are not art. 1 in = 96 px.</p>
+
+<!-- ======================================================================
+     1. Stand-up pouch front
+     ====================================================================== -->
+<section class="surface" id="s-standup">
+  <p class="cap"><b>1 · Stand-up pouch, front</b> · 5 × 8 in · 3 in gusset (Vann's)</p>
+  <div class="pack standup" data-shot="standup">
+    <div class="g g-safe"></div>
+    <div class="g g-gusset"></div>
+    <div class="g g-fold"></div>
+    <div class="front">
+      <p class="mark">Vinaigresque<span class="dot">.</span></p>
+      <p class="desc">A mustard-free vinaigrette mix</p>
+      <svg class="cruet" viewBox="0 -12 48 112" role="img" aria-label="Bottle of oil and vinegar with herbs">
+        <defs><clipPath id="body-1"><path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/></clipPath></defs>
+        <g clip-path="url(#body-1)">
+          <rect class="oil" x="0" y="36" width="48" height="64"/>
+          <circle class="glob" cx="19" cy="58" r="7.2"/><circle class="glob" cx="30" cy="70" r="5"/>
+          <circle class="glob" cx="17" cy="82" r="6.1"/><circle class="glob" cx="31" cy="87" r="3.9"/>
+          <circle class="herb" cx="27" cy="52" r=".9"/><circle class="herb" cx="14" cy="70" r=".8"/>
+          <circle class="herb" cx="34" cy="60" r=".7"/><circle class="herb" cx="24" cy="76" r=".9"/>
+        </g>
+        <path class="glass" d="M20,8 L20,30 C20,35 8,39 8,50 L8,88 Q8,94 14,94 L34,94 Q40,94 40,88 L40,50 C40,39 28,35 28,30 L28,8"/>
+      </svg>
+      <p class="flavor"><img src="../../../assets/img/basil.webp" alt="">Classic Italian Herb</p>
+    </div>
+    <div class="base">
+      <p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p>
+      <p class="netwt">Net wt <span class="slot">[__ g / __ oz]</span></p>
+    </div>
+  </div>
+  <p class="note">The wordmark, descriptor, bottle and flavor all sit above the 3 in gusset line; the cue and net weight sit in the zone's upper half, above the base fold, where a standing pouch still shows them. The lower 1½ in is left empty because it becomes the base.</p>
+</section>
+
+<!-- ======================================================================
+     2. Pillow pouch front
+     ====================================================================== -->
+<section class="surface" id="s-pillow">
+  <p class="cap"><b>2 · Pillow pouch, front</b> · 3.5 × 6 in (height adjustable; 6 in assumed)</p>
+  <div class="pack pillow" data-shot="pillow">
+    <div class="g g-safe"></div>
+    <div class="front">
+      <p class="mark">Vinaigresque<span class="dot">.</span></p>
+      <p class="desc">A mustard-free vinaigrette mix</p>
+      <svg class="cruet" viewBox="0 -12 48 112" role="img" aria-label="Bottle of oil and vinegar with herbs">
+        <defs><clipPath id="body-2"><path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/></clipPath></defs>
+        <g clip-path="url(#body-2)">
+          <rect class="oil" x="0" y="36" width="48" height="64"/>
+          <circle class="glob" cx="19" cy="58" r="7.2"/><circle class="glob" cx="30" cy="70" r="5"/>
+          <circle class="glob" cx="17" cy="82" r="6.1"/><circle class="glob" cx="31" cy="87" r="3.9"/>
+          <circle class="herb" cx="27" cy="52" r=".9"/><circle class="herb" cx="14" cy="70" r=".8"/>
+          <circle class="herb" cx="34" cy="60" r=".7"/><circle class="herb" cx="24" cy="76" r=".9"/>
+        </g>
+        <path class="glass" d="M20,8 L20,30 C20,35 8,39 8,50 L8,88 Q8,94 14,94 L34,94 Q40,94 40,88 L40,50 C40,39 28,35 28,30 L28,8"/>
+      </svg>
+      <p class="flavor"><img src="../../../assets/img/basil.webp" alt="">Classic Italian Herb</p>
+    </div>
+    <div class="base">
+      <p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p>
+      <p class="netwt">Net wt <span class="slot">[__ g / __ oz]</span></p>
+    </div>
+  </div>
+  <p class="note">The same stack at 70 %. A pillow pouch has no gusset, so the base group comes down to the safe area and the picture takes the room.</p>
+</section>
+
+<!-- ======================================================================
+     3. Jar label
+     ====================================================================== -->
+<section class="surface" id="s-jar">
+  <p class="cap"><b>3 · Jar label, flat</b> · 5 × 3 in (fits the 3.75 oz and 5.5 oz plastic)</p>
+  <div class="pack jar" data-shot="jar">
+    <div class="g g-safe"></div>
+    <div class="g g-face"></div>
+    <div class="front">
+      <p class="mark">Vinaigresque<span class="dot">.</span></p>
+      <p class="desc">A mustard-free vinaigrette mix</p>
+      <svg class="cruet" viewBox="0 -12 48 112" role="img" aria-label="Bottle of oil and vinegar with herbs">
+        <defs><clipPath id="body-3"><path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/></clipPath></defs>
+        <g clip-path="url(#body-3)">
+          <rect class="oil" x="0" y="36" width="48" height="64"/>
+          <circle class="glob" cx="19" cy="58" r="7.2"/><circle class="glob" cx="30" cy="70" r="5"/>
+          <circle class="glob" cx="17" cy="82" r="6.1"/><circle class="glob" cx="31" cy="87" r="3.9"/>
+          <circle class="herb" cx="27" cy="52" r=".9"/><circle class="herb" cx="14" cy="70" r=".8"/>
+          <circle class="herb" cx="34" cy="60" r=".7"/><circle class="herb" cx="24" cy="76" r=".9"/>
+        </g>
+        <path class="glass" d="M20,8 L20,30 C20,35 8,39 8,50 L8,88 Q8,94 14,94 L34,94 Q40,94 40,88 L40,50 C40,39 28,35 28,30 L28,8"/>
+      </svg>
+      <p class="flavor"><img src="../../../assets/img/basil.webp" alt="">Classic Italian Herb</p>
+    </div>
+    <div class="wing wing-l">
+      <p class="cue">Add oil and vinegar. Shake. Makes about eight servings.</p>
+    </div>
+    <div class="wing wing-r">
+      <p class="netwt">Net wt<br><span class="slot">[__ g / __ oz]</span></p>
+    </div>
+  </div>
+  <p class="note">A 5 in label wraps a 1.75–2 in jar almost fully, so only about 2 in of it faces out at once. The six-item stack is held to that centre face; the cue and the net weight go to the wings, where a turn of the jar finds them.</p>
+</section>
+
+<!-- ======================================================================
+     4. Stand-up pouch back
+     ====================================================================== -->
+<section class="surface" id="s-back">
+  <p class="cap"><b>4 · Stand-up pouch, back</b> · 5 × 8 in</p>
+  <div class="pack standup back" data-shot="back">
+    <div class="g g-safe"></div>
+    <div class="g g-gusset"></div>
+    <div class="g g-fold"></div>
+    <div class="head">
+      <p class="mark">Vinaigresque<span class="dot">.</span></p>
+      <p class="flavor">Classic Italian Herb</p>
+    </div>
+
+    <h2>Mix it</h2>
+    <p>Three parts oil to one part vinegar. For the whole pouch, ¾ cup oil and ¼ cup vinegar. For one salad, 1½ tablespoons oil and ½ tablespoon vinegar.</p>
+    <p class="sub">Shake or whisk, then dress. There is no mustard in it, so it separates as it sits: shake again before serving.</p>
+
+    <h2>In the pouch</h2>
+    <p>Dried oregano, parsley and basil, garlic and onion powder, black pepper, salt, sugar.</p>
+
+    <h2>Pair it</h2>
+    <p>Extra-virgin olive oil and red wine vinegar are the house pairing. Or choose your own.</p>
+    <p class="sub"><b>Vinegar</b> · red wine, white wine or champagne, balsamic, apple cider, sherry, rice.<br><b>Oil</b> · extra-virgin olive, mild olive, avocado, neutral.</p>
+
+    <div class="slots">
+      <div class="slot-box nutrition">[Nutrition Facts]<small>as needed</small></div>
+      <div class="col">
+        <div class="slot-box distrib">[Distributed by]<small>city, state, zip</small></div>
+        <div class="slot-box lot">[Lot / best by]</div>
+        <div class="upc-row">
+          <div class="slot-box upc">[UPC]</div>
+          <div class="slot-box url">[vinaigresque.com]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="note">Directions, ingredients at the name level, and the pairing guide; the slots are labelled boxes at plausible size and hold nothing. The slot block sits above the base fold.</p>
+</section>
+
+<!-- ======================================================================
+     5. The family
+     ====================================================================== -->
+<section class="surface" id="s-family">
+  <p class="cap"><b>5 · The family</b> · stand-up fronts at half scale · Classic Italian Herb, Lemon Herb, Ginger Citrus</p>
+  <div class="family-wrap" data-shot="family">
+  <div class="family">
+    <div class="half"><div class="pack standup">
+      <div class="g g-safe"></div><div class="g g-gusset"></div><div class="g g-fold"></div>
+      <div class="front">
+        <p class="mark">Vinaigresque<span class="dot">.</span></p>
+        <p class="desc">A mustard-free vinaigrette mix</p>
+        <svg class="cruet" viewBox="0 -12 48 112" role="img" aria-label="Bottle of oil and vinegar with herbs">
+          <defs><clipPath id="body-5a"><path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/></clipPath></defs>
+          <g clip-path="url(#body-5a)">
+            <rect class="oil" x="0" y="36" width="48" height="64"/>
+            <circle class="glob" cx="19" cy="58" r="7.2"/><circle class="glob" cx="30" cy="70" r="5"/>
+            <circle class="glob" cx="17" cy="82" r="6.1"/><circle class="glob" cx="31" cy="87" r="3.9"/>
+            <circle class="herb" cx="27" cy="52" r=".9"/><circle class="herb" cx="14" cy="70" r=".8"/>
+            <circle class="herb" cx="34" cy="60" r=".7"/><circle class="herb" cx="24" cy="76" r=".9"/>
+          </g>
+          <path class="glass" d="M20,8 L20,30 C20,35 8,39 8,50 L8,88 Q8,94 14,94 L34,94 Q40,94 40,88 L40,50 C40,39 28,35 28,30 L28,8"/>
+        </svg>
+        <p class="flavor"><img src="../../../assets/img/basil.webp" alt="">Classic Italian Herb</p>
+      </div>
+      <div class="base">
+        <p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p>
+        <p class="netwt">Net wt <span class="slot">[__ g / __ oz]</span></p>
+      </div>
+    </div></div>
+
+    <div class="half"><div class="pack standup">
+      <div class="g g-safe"></div><div class="g g-gusset"></div><div class="g g-fold"></div>
+      <div class="front">
+        <p class="mark">Vinaigresque<span class="dot">.</span></p>
+        <p class="desc">A mustard-free vinaigrette mix</p>
+        <svg class="cruet" viewBox="0 -12 48 112" role="img" aria-label="Bottle of oil and vinegar with herbs">
+          <defs><clipPath id="body-5b"><path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/></clipPath></defs>
+          <g clip-path="url(#body-5b)">
+            <rect class="oil" x="0" y="36" width="48" height="64"/>
+            <circle class="glob" cx="19" cy="58" r="7.2"/><circle class="glob" cx="30" cy="70" r="5"/>
+            <circle class="glob" cx="17" cy="82" r="6.1"/><circle class="glob" cx="31" cy="87" r="3.9"/>
+            <circle class="herb" cx="27" cy="52" r=".9"/><circle class="herb" cx="14" cy="70" r=".8"/>
+            <circle class="herb" cx="34" cy="60" r=".7"/><circle class="herb" cx="24" cy="76" r=".9"/>
+          </g>
+          <path class="glass" d="M20,8 L20,30 C20,35 8,39 8,50 L8,88 Q8,94 14,94 L34,94 Q40,94 40,88 L40,50 C40,39 28,35 28,30 L28,8"/>
+        </svg>
+        <p class="flavor"><img src="../../../assets/img/lemon.webp" alt="">Lemon Herb</p>
+      </div>
+      <div class="base">
+        <p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p>
+        <p class="netwt">Net wt <span class="slot">[__ g / __ oz]</span></p>
+      </div>
+    </div></div>
+
+    <div class="half"><div class="pack standup">
+      <div class="g g-safe"></div><div class="g g-gusset"></div><div class="g g-fold"></div>
+      <div class="front">
+        <p class="mark">Vinaigresque<span class="dot">.</span></p>
+        <p class="desc">A mustard-free vinaigrette mix</p>
+        <svg class="cruet" viewBox="0 -12 48 112" role="img" aria-label="Bottle of oil and vinegar with herbs">
+          <defs><clipPath id="body-5c"><path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/></clipPath></defs>
+          <g clip-path="url(#body-5c)">
+            <rect class="oil" x="0" y="36" width="48" height="64"/>
+            <circle class="glob" cx="19" cy="58" r="7.2"/><circle class="glob" cx="30" cy="70" r="5"/>
+            <circle class="glob" cx="17" cy="82" r="6.1"/><circle class="glob" cx="31" cy="87" r="3.9"/>
+            <circle class="herb" cx="27" cy="52" r=".9"/><circle class="herb" cx="14" cy="70" r=".8"/>
+            <circle class="herb" cx="34" cy="60" r=".7"/><circle class="herb" cx="24" cy="76" r=".9"/>
+          </g>
+          <path class="glass" d="M20,8 L20,30 C20,35 8,39 8,50 L8,88 Q8,94 14,94 L34,94 Q40,94 40,88 L40,50 C40,39 28,35 28,30 L28,8"/>
+        </svg>
+        <p class="flavor"><img src="../../../assets/img/ginger.webp" alt="">Ginger Citrus</p>
+      </div>
+      <div class="base">
+        <p class="cue">Add oil and vinegar. Shake.<br>Makes about eight servings.</p>
+        <p class="netwt">Net wt <span class="slot">[__ g / __ oz]</span></p>
+      </div>
+    </div></div>
+  </div>
+  </div>
+  <p class="note">Only the caption line changes: the name and the one small ingredient beside it (basil, lemon, ginger and orange: the site's own cutouts, so the pack and the page use one image system). Everything above the bottle is identical on all six.</p>
+</section>
+
+</body>
+</html>
