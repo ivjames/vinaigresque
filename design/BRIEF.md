@@ -58,10 +58,15 @@ ingredient lists, dates, barcodes and net weights are placeholder art.
   apple cider, sherry, rice; olive oil, mild olive oil, avocado, neutral) is
   the customer-choice guide from the packet and may be reused as is.
 - Flavors: **Classic Italian Herb** is the base blend. Lemon Herb, Garlic &
-  Herb, Greek Herb, Roasted Red Pepper and Ginger Citrus are the starter
-  extensions, all in development. Say so; a flavor's status is text, not a
-  colour. Ginger Citrus has no image of its own yet; its card borrows the
-  lemon until the owner supplies one.
+  Herb, Greek Herb and Roasted Red Pepper are the packet's compact trial
+  set, and Ginger Citrus is a sixth concept the owner chose to show; all
+  are in development. Say so; a flavor's status is text, not a colour.
+  Each card's profile line is the flavor's profile from the owner's
+  project packet (the "Flavor architecture" tables), verbatim, and its
+  pairing is that table's suggested wet pairing. Ginger Citrus is "Light
+  citrus-ginger", rice vinegar with a neutral or mild olive oil; it has no
+  image of its own yet, so its card borrows the lemon until the owner
+  supplies one.
 - Positioning: a specialty pantry product for everyday salads. Refined,
   approachable, food-first. Culinary, not rustic; premium pantry, not
   luxury; fresh and ingredient-forward, not wellness-branded.
