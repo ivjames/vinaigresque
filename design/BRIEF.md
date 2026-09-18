@@ -58,8 +58,14 @@ ingredient lists, dates, barcodes and net weights are placeholder art.
   apple cider, sherry, rice; olive oil, mild olive oil, avocado, neutral) is
   the customer-choice guide from the packet and may be reused as is.
 - Flavors: **Classic Italian Herb** is the base blend. Lemon Herb, Garlic &
-  Herb, Greek Herb and Roasted Red Pepper are the starter extensions, all in
-  development. Say so; a flavor's status is text, not a colour.
+  Herb, Greek Herb and Roasted Red Pepper are the packet's compact trial
+  set, and Ginger Citrus is a sixth concept the owner chose to show; all
+  are in development. Say so; a flavor's status is text, not a colour.
+  Each card's profile line is the flavor's profile from the owner's
+  project packet (the "Flavor architecture" tables), verbatim, and its
+  pairing is that table's suggested wet pairing. Ginger Citrus is "Light
+  citrus-ginger", rice vinegar with a neutral or mild olive oil, headed by
+  the owner's ginger-and-orange cutout.
 - Positioning: a specialty pantry product for everyday salads. Refined,
   approachable, food-first. Culinary, not rustic; premium pantry, not
   luxury; fresh and ingredient-forward, not wellness-branded.
@@ -203,8 +209,8 @@ it goes live at the next deploy.
 2. From `food`: the three step renders at native size on panel plates as the
    how-it-works row's main event, with the numeral in the plate corner and
    never over the picture.
-3. From `food`: five flavour cards in one row from 1000px, icons heading
-   each card, so there is no 3 + 2 hole.
+3. From `food`: the flavour cards in one row from 1000px (five then, six
+   now), icons heading each card, so there is no 3 + 2 hole.
 4. Everything else is `scale` as merged in #10: 7rem name capped beside the
    bottle, the why section on the panel field, the between-section air, the
    display numerals where they remain. The status heading comes down to the

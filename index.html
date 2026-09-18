@@ -16,7 +16,7 @@
      sections rather than inside them. Folded into it: "edit"'s copy cuts
      (restatements out, every fact kept) and "food"'s plates — the three step
      renders at native size on panel plates with the numeral in the corner,
-     and five flavour cards in one row from 1000px, each headed by its icon
+     and six flavour cards in one row from 1000px, each headed by its icon
      on a cream dish. Same tokens throughout.
      Light mode only; there is deliberately no prefers-color-scheme block. */
   :root {
@@ -348,9 +348,9 @@
   }
 
   /* Flavours: the ingredient is the card. Each icon sits on a cream dish at
-     the head of its card, fitted into an 88px box (all five natives are
-     larger), and the name comes after it. Five in one row from 1000px, so
-     there is no three-and-two hole; the status is text, not a colour. */
+     the head of its card, fitted into an 88px box (all the natives are
+     larger), and the name comes after it. Six in one row from 1000px, so
+     there is no hole; the status is text, not a colour. */
   .cards { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 0; padding: 0; list-style: none; }
   .card {
     background: var(--panel);
@@ -375,7 +375,7 @@
   @media (min-width: 600px) { .cards { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 760px) { .cards { grid-template-columns: repeat(3, 1fr); gap: 1.25rem; } }
   @media (min-width: 1000px) {
-    .cards { grid-template-columns: repeat(5, 1fr); gap: .9rem; }
+    .cards { grid-template-columns: repeat(6, 1fr); gap: .9rem; }
     .card { padding: 1.3rem .7rem 1.15rem; }
     .card h3 { font-size: 1.2rem; line-height: 1.15; }
     .card .profile { font-size: 1.05rem; }
@@ -607,6 +607,13 @@
           <h3>Roasted Red Pepper</h3>
           <p class="profile">Sweet pepper, garlic, herbs.</p>
           <p class="pair"><b>Pair with</b> red wine or sherry vinegar and olive oil.</p>
+        </li>
+        <li class="card">
+          <div class="dish"><img src="assets/img/ginger.webp" width="309" height="200" alt="" loading="lazy"></div>
+          <span class="tag">In development</span>
+          <h3>Ginger Citrus</h3>
+          <p class="profile">Light citrus-ginger.</p>
+          <p class="pair"><b>Pair with</b> rice vinegar and a neutral or mild olive oil.</p>
         </li>
       </ul>
     </section>
