@@ -214,7 +214,8 @@
   /* What is in the mix: eight pieces of the art with their names, on the
      panel field, in their own full-width row under the story grid rather
      than inside the copy column: two across, four from 600px, all eight
-     from 900px. Each image is a 3:2 box the width of its cell (capped at
+     from 1000px (with the flavour cards; at 900px the cells were 87px, so
+     the art halved in one step and the longer captions ran tight). Each image is a 3:2 box the width of its cell (capped at
      150px, so it never nears the 300px natives) with the art fitted inside,
      so the eight captions sit on one line. Ink on panel is 12.3:1. */
   .whats-in { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem .75rem; margin: 3rem 0 0; padding: 0; list-style: none; }
@@ -222,7 +223,7 @@
   .whats-in img { display: block; width: 100%; max-width: 150px; height: auto; aspect-ratio: 3 / 2; object-fit: contain; margin: 0 auto .5rem; }
   .whats-in span { font-family: var(--serif); font-size: 1rem; }
   @media (min-width: 600px) { .whats-in { grid-template-columns: repeat(4, 1fr); } }
-  @media (min-width: 900px) { .whats-in { grid-template-columns: repeat(8, 1fr); gap: 1rem; margin-top: 3.5rem; } }
+  @media (min-width: 1000px) { .whats-in { grid-template-columns: repeat(8, 1fr); gap: 1rem; margin-top: 3.5rem; } }
   /* The pairings head: copy on the left at the head measure, the six
      vinegars at the right edge, bottoms aligned, the way the hero pairs
      copy with the bottle. Below 600px the group drops under the copy. */
