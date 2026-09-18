@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Vinaigresque packaging — round 1 — ingredients</title>
+<style>
+:root {
+  --cream:#FAF6EC; --ink:#2E2A1F; --muted:#5E5849; --sage:#6B7F4E; --sage-ink:#5A6C40;
+  --gold:#D4B04C; --burgundy:#7A2E34; --taupe:#D8CDBA; --panel:#F3EDDE;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { background: #E7DFCD; }
+body { margin:0; padding: 40px 24px 80px; font-family: var(--sans); color: var(--ink); background:#E7DFCD; }
+h1 { font-family: var(--serif); font-weight:400; font-size: 28px; margin: 0 0 6px; }
+h1 .dot { color: var(--sage); }
+.intro { max-width: 720px; color: var(--muted); font-size: 14px; line-height: 1.5; margin: 0 0 32px; }
+.intro b { color: var(--ink); font-weight: 600; }
+figure { margin: 0 0 56px; display: inline-block; vertical-align: top; }
+figcaption { font-size: 12px; color: var(--muted); letter-spacing: .04em; margin: 0 0 12px; }
+figcaption b { color: var(--ink); font-weight: 600; }
+.row { display:flex; gap: 40px; flex-wrap: wrap; align-items: flex-start; }
+
+/* ---- a surface ------------------------------------------------------- */
+.surface { position: relative; background: var(--cream); overflow: hidden;
+  outline: 1px solid var(--taupe); box-shadow: 0 1px 0 rgba(46,42,31,.08), 0 12px 32px rgba(46,42,31,.10); }
+.front-su, .back-su { width: 480px; height: 768px; }
+.front-pillow { width: 336px; height: 576px; }
+.jar { width: 480px; height: 288px; }
+
+/* guides: drawn light, labelled, never part of the art */
+.guide { position:absolute; pointer-events:none; font-size: 8px; letter-spacing:.08em; text-transform: uppercase; color: var(--muted); }
+.guide span { position:absolute; left: 6px; top: 2px; white-space: nowrap; z-index: 6; background: var(--cream); padding: 0 4px; }
+.guide.safe { inset: 24px; border: 1px dashed var(--taupe); }
+.jar .guide.safe { inset: 12px; }
+.jar .guide.safe span { top: 1px; }
+.guide.gusset { left:0; right:0; bottom:0; height: 288px; border-top: 1px dashed var(--taupe);
+  background: repeating-linear-gradient(135deg, transparent 0 14px, rgba(216,205,186,.22) 14px 15px); }
+.guide.gusset span { left: 30px; top: 3px; }
+.guide.fold { left:0; right:0; bottom:0; height: 144px; border-top: 1px dashed var(--taupe); }
+.guide.fold span { left: 30px; top: 3px; }
+.guide.seam { left:0; right:0; height: 28px; background: repeating-linear-gradient(135deg, transparent 0 14px, rgba(216,205,186,.22) 14px 15px); }
+.guide.seam.top { top:0; border-bottom: 1px dashed var(--taupe); }
+.guide.seam.bottom { bottom:0; border-top: 1px dashed var(--taupe); }
+.guide.seam span { left: 30px; top: 9px; }
+.guide.split { top:0; bottom:0; left: 240px; border-left: 1px dashed var(--taupe); }
+.guide.split span { left: -60px; top: 1px; }
+
+/* the cruet, one static frame, reused by reference */
+.cruet .glass { fill: none; stroke: var(--taupe); stroke-width: 2; }
+.cruet .oil { fill: var(--gold); opacity: .8; }
+.cruet .glob { fill: var(--burgundy); opacity: .92; }
+.cruet .herb { fill: var(--sage); }
+.seal { position: relative; display:flex; align-items:center; justify-content:center; flex: none; }
+.seal-ring { position:absolute; inset:0; border-radius: 50%; border: 1.5px solid var(--taupe); }
+.seal .cruet { position: relative; display:block; }
+
+/* type */
+.wordmark { font-family: var(--serif); font-size: 38px; line-height: 1; color: var(--ink); letter-spacing: -.01em; }
+.wordmark .dot { color: var(--sage); }
+.wordmark.sm { font-size: 30px; }
+.wordmark.xs { font-size: 22px; }
+.flavor { font-family: var(--serif); font-size: 24px; line-height: 1.15; color: var(--ink); margin-top: 10px; }
+.flavor.sm { font-size: 20px; margin-top: 8px; }
+.flavor.xs { font-size: 16px; margin-top: 6px; }
+.descriptor { font-family: var(--sans); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-top: 12px; }
+.descriptor.sm { font-size: 9px; letter-spacing: .14em; margin-top: 10px; }
+.descriptor.xs { font-size: 9px; letter-spacing: .12em; margin-top: 8px; }
+
+.head { position:absolute; left: 40px; right: 40px; top: 44px; display:flex; justify-content: space-between; align-items: flex-start; }
+.front-pillow .head { left: 30px; right: 30px; top: 40px; }
+.jar .head { left: 0; right: 0; top: 0; }
+
+/* the cutouts: level, no rotation, no shadow; each below its native pixel size */
+.art { position:absolute; left: 40px; top: 270px; width: 400px; height: 300px; }
+.art .cut { position:absolute; height:auto; display:block; }
+.art .hero { z-index: 2; }
+.art .sup { z-index: 3; }
+.art-pillow { left: 18px; top: 224px; width: 300px; height: 240px; }
+.art-jar { left: 0; top: 92px; width: 200px; height: 110px; }
+
+.foot { position:absolute; left: 40px; right: 40px; bottom: 156px; display:flex; justify-content: space-between; align-items: flex-end; }
+.front-pillow .foot { left: 30px; right: 30px; bottom: 40px; flex-direction: column; align-items: flex-start; gap: 6px; }
+.front-pillow .netwt { align-self: flex-end; }
+.jar .foot { left: 0; right: 0; bottom: 0; flex-direction: column; align-items: flex-start; gap: 4px; }
+.jar .netwt { align-self: flex-end; }
+.cue { font-family: var(--sans); font-size: 12px; line-height: 1.45; color: var(--ink); }
+.cue b { display:block; font-weight: 600; color: var(--sage-ink); }
+.cue span { display:block; color: var(--muted); }
+.cue.sm { font-size: 11px; }
+.cue.xs { font-size: 9px; line-height: 1.4; }
+.netwt { font-family: var(--sans); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
+.netwt.sm { font-size: 10px; }
+.netwt.xs { font-size: 9px; letter-spacing: .06em; }
+.slot-inline { color: var(--muted); letter-spacing: 0; text-transform: none; }
+
+/* jar label */
+.jar-front { position:absolute; left: 24px; top: 26px; width: 200px; height: 244px; }
+.jar-back { position:absolute; left: 256px; top: 18px; width: 210px; height: 252px; font-size: 8px; line-height: 1.35; color: var(--ink); }
+.bk-h { font-family: var(--sans); font-size: 8px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 2px; }
+.bk-p { margin: 0 0 7px; font-size: 8px; line-height: 1.4; }
+.bk-p b { color: var(--burgundy); font-weight: 600; }
+.back-main .bk-p b { color: var(--ink); }
+.slots-jar { display:flex; gap: 6px; margin-top: 4px; }
+.slot-col { display:flex; flex-direction: column; gap: 4px; flex: 1; }
+.slot { border: 1px dashed var(--taupe); background: var(--panel); color: var(--muted); font-size: 8px; letter-spacing: .04em;
+  display:flex; align-items:center; justify-content:center; text-align:center; flex: none; }
+
+/* pouch back */
+.head-back { align-items: center; }
+.bk-brand { display:flex; align-items: baseline; gap: 12px; }
+.bk-flavor { font-family: var(--serif); font-size: 14px; color: var(--muted); }
+.back-cols { position:absolute; left: 40px; right: 40px; top: 118px; display:flex; gap: 24px; align-items: flex-start; }
+.back-main { flex: 1; font-size: 10px; line-height: 1.45; }
+.back-main .bk-h { font-size: 9px; margin: 9px 0 3px; }
+.back-main .bk-p { font-size: 10px; line-height: 1.45; margin: 0 0 4px; }
+.back-side { display:flex; flex-direction: column; gap: 8px; flex: none; margin-top: 4px; }
+.ratio { display:flex; align-items: baseline; gap: 10px; margin-bottom: 2px; }
+.ratio .num { font-family: var(--serif); font-size: 46px; line-height: 1; color: var(--burgundy); letter-spacing: -.02em; }
+.ratio-cap { font-family: var(--serif); font-size: 14px; color: var(--ink); }
+.bk-t { border-collapse: collapse; font-size: 10px; width: 100%; }
+.bk-t th { text-align:left; font-weight: 600; padding: 3px 10px 3px 0; white-space: nowrap; vertical-align: top; color: var(--ink); }
+.bk-t td { padding: 3px 0; vertical-align: top; }
+.bk-t tr + tr th, .bk-t tr + tr td { border-top: 1px solid var(--taupe); }
+.back-foot { position:absolute; left: 40px; right: 40px; bottom: 156px; display:flex; gap: 12px; align-items: flex-end; }
+.back-sprig { position:absolute; right: -4px; bottom: -8px; width: 160px; height:auto; }
+
+/* family at half scale */
+.half { width: 240px; height: 384px; position: relative; }
+.half .surface { transform: scale(.5); transform-origin: 0 0; }
+.fam-caption { font-family: var(--serif); font-size: 14px; color: var(--ink); margin: 10px 0 0; }
+</style>
+</head>
+<body>
+<svg class="cruet" width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <clipPath id="body"><path d="M20,8 L28,8 L28,30 C28,35 40,39 40,50 L40,88 Q40,94 34,94 L14,94 Q8,94 8,88 L8,50 C8,39 20,35 20,30 Z"/></clipPath>
+    <g id="cruet-frame">
+      <g clip-path="url(#body)">
+        <rect class="oil" x="0" y="36" width="48" height="64"/>
+        <circle class="glob" cx="19" cy="58" r="7.2"/>
+        <circle class="glob" cx="30" cy="70" r="5"/>
+        <circle class="glob" cx="17" cy="82" r="6.1"/>
+        <circle class="glob" cx="31" cy="87" r="3.9"/>
+        <circle class="herb" cx="27" cy="52" r=".9"/>
+        <circle class="herb" cx="14" cy="70" r=".8"/>
+        <circle class="herb" cx="34" cy="60" r=".7"/>
+        <circle class="herb" cx="24" cy="76" r=".9"/>
+      </g>
+      <path class="glass" d="M20,8 L20,30 C20,35 8,39 8,50 L8,88 Q8,94 14,94 L34,94 Q40,94 40,88 L40,50 C40,39 28,35 28,30 L28,8"/>
+    </g>
+  </defs>
+</svg>
+<h1>Vinaigresque<span class="dot">.</span> packaging, round 1 — <em>ingredients</em></h1>
+<p class="intro"><b>Hypothesis: food-first, the ingredients are the picture.</b> The site's cutouts on cream around a modest wordmark; the bottle mark reduced to a seal; the flavor told by which cutout leads. Scale 1 in = 96 px. Dashed lines and hatching are guides, not art. Bracketed boxes are slots, never filled. Exploration only; not linked from the site.</p>
+
+<figure>
+<figcaption><b>1 · Stand-up pouch front</b> — 5 × 8 in (480 × 768 px) · Classic Italian Herb</figcaption>
+
+<div class="surface front-su" id="front">
+  <div class="guide safe"><span>safe area · ¼ in</span></div>
+  <div class="guide gusset"><span>3 in gusset zone</span></div>
+  <div class="guide fold"><span>fold · 1½ in on this face</span></div>
+  <div class="head">
+    <div>
+      <div class="wordmark ">Vinaigresque<span class="dot">.</span></div>
+      <div class="flavor">Classic Italian Herb</div>
+      <div class="descriptor">A mustard-free vinaigrette mix.</div>
+    </div>
+    <div class="seal" style="width:64px;height:64px"><span class="seal-ring"></span><svg class="cruet" viewBox="0 -12 48 112" width="20.1" height="47" aria-hidden="true"><use href="#cruet-frame"/></svg></div>
+  </div>
+  <div class="art"><img class="cut hero" src="../../../assets/img/oregano.webp" width="581" height="400" alt="" style="left:18px; top:0; width:392px;"><img class="cut sup" src="../../../assets/img/garlic.webp" width="254" height="200" alt="" style="left:296px; top:170px; width:132px;"><img class="cut sup" src="../../../assets/img/pepper.webp" width="300" height="167" alt="" style="left:52px; top:228px; width:88px;"></div>
+  <div class="foot">
+    <div class="cue"><b>Add oil and vinegar. Shake.</b><span>Makes about eight servings.</span></div>
+    <div class="netwt">NET WT <span class="slot-inline">[__ g / __ oz]</span></div>
+  </div>
+</div>
+</figure>
+
+<figure>
+<figcaption><b>2 · Pillow pouch front</b> — 3.5 × 6 in (336 × 576 px) · height is a working assumption</figcaption>
+
+<div class="surface front-pillow" id="pillow">
+  <div class="guide safe"><span>safe area · ¼ in</span></div>
+  <div class="guide seam top"><span>seal</span></div>
+  <div class="guide seam bottom"><span>seal</span></div>
+  <div class="head">
+    <div>
+      <div class="wordmark sm">Vinaigresque<span class="dot">.</span></div>
+      <div class="flavor sm">Classic Italian Herb</div>
+      <div class="descriptor sm">A mustard-free vinaigrette mix.</div>
+    </div>
+    <div class="seal" style="width:48px;height:48px"><span class="seal-ring"></span><svg class="cruet" viewBox="0 -12 48 112" width="15.0" height="35" aria-hidden="true"><use href="#cruet-frame"/></svg></div>
+  </div>
+  <div class="art art-pillow">
+    <img class="cut hero" src="../../../assets/img/oregano.webp" width="581" height="400" alt="" style="left:0; top:0; width:300px;">
+    <img class="cut sup" src="../../../assets/img/garlic.webp" width="254" height="200" alt="" style="left:184px; top:126px; width:104px;">
+  </div>
+  <div class="foot">
+    <div class="cue sm"><b>Add oil and vinegar. Shake.</b><span>Makes about eight servings.</span></div>
+    <div class="netwt sm">NET WT <span class="slot-inline">[__ g / __ oz]</span></div>
+  </div>
+</div>
+</figure>
+
+<figure>
+<figcaption><b>3 · Jar label, flat</b> — 5 × 3 in (480 × 288 px) · fits the 3.75 oz and 5.5 oz plastic</figcaption>
+
+<div class="surface jar" id="jar">
+  <div class="guide safe"><span>safe area · ⅛ in</span></div>
+  <div class="guide split"><span>front · back</span></div>
+  <div class="jar-front">
+    <div class="head">
+      <div>
+        <div class="wordmark xs">Vinaigresque<span class="dot">.</span></div>
+        <div class="flavor xs">Classic Italian Herb</div>
+        <div class="descriptor xs">A mustard-free vinaigrette mix.</div>
+      </div>
+      <div class="seal" style="width:40px;height:40px"><span class="seal-ring"></span><svg class="cruet" viewBox="0 -12 48 112" width="12.4" height="29" aria-hidden="true"><use href="#cruet-frame"/></svg></div>
+    </div>
+    <div class="art art-jar">
+      <img class="cut hero" src="../../../assets/img/oregano.webp" width="581" height="400" alt="" style="left:0; top:0; width:158px;">
+      <img class="cut sup" src="../../../assets/img/garlic.webp" width="254" height="200" alt="" style="left:118px; top:58px; width:64px;">
+    </div>
+    <div class="foot">
+      <div class="cue xs"><b>Add oil and vinegar. Shake.</b><span>Makes about eight servings.</span></div>
+      <div class="netwt xs">NET WT <span class="slot-inline">[__ g / __ oz]</span></div>
+    </div>
+  </div>
+  <div class="jar-back">
+    <div class="bk-h">Mixing directions</div>
+    <p class="bk-p"><b>3 : 1</b> oil to vinegar. Whole jar: ¾ cup oil, ¼ cup vinegar. One salad: 1½ tablespoons oil, ½ tablespoon vinegar. Add the mix, shake, dress. Extra-virgin olive oil and red wine vinegar is the house pairing. There is no mustard, so it separates as it sits: shake again before serving.</p>
+    <div class="bk-h">Ingredients</div>
+    <p class="bk-p">Dried oregano, dried parsley, dried basil, garlic powder, onion powder, black pepper, salt, sugar.</p>
+    <div class="slots-jar">
+      <div class="slot" style="width:90px;height:116px">[Nutrition Facts]</div>
+      <div class="slot-col">
+        <div class="slot" style="height:30px">[Distributed by]</div>
+        <div class="slot" style="height:18px">[Lot / best by]</div>
+        <div class="slot" style="height:44px">[UPC]</div>
+        <div class="slot" style="height:12px">[vinaigresque.com]</div>
+      </div>
+    </div>
+  </div>
+</div>
+</figure>
+
+<figure>
+<figcaption><b>4 · Stand-up pouch back</b> — 5 × 8 in (480 × 768 px)</figcaption>
+
+<div class="surface back-su" id="back">
+  <div class="guide safe"><span>safe area · ¼ in</span></div>
+  <div class="guide gusset"><span>3 in gusset zone</span></div>
+  <div class="guide fold"><span>fold · 1½ in on this face</span></div>
+  <div class="head head-back">
+    <div class="bk-brand"><div class="wordmark xs">Vinaigresque<span class="dot">.</span></div><span class="bk-flavor">Classic Italian Herb</span></div>
+    <div class="seal" style="width:40px;height:40px"><span class="seal-ring"></span><svg class="cruet" viewBox="0 -12 48 112" width="12.4" height="29" aria-hidden="true"><use href="#cruet-frame"/></svg></div>
+  </div>
+  <div class="back-cols">
+    <div class="back-main">
+      <div class="ratio"><span class="num">3 : 1</span><span class="ratio-cap">oil to vinegar</span></div>
+      <div class="bk-h">Mixing directions</div>
+      <table class="bk-t">
+        <tr><th>Whole pouch</th><td>¾ cup oil · ¼ cup vinegar</td></tr>
+        <tr><th>One salad</th><td>1½ tablespoons oil · ½ tablespoon vinegar</td></tr>
+      </table>
+      <p class="bk-p">Add the mix, shake or whisk, and dress. Mustard is the usual emulsifier and there is none in this, so it separates as it sits. Shake before serving.</p>
+      <div class="bk-h">Ingredients</div>
+      <p class="bk-p">Dried oregano, dried parsley, dried basil, garlic powder, onion powder, black pepper, salt, sugar.</p>
+      <div class="bk-h">Pairs with</div>
+      <p class="bk-p"><b>Extra-virgin olive oil and red wine vinegar</b> is the house pairing. Also white wine, champagne, balsamic, apple cider, sherry or rice vinegar, with mild olive, avocado or a neutral oil.</p>
+    </div>
+    <div class="back-side">
+      <div class="slot" style="width:150px;height:222px">[Nutrition Facts]</div>
+      <div class="slot" style="width:150px;height:50px">[Distributed by]</div>
+      <div class="slot" style="width:150px;height:28px">[Lot / best by]</div>
+      <div class="slot" style="width:150px;height:22px">[vinaigresque.com]</div>
+    </div>
+  </div>
+  <div class="back-foot">
+    <div class="slot" style="width:140px;height:84px">[UPC]</div>
+    <img class="cut back-sprig" src="../../../assets/img/basil.webp" width="346" height="240" alt="">
+  </div>
+</div>
+</figure>
+
+<figure id="family">
+<figcaption><b>5 · Flavor family</b> — stand-up pouch fronts at half scale: the hero cutout changes, the type does not</figcaption>
+<div class="row" style="gap:24px">
+  <div><div class="half">
+<div class="surface front-su">
+  <div class="guide safe"><span>safe area · ¼ in</span></div>
+  <div class="guide gusset"><span>3 in gusset zone</span></div>
+  <div class="guide fold"><span>fold · 1½ in on this face</span></div>
+  <div class="head">
+    <div>
+      <div class="wordmark ">Vinaigresque<span class="dot">.</span></div>
+      <div class="flavor">Classic Italian Herb</div>
+      <div class="descriptor">A mustard-free vinaigrette mix.</div>
+    </div>
+    <div class="seal" style="width:64px;height:64px"><span class="seal-ring"></span><svg class="cruet" viewBox="0 -12 48 112" width="20.1" height="47" aria-hidden="true"><use href="#cruet-frame"/></svg></div>
+  </div>
+  <div class="art"><img class="cut hero" src="../../../assets/img/oregano.webp" width="581" height="400" alt="" style="left:18px; top:0; width:392px;"><img class="cut sup" src="../../../assets/img/garlic.webp" width="254" height="200" alt="" style="left:296px; top:170px; width:132px;"><img class="cut sup" src="../../../assets/img/pepper.webp" width="300" height="167" alt="" style="left:52px; top:228px; width:88px;"></div>
+  <div class="foot">
+    <div class="cue"><b>Add oil and vinegar. Shake.</b><span>Makes about eight servings.</span></div>
+    <div class="netwt">NET WT <span class="slot-inline">[__ g / __ oz]</span></div>
+  </div>
+</div></div><div class="fam-caption">Classic Italian Herb · oregano leads</div></div>
+  <div><div class="half">
+<div class="surface front-su">
+  <div class="guide safe"><span>safe area · ¼ in</span></div>
+  <div class="guide gusset"><span>3 in gusset zone</span></div>
+  <div class="guide fold"><span>fold · 1½ in on this face</span></div>
+  <div class="head">
+    <div>
+      <div class="wordmark ">Vinaigresque<span class="dot">.</span></div>
+      <div class="flavor">Lemon Herb</div>
+      <div class="descriptor">A mustard-free vinaigrette mix.</div>
+    </div>
+    <div class="seal" style="width:64px;height:64px"><span class="seal-ring"></span><svg class="cruet" viewBox="0 -12 48 112" width="20.1" height="47" aria-hidden="true"><use href="#cruet-frame"/></svg></div>
+  </div>
+  <div class="art"><img class="cut sup" src="../../../assets/img/basil.webp" width="346" height="240" alt="" style="left:36px; top:24px; width:236px;"><img class="cut hero" src="../../../assets/img/lemon.webp" width="286" height="200" alt="" style="left:176px; top:112px; width:250px;"></div>
+  <div class="foot">
+    <div class="cue"><b>Add oil and vinegar. Shake.</b><span>Makes about eight servings.</span></div>
+    <div class="netwt">NET WT <span class="slot-inline">[__ g / __ oz]</span></div>
+  </div>
+</div></div><div class="fam-caption">Lemon Herb · lemon leads</div></div>
+  <div><div class="half">
+<div class="surface front-su">
+  <div class="guide safe"><span>safe area · ¼ in</span></div>
+  <div class="guide gusset"><span>3 in gusset zone</span></div>
+  <div class="guide fold"><span>fold · 1½ in on this face</span></div>
+  <div class="head">
+    <div>
+      <div class="wordmark ">Vinaigresque<span class="dot">.</span></div>
+      <div class="flavor">Ginger Citrus</div>
+      <div class="descriptor">A mustard-free vinaigrette mix.</div>
+    </div>
+    <div class="seal" style="width:64px;height:64px"><span class="seal-ring"></span><svg class="cruet" viewBox="0 -12 48 112" width="20.1" height="47" aria-hidden="true"><use href="#cruet-frame"/></svg></div>
+  </div>
+  <div class="art"><img class="cut hero" src="../../../assets/img/ginger.webp" width="309" height="200" alt="" style="left:84px; top:88px; width:300px;"></div>
+  <div class="foot">
+    <div class="cue"><b>Add oil and vinegar. Shake.</b><span>Makes about eight servings.</span></div>
+    <div class="netwt">NET WT <span class="slot-inline">[__ g / __ oz]</span></div>
+  </div>
+</div></div><div class="fam-caption">Ginger Citrus · ginger and orange lead</div></div>
+</div>
+</figure>
+</body>
+</html>
