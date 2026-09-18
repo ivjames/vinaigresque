@@ -64,9 +64,8 @@ ingredient lists, dates, barcodes and net weights are placeholder art.
   Each card's profile line is the flavor's profile from the owner's
   project packet (the "Flavor architecture" tables), verbatim, and its
   pairing is that table's suggested wet pairing. Ginger Citrus is "Light
-  citrus-ginger", rice vinegar with a neutral or mild olive oil; it has no
-  image of its own yet, so its card borrows the lemon until the owner
-  supplies one.
+  citrus-ginger", rice vinegar with a neutral or mild olive oil, headed by
+  the owner's ginger-and-orange cutout.
 - Positioning: a specialty pantry product for everyday salads. Refined,
   approachable, food-first. Culinary, not rustic; premium pantry, not
   luxury; fresh and ingredient-forward, not wellness-branded.
