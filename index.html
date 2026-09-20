@@ -456,13 +456,21 @@
   }
   .status-block .measure { font-size: 1.15rem; max-width: 40rem; }
 
-  /* Footer */
-  footer { padding-top: 2rem; padding-bottom: 3.5rem; }
-  .foot { display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: baseline; justify-content: space-between; }
-  .foot .nav a { font-size: .74rem; }
+  /* Footer: a thick field, the panel's second use. The section above ends
+     in --between, so no top margin. On panel: ink 12.3:1, muted 6.1:1. */
+  footer.field { margin-top: 0; padding-top: clamp(3rem, 6vw, 4.5rem); padding-bottom: clamp(2rem, 4vw, 3rem); }
+  .foot { display: grid; grid-template-columns: 1fr; gap: 2.25rem 3rem; }
+  @media (min-width: 760px) { .foot { grid-template-columns: 1fr auto auto; gap: 2rem clamp(2.5rem, 5vw, 4rem); } }
+  .brand-lg { font-size: 2rem; }
+  .foot-line { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--muted); margin: .4rem 0 0; }
+  .foot-label { font-family: var(--sans); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 .75rem; }
+  .foot-nav { flex-direction: column; gap: .55rem; }
+  .foot-nav a { font-size: .74rem; color: var(--ink); }
+  .foot-nav a:hover { text-decoration: underline; }
+  .foot-mail { font-family: var(--mono); font-size: .8rem; letter-spacing: .06em; color: var(--ink); text-decoration: none; }
+  .foot-mail:hover { text-decoration: underline; }
+  .foot-base { margin-top: clamp(2rem, 4vw, 3rem); padding-top: 1rem; border-top: 1px solid var(--taupe); }
   .build { font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; color: var(--muted); }
-  a.build { text-decoration: none; }
-  a.build:hover { color: var(--ink); text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -680,17 +688,30 @@
     </section>
   </main>
 
-  <footer class="wrap">
-    <hr class="rule">
-    <div class="foot" style="padding-top:1.5rem">
-      <a class="brand" href="#top">Vinaigresque<span class="dot">.</span></a>
-      <ul class="nav">
-        <li><a href="#how">How it works</a></li>
-        <li><a href="#why">Why mustard-free</a></li>
-        <li><a href="#flavors">Flavors</a></li>
-        <li><a href="#pairings">Pairings</a></li>
-      </ul>
-      <a class="build" href="mailto:hello@vinaigresque.com">hello@vinaigresque.com</a>
+  <footer class="field">
+    <div class="wrap">
+      <div class="foot">
+        <div>
+          <a class="brand brand-lg" href="#top">Vinaigresque<span class="dot">.</span></a>
+          <p class="foot-line">A mustard-free vinaigrette mix.</p>
+        </div>
+        <div>
+          <p class="foot-label">Sections</p>
+          <ul class="nav foot-nav">
+            <li><a href="#how">How it works</a></li>
+            <li><a href="#why">Why mustard-free</a></li>
+            <li><a href="#flavors">Flavors</a></li>
+            <li><a href="#pairings">Pairings</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="foot-label">Contact</p>
+          <a class="foot-mail" href="mailto:hello@vinaigresque.com">hello@vinaigresque.com</a>
+        </div>
+      </div>
+      <div class="foot-base">
+        <span class="build">vinaigresque.com</span>
+      </div>
     </div>
   </footer>
 
