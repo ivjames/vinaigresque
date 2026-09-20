@@ -49,7 +49,7 @@
     --sans:  Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
              "Helvetica Neue", Arial, sans-serif;
     --mono:  ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-    --display: MuseoModerno, var(--serif);   /* the hero name; falls back to the serif stack while the font loads or if it fails */
+    --display: MuseoModerno, var(--serif);   /* the hero name and the wordmark; falls back to the serif stack while the font loads or if it fails */
 
     --measure: 36rem;
     --head-measure: 46rem;   /* the display heads wrap wider than body copy */
@@ -115,7 +115,7 @@
     gap: 1rem;
     padding: 1.1rem 0;
   }
-  .brand { font-family: var(--serif); font-size: 1.35rem; color: var(--ink); text-decoration: none; }
+  .brand { font-family: var(--display); font-size: 1.35rem; color: var(--ink); text-decoration: none; }   /* the wordmark, in the same face as the hero name */
   .brand .dot, h1 .dot { color: var(--sage); }
   .nav { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; margin: 0; padding: 0; list-style: none; }
   .nav a {
@@ -144,16 +144,18 @@
     text-align: center;
   }
   .hero-copy { max-width: var(--measure); margin: 0 auto; min-width: 0; }
-  /* The name: 6.5rem (104px at 1440, 52px at 360). One word, so it cannot
-     wrap, and MuseoModerno is wide: at 7rem it ran 686px in the 653px column
-     at 1440 and 343px in 328px at 360, so both ends of the clamp came down
-     from 7rem/3.5rem to fit it (measured after: 637px and 318px). The serif
-     fallbacks are all narrower (DejaVu Serif, the widest, ~575px at 7rem in
-     a 598px column), so the name never reaches the bottle in either face. */
+  /* The name: 6.25rem (100px at 1440, 50px at 360). One word, so it cannot
+     wrap, and MuseoModerno is wide. The -0.03em tracking was the serif's; a
+     round geometric face wants less, so it is -0.01em here, and the clamp
+     came down (from the serif's 7rem/3.5rem) to hold the wider setting:
+     measured 639px in the 653px column at 1440 and 319px in 328px at 360.
+     The serif fallbacks are all narrower (DejaVu Serif, the widest, ~575px
+     at 7rem in a 598px column), so the name never reaches the bottle in
+     either face. */
   h1 {
     font-family: var(--display);
-    font-size: clamp(3.25rem, 10vw, 6.5rem);
-    letter-spacing: -0.03em;
+    font-size: clamp(3.125rem, 10vw, 6.25rem);
+    letter-spacing: -0.01em;
     line-height: .95;
     margin: 0 0 .1em;
     white-space: nowrap;
@@ -161,7 +163,7 @@
   /* Two columns from 740px (every iPad in portrait, 744 up): the name
      shares the row with the bottle, so here alone it is held to what
      MuseoModerno fits in the column (see above). */
-  @media (min-width: 740px) { h1 { font-size: clamp(3.5rem, 8vw, 6.5rem); } }
+  @media (min-width: 740px) { h1 { font-size: clamp(3.5rem, 8vw, 6.25rem); } }
   .tagline {
     font-family: var(--serif);
     font-style: italic;
