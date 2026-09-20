@@ -456,20 +456,16 @@
   }
   .status-block .measure { font-size: 1.15rem; max-width: 40rem; }
 
-  /* Footer: a thick field at the foot of the page, the second use of the
-     panel. The wordmark and tagline on the left, the sections and the
-     contact address as labelled columns, and a base line under a taupe
-     rule. The status section above it already ends in --between, so the
-     field's own top margin is dropped here. Computed on the panel: ink
-     12.3:1, muted 6.1:1, sage-ink 4.9:1 (the nav links). */
+  /* Footer: a thick field, the panel's second use. The section above ends
+     in --between, so no top margin. On panel: ink 12.3:1, muted 6.1:1. */
   footer.field { margin-top: 0; padding-top: clamp(3rem, 6vw, 4.5rem); padding-bottom: clamp(2rem, 4vw, 3rem); }
   .foot { display: grid; grid-template-columns: 1fr; gap: 2.25rem 3rem; }
-  @media (min-width: 760px) { .foot { grid-template-columns: 1fr auto auto; gap: 2rem clamp(2.5rem, 5vw, 4rem); } }   /* three columns need ~640px of row; below that they stack */
+  @media (min-width: 760px) { .foot { grid-template-columns: 1fr auto auto; gap: 2rem clamp(2.5rem, 5vw, 4rem); } }
   .brand-lg { font-size: 2rem; }
   .foot-line { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--muted); margin: .4rem 0 0; }
   .foot-label { font-family: var(--sans); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 .75rem; }
   .foot-nav { flex-direction: column; gap: .55rem; }
-  .foot-nav a { font-size: .74rem; color: var(--ink); }   /* labels muted, items ink, like the address beside them */
+  .foot-nav a { font-size: .74rem; color: var(--ink); }
   .foot-nav a:hover { text-decoration: underline; }
   .foot-mail { font-family: var(--mono); font-size: .8rem; letter-spacing: .06em; color: var(--ink); text-decoration: none; }
   .foot-mail:hover { text-decoration: underline; }
