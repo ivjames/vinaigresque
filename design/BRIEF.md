@@ -112,9 +112,11 @@ or as text at body size; `--sage-ink` is 5.33 : 1 and does. `--muted` is
 6.6 : 1 on cream. Taupe is never text.
 
 Type: an editorial serif for display and ledes, a clean sans for body and
-UI. The packet's reference faces are Tiempos Headline / Tiempos Text Italic
-and Inter, "or a close licensed equivalent". No licence is on record, so the
-page uses system stacks; do not load a webfont without one.
+UI, and, since round 4, one display face for the wordmark alone
+(MuseoModerno, self-hosted; see Round 4). The packet's reference faces are
+Tiempos Headline / Tiempos Text Italic and Inter, "or a close licensed
+equivalent". No licence is on record for those, so the serif and the sans
+are system stacks; do not load a webfont without a licence in the repo.
 
 The bottle mark is the canvas simulation in `/index.html`: an open bottle,
 golden oil, burgundy globules rising and falling, the mix falling in through
@@ -124,12 +126,13 @@ of it. Do not redraw the bottle from scratch; extend what is there.
 
 ## Hard constraints (every page)
 
-1. One HTML file with inline CSS and inline script, plus images under
-   `assets/` in this repo. Nothing loads from another host: no frameworks,
-   no external scripts, no webfont CDN. JavaScript optional and
-   progressive: the page must be complete with JS off. (Round 1's drafts
-   were single files with no images; the shipped page has an `assets/`
-   directory beside it, served by the same vhost.)
+1. One HTML file with inline CSS and inline script, plus images and fonts
+   under `assets/` in this repo. Nothing loads from another host: no
+   frameworks, no external scripts, no webfont CDN (a webfont is fine when
+   its file and its licence are in `assets/fonts/`). JavaScript optional
+   and progressive: the page must be complete with JS off. (Round 1's
+   drafts were single files with no images; the shipped page has an
+   `assets/` directory beside it, served by the same vhost.)
 2. Works at 360px wide (16px side gutters, no horizontal scroll) through
    1440px. Test both. Write section padding as longhands (`padding-top`,
    `padding-bottom`): the shorthand on a `.wrap` element zeroes its gutter,
@@ -220,3 +223,42 @@ it goes live at the next deploy.
 Image paths in `index.html` are `assets/img/…`. All hard constraints in the
 packet brief apply; the round-2 section's decisions (no CTA, cream ground,
 light only) still stand.
+
+---
+
+# Round 4 (2026-09-19 to 2026-09-20)
+
+Decisions taken after round 3, on the owner's instruction in each case, on
+top of everything above. Where they differ from an earlier section, this
+one wins.
+
+1. **A contact address.** The footer carries `hello@vinaigresque.com` as a
+   `mailto:` link (#27). Round 2's "no `mailto:` without being told" was
+   waiting for exactly this instruction, which has now been given for this
+   one address. Still no button, form or list; whether the address receives
+   mail is a DNS and mailbox matter outside the repo.
+2. **The wordmark is set in MuseoModerno** (Omnibus-Type, SIL OFL 1.1),
+   Regular 400, at −0.01em tracking, through the page's `--display` token:
+   the hero `h1` and the header and footer wordmark, and nothing else.
+   Asimovian was tried first (#28, then narrowed to the hero in #29) and
+   replaced (#30); the wordmark followed the hero and the tracking was
+   relaxed from the serif's −0.03em in #31. Everything else keeps the
+   round-3 type: the serif for section heads, ledes, the italic tagline
+   and the other display accents; the sans for body and UI. MuseoModerno
+   has no italic, and only the one weight is carried.
+3. **The webfont is self-hosted, so constraint 1 still holds.** The latin
+   woff2 and the face's `OFL.txt` are at `assets/fonts/`, served by the
+   same vhost as the images; nothing is fetched from Google or any other
+   host at page load. The licence gap the packet brief named is closed
+   for this face. The name is ASCII, so only the latin subset is carried.
+4. **The name's cap came down** from round 3's 7rem to 6.25rem (100px at
+   1440, 50px at 360), because MuseoModerno is wider than the serif it
+   replaced: measured 639px in the 653px column at 1440 and 319px in
+   328px at 360, so it never reaches the bottle, and the serif fallbacks,
+   all narrower, fit under the same cap.
+5. **A thick footer.** The footer is the second use of the panel field: a
+   full-bleed band with the wordmark at 2rem and the tagline under it, the
+   sections and the contact address as labelled columns, and a base line
+   with the domain under a taupe rule. Its content is only what the page
+   already said: no new copy, no legal line, no social links. Computed on
+   the panel: ink 12.3:1, muted 6.1:1, sage-ink 4.9:1.
