@@ -7,19 +7,20 @@
 <meta name="description" content="Vinaigresque — a vinaigrette mix with no mustard, a priority food allergen in Canada. Add your own oil and vinegar, shake, and dress the salad. Under development.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#FAF6EC">
-<link rel="preload" href="assets/fonts/asimovian-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/museomoderno-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23FAF6EC'/><text x='5' y='25' font-family='Georgia,serif' font-size='26' fill='%232E2A1F'>V</text><circle cx='26.5' cy='22.5' r='2.6' fill='%236B7F4E'/></svg>">
 <style>
-  /* Asimovian (Carolina Short, SIL OFL 1.1; licence in assets/fonts/OFL.txt)
+  /* MuseoModerno (Omnibus-Type, SIL OFL 1.1; licence in assets/fonts/OFL.txt)
      for the hero name only. Self-hosted from this repo, not fetched from
-     Google, so the page still loads from one host. Regular is the only weight
-     cut; the name is ASCII, so only the latin subset is carried. */
+     Google, so the page still loads from one host. The family is variable
+     100-900 with an italic; only the 400 static instance is carried, and the
+     name is ASCII, so only the latin subset. */
   @font-face {
-    font-family: "Asimovian";
+    font-family: "MuseoModerno";
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url("assets/fonts/asimovian-latin.woff2") format("woff2");
+    src: url("assets/fonts/museomoderno-latin.woff2") format("woff2");
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
   }
   /* Round 3. The round-2 "scale" treatment is the base: a display-sized
@@ -48,7 +49,7 @@
     --sans:  Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
              "Helvetica Neue", Arial, sans-serif;
     --mono:  ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-    --display: Asimovian, var(--serif);   /* the hero name; falls back to the serif stack while the font loads or if it fails */
+    --display: MuseoModerno, var(--serif);   /* the hero name; falls back to the serif stack while the font loads or if it fails */
 
     --measure: 36rem;
     --head-measure: 46rem;   /* the display heads wrap wider than body copy */
@@ -143,23 +144,24 @@
     text-align: center;
   }
   .hero-copy { max-width: var(--measure); margin: 0 auto; min-width: 0; }
-  /* The name: 7rem (112px at 1440, 56px at 360). One word, so it cannot
-     wrap. Asimovian sets it at 621px in the 653px column at 1440 and 311px
-     in 328px at 360, and the cap was sized to the widest serif fallback
-     (DejaVu Serif, ~575px in a 598px column at 1440) so it never reaches
-     the bottle in either face. */
+  /* The name: 6.5rem (104px at 1440, 52px at 360). One word, so it cannot
+     wrap, and MuseoModerno is wide: at 7rem it ran 686px in the 653px column
+     at 1440 and 343px in 328px at 360, so both ends of the clamp came down
+     from 7rem/3.5rem to fit it (measured after: 637px and 318px). The serif
+     fallbacks are all narrower (DejaVu Serif, the widest, ~575px at 7rem in
+     a 598px column), so the name never reaches the bottle in either face. */
   h1 {
     font-family: var(--display);
-    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-size: clamp(3.25rem, 10vw, 6.5rem);
     letter-spacing: -0.03em;
     line-height: .95;
     margin: 0 0 .1em;
     white-space: nowrap;
   }
   /* Two columns from 740px (every iPad in portrait, 744 up): the name
-     shares the row with the bottle, so here alone it is held to what the
-     widest fallback serif fits in the column (measured: DejaVu Serif). */
-  @media (min-width: 740px) { h1 { font-size: clamp(3.5rem, 8vw, 7rem); } }
+     shares the row with the bottle, so here alone it is held to what
+     MuseoModerno fits in the column (see above). */
+  @media (min-width: 740px) { h1 { font-size: clamp(3.5rem, 8vw, 6.5rem); } }
   .tagline {
     font-family: var(--serif);
     font-style: italic;
