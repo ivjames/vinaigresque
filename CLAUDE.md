@@ -67,6 +67,14 @@ Those docs are the memory; a session's own transcript is not, because a new
 session starts without it. This applies to every session in this repo,
 whatever it was opened for.
 
+**The repo has to be mounted for any of this to apply.** This file loads only
+in a session that has `ivjames/vinaigresque` or `ivjames/iqiqllc` attached as
+a repository; both carry this section. Start every co-packer session with one
+of them attached, and when a session spawns another (for example with
+`create_session`), pass the repo as its source. A session started with no repo
+never sees this file, so its first message has to carry the doc link and these
+rules instead.
+
 - **Before** discussing a co-packer, read its doc with the Claude Docs tools.
 - **Whenever** a co-packer fact turns up (an email, a call, a quote, a
   packet, a decision about one), write it to that co-packer's doc before
@@ -75,8 +83,8 @@ whatever it was opened for.
   unconfirmed. Do this even if the session was opened for something else.
 - **A co-packer with no doc yet**: create one in the same shape (How to use,
   Company facts, Terms, Open questions and next step, Correspondence log)
-  and add it to the table below in the same PR as any other change, or in
-  its own.
+  and add it to the table below in both repos' `CLAUDE.md`, which carry the
+  same section and must stay in step.
 - If the Claude Docs tools are unavailable, say so and give Arthur the facts
   to paste in; don't let them live only in the chat.
 
